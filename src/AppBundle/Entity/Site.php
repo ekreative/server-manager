@@ -40,14 +40,6 @@ class Site
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    private $framework;
-
-    /**
-     * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
      * @ORM\Column(type="string", length=255)
@@ -94,6 +86,14 @@ class Site
      */
     private $domains;
 
+    /**
+     * @var Framework
+     *
+     * @ORM\ManyToOne(targetEntity="Framework", inversedBy="sites")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $framework;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
@@ -125,25 +125,6 @@ class Site
     public function getLive()
     {
         return $this->live;
-    }
-
-    /**
-     * @param string $framework
-     * @return Site
-     */
-    public function setFramework($framework)
-    {
-        $this->framework = $framework;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFramework()
-    {
-        return $this->framework;
     }
 
     /**
@@ -248,6 +229,7 @@ class Site
     public function addServer(Server $servers)
     {
         $this->servers[] = $servers;
+        $servers->addSite($this);
 
         return $this;
     }
@@ -258,6 +240,7 @@ class Site
     public function removeServer(Server $servers)
     {
         $this->servers->removeElement($servers);
+        $servers->removeSite($this);
     }
 
     /**
@@ -275,6 +258,7 @@ class Site
     public function addDomain(Domain $domains)
     {
         $this->domains[] = $domains;
+        $domains->setSite($this);
 
         return $this;
     }
@@ -285,6 +269,7 @@ class Site
     public function removeDomain(Domain $domains)
     {
         $this->domains->removeElement($domains);
+        $domains->setSite(null);
     }
 
     /**
@@ -293,5 +278,24 @@ class Site
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * @param Framework $framework
+     * @return Site
+     */
+    public function setFramework(Framework $framework = null)
+    {
+        $this->framework = $framework;
+
+        return $this;
+    }
+
+    /**
+     * @return Framework
+     */
+    public function getFramework()
+    {
+        return $this->framework;
     }
 }

@@ -25,7 +25,8 @@ gulp.task('styles', function() {
 gulp.task('scripts:bundle', function() {
     return gulp.src([
         'node_modules/jquery/dist/jquery.js',
-        'node_modules/bootstrap/dist/js/bootstrap.js'
+        'node_modules/bootstrap/dist/js/bootstrap.js',
+        'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(concat('bundle.js'))
@@ -35,7 +36,7 @@ gulp.task('scripts:bundle', function() {
 });
 
 gulp.task('scripts:pages', function() {
-    return gulp.src(['web-src/js/**/*.js'])
+    return gulp.src(['web-src/js/*/**/*.js'])
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
@@ -56,7 +57,7 @@ gulp.task('images', function () {
         .pipe(gulp.dest('web/images'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['build'], function () {
     gulp.watch('web-src/less/*.less', ['styles']);
     gulp.watch('web-src/js/**/*.js', ['scripts:pages']);
     gulp.watch('web-src/images/**/*', ['images']);
