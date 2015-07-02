@@ -6,12 +6,16 @@ framework:
         cache: validator.mapping.cache.apc
     serializer:
         cache: serializer.mapping.cache.apc
+    session:
+        handler_id: session_handler
 
 doctrine:
     orm:
         metadata_cache_driver: apc
         result_cache_driver: apc
-        query_cache_driver: apc
+        result_cache_driver:
+            type: service
+            id: result_cache
 
 monolog:
     handlers:
@@ -25,3 +29,18 @@ monolog:
             level: debug
         console:
             type:  console
+
+services:
+    result_cache:
+        class: Doctrine\Common\Cache\RedisCache
+        calls:
+            - [ setRedis, [ @redis ]]
+            - [ setNamespace, [ 'r:' ]]
+
+    session_handler:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+        arguments:
+            - @redis
+            - 86400
+            -
+                key_prefix: 's:'

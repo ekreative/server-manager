@@ -2,9 +2,12 @@
 
 namespace AppBundle\Redmine;
 
+use Doctrine\Common\Cache\Cache;
 use Ekreative\RedmineLoginBundle\Client\ClientProvider;
+use Ekreative\RedmineLoginBundle\Security\RedmineUser;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class Projects
@@ -14,13 +17,24 @@ class Projects
      */
     private $client;
 
-    public function __construct(ClientProvider $clientProvider, TokenStorageInterface $tokenStorage)
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    private $cachePrefix;
+
+    public function __construct(ClientProvider $clientProvider, TokenStorageInterface $tokenStorage, Cache $cache)
     {
         if ($tokenStorage->getToken()) {
-            $this->client = $clientProvider->get($tokenStorage->getToken()->getUser());
+            /** @var RedmineUser $user */
+            $user = $tokenStorage->getToken()->getUser();
+            $this->client = $clientProvider->get($user);
+            $this->cachePrefix = $user->getId();
         } else {
             throw new \InvalidArgumentException('Cannot access Projects as no user is logged in');
         }
+        $this->cache = $cache;
     }
 
     /**
@@ -39,6 +53,11 @@ class Projects
 
     public function getAllProjects()
     {
+        $key = "{$this->cachePrefix}-all-projects";
+        if (($projects = $this->cache->fetch($key))) {
+            return $projects;
+        }
+
         $first = json_decode($this->client->get('projects.json', [
             'query' => [
                 'limit' => 100
@@ -56,12 +75,14 @@ class Projects
                     ]
                 ]);
             }
+            /** @var Response[] $responses */
             $responses = Promise\unwrap($requests);
             foreach ($responses as $response) {
                 $projects = array_merge($projects, json_decode($response->getBody(), true)['projects']);
             }
         }
 
+        $this->cache->save($key, $projects);
         return $projects;
     }
 }
