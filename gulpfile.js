@@ -26,6 +26,8 @@ gulp.task('scripts:bundle', function() {
     return gulp.src([
         'node_modules/jquery/dist/jquery.js',
         'node_modules/bootstrap/dist/js/bootstrap.js',
+        'node_modules/typeahead.js/dist/bloodhound.js',
+        'node_modules/typeahead.js/dist/typeahead.jquery.js',
         'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
@@ -59,6 +61,7 @@ gulp.task('images', function () {
 
 gulp.task('watch', ['build'], function () {
     gulp.watch('web-src/less/*.less', ['styles']);
-    gulp.watch('web-src/js/**/*.js', ['scripts:pages']);
+    gulp.watch('web-src/js/*/**/*.js', ['scripts:pages']);
+    gulp.watch('web-src/js/*.js', ['scripts:bundle']);
     gulp.watch('web-src/images/**/*', ['images']);
 });

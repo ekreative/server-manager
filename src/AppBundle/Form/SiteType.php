@@ -15,7 +15,7 @@ class SiteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('project')
+            ->add('project', 'project')
             ->add('name')
             ->add('live', 'checkbox', [
                 'required' => false

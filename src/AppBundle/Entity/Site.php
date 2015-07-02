@@ -44,7 +44,7 @@ class Site
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\Regex("/\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b/ig")
+     * @Assert\Regex("/\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b/i", message="Enter a valid semvar version")
      */
     private $frameworkVersion;
 
@@ -61,6 +61,7 @@ class Site
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="siteAdmin", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $adminLogin;
 
@@ -69,6 +70,7 @@ class Site
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="siteDatabase", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $databaseLogin;
 
@@ -76,6 +78,7 @@ class Site
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Server", mappedBy="sites", cascade={"persist"})
+     * @Assert\Valid()
      */
     private $servers;
 
@@ -83,6 +86,7 @@ class Site
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Domain", mappedBy="site", cascade={"persist", "remove"})
+     * @Assert\Valid()
      */
     private $domains;
 

@@ -36,7 +36,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
-        resources: ['bootstrap_3_horizontal_layout.html.twig']
+        resources: ['form.html.twig']
 
 # Doctrine Configuration
 doctrine:
@@ -67,3 +67,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+ekreative_redmine_login:
+    redmine: %redmine%

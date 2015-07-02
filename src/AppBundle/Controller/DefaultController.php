@@ -16,8 +16,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return [
-            'form' => $this->createForm(new SiteType(), new Site())->createView()
-        ];
+        return [];
     }
 }

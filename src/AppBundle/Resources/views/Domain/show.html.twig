@@ -1,0 +1,12 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Name</th>
+        <td>{{ entity.name }}</td>
+    </tr>
+    <tr>
+        <th>Management Login</th>
+        <td>{{ render(controller('AppBundle:Login:show', {'login': entity.managementLogin})) }}</td>
+    </tr>
+    </tbody>
+</table>

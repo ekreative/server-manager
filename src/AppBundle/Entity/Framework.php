@@ -38,7 +38,7 @@ class Framework
      *
      * @ORM\Column(name="currentVersion", type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\Regex("/\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b/ig")
+     * @Assert\Regex("/\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b/i", message="Enter a valid semvar version")
      */
     private $currentVersion;
 
@@ -125,5 +125,10 @@ class Framework
     public function getSites()
     {
         return $this->sites;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

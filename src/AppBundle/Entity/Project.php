@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Project
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ProjectRepository")
  */
 class Project
 {
@@ -34,6 +34,7 @@ class Project
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Site", mappedBy="project", cascade={"persist", "remove"})
+     * @Assert\Valid()
      */
     private $sites;
 

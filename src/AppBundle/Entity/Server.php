@@ -59,6 +59,7 @@ class Server
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="serverRoot", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $rootLogin;
 
@@ -67,6 +68,7 @@ class Server
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="serverHosting", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $hostingLogin;
 
@@ -75,6 +77,7 @@ class Server
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="serverUser", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $userLogin;
 

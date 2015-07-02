@@ -52,6 +52,7 @@ class Domain
      *
      * @ORM\OneToOne(targetEntity="Login", mappedBy="domainManagement", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
      */
     private $managementLogin;
 

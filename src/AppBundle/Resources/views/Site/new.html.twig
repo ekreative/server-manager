@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}New Site{% endblock %}
+
+{% block body %}
+    {{ form(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('site') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}
