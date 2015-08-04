@@ -20,6 +20,9 @@ class ServerType extends AbstractType
             ->add('autoUpdates', 'checkbox', [
                 'required' => false
             ])
+            ->add('ntp', 'checkbox', [
+                'required' => false
+            ])
             ->add('hostingLogin', new LoginType())
             ->add('rootLogin', new LoginType())
             ->add('userLogin', new LoginType())

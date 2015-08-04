@@ -48,6 +48,13 @@ class Server
     private $autoUpdates;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $ntp;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Site", inversedBy="servers", cascade={"persist"})
@@ -157,6 +164,25 @@ class Server
     public function getAutoUpdates()
     {
         return $this->autoUpdates;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getNtp()
+    {
+        return $this->ntp;
+    }
+
+    /**
+     * @param boolean $ntp
+     * @return Server
+     */
+    public function setNtp($ntp)
+    {
+        $this->ntp = $ntp;
+
+        return $this;
     }
 
     /**
