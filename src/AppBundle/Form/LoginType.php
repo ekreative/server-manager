@@ -17,8 +17,16 @@ class LoginType extends AbstractType
         $builder
             ->add('username')
             ->add('password')
-            ->add('sshKey')
-            ->add('hostname')
+            ->add('sshKey', null, [
+                'attr' => [
+                    'help-block' => 'The text of a PEM file used for login'
+                ]
+            ])
+            ->add('hostname', null, [
+                'attr' => [
+                    'help-block' => 'DNS name for this login'
+                ]
+            ])
             ->add('port')
             ->add('url')
         ;

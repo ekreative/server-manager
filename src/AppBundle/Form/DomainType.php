@@ -16,7 +16,11 @@ class DomainType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('managementLogin', new LoginType())
+            ->add('managementLogin', new LoginType(), [
+                'attr' => [
+                    'help-block' => 'Where can we change things for this domain name? e.g. 123-reg.co.uk'
+                ]
+            ])
         ;
     }
 

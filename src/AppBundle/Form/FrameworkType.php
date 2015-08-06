@@ -16,7 +16,11 @@ class FrameworkType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('currentVersion')
+            ->add('currentVersion', null, [
+                'attr' => [
+                    'help-block' => 'Must be semvar major.minor.patch'
+                ]
+            ])
         ;
     }
 

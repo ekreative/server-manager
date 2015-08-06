@@ -1,4 +1,5 @@
 {% extends 'bootstrap_3_horizontal_layout.html.twig' %}
+
 {% block collection_widget %}
     {% spaceless %}
         <div class="form-collection">
@@ -43,3 +44,14 @@
         </div>
     {% endspaceless %}
 {% endblock %}
+
+{% block form_help -%}
+    {%  if attr['help-block'] is defined %}
+        <span class="help-block">{{ attr['help-block']|raw }}</span>
+    {% endif %}
+{%- endblock form_help %}
+
+{% block form_errors -%}
+    {{ parent() }}
+    {{- block('form_help') -}}
+{%- endblock form_errors %}
