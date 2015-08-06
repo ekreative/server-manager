@@ -11,9 +11,9 @@ $('.form-collection').each(function(i, formCollection) {
         $(this).parents('.form-collection-element').remove();
     });
 });
+
 $('input[typeahead]').each(function(i, input) {
     $(input).typeahead(null, {
-        display: 'value',
         source: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
