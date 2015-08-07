@@ -5,7 +5,9 @@ var gulp = require('gulp'),
     del = require('del'),
     sourcemaps = require('gulp-sourcemaps'),
     uglifycss = require('gulp-uglifycss'),
-    imagemin = require('gulp-imagemin');
+    imagemin = require('gulp-imagemin'),
+    babel = require('gulp-babel'),
+    filter = require('gulp-filter');
 
 gulp.task('default', ['build']);
 
@@ -23,6 +25,10 @@ gulp.task('styles', function() {
 });
 
 gulp.task('scripts:bundle', function() {
+    var myJsFilter = filter(function(file) {
+        return /web\-src/.test(file.path);
+    }, {restore: true});
+
     return gulp.src([
         'node_modules/jquery/dist/jquery.js',
         'node_modules/bootstrap/dist/js/bootstrap.js',
@@ -31,6 +37,9 @@ gulp.task('scripts:bundle', function() {
         'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(myJsFilter)
+        .pipe(babel())
+        .pipe(myJsFilter.restore)
         .pipe(concat('bundle.js'))
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
@@ -40,6 +49,7 @@ gulp.task('scripts:bundle', function() {
 gulp.task('scripts:pages', function() {
     return gulp.src(['web-src/js/*/**/*.js'])
         .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(babel())
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('web/js'));
