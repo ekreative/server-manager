@@ -15,11 +15,7 @@ class SiteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('project', 'project', [
-                'attr' => [
-                    'help-block' => 'The Redmine project'
-                ]
-            ])
+            ->add('project', 'project')
             ->add('name', null, [
                 'attr' => [
                     'help-block' => 'A name for the server'

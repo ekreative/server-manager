@@ -39,7 +39,8 @@ class ProjectType extends TextType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'attr' => [
-                'typeahead' => $this->router->generate('project_typeahead')
+                'typeahead' => $this->router->generate('project_typeahead'),
+                'help-block' => 'The Redmine project'
             ]
         ]);
     }
