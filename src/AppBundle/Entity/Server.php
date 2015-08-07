@@ -99,6 +99,9 @@ class Server
     {
         $this->sites = new ArrayCollection();
         $this->domains = new ArrayCollection();
+        $this->setHostingLogin(new Login(Login::TYPE_SITE));
+        $this->setRootLogin(new Login(Login::TYPE_SSH));
+        $this->setUserLogin(new Login(Login::TYPE_SSH));
     }
 
     /**

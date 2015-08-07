@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Login;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,20 +17,43 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('loginType', 'choice', [
+                'choices' => [
+                    Login::TYPE_SITE => 'Site',
+                    Login::TYPE_SSH => 'SSH',
+                    Login::TYPE_DB => 'Database'
+                ],
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'btn-group',
+                    'data-toggle' => 'buttons',
+                    'data-login-type-toggle' => null
+                ]
+            ])
             ->add('username')
             ->add('password')
             ->add('sshKey', null, [
                 'attr' => [
-                    'help-block' => 'The text of a PEM file used for login'
+                    'help-block' => 'The text of a PEM file used for login',
+                    'data-login-type' => Login::TYPE_SSH
                 ]
             ])
             ->add('hostname', null, [
                 'attr' => [
-                    'help-block' => 'DNS name for this login'
+                    'help-block' => 'DNS name for this login',
+                    'data-login-type' => implode(' ', [Login::TYPE_SSH, Login::TYPE_DB])
                 ]
             ])
-            ->add('port')
-            ->add('url')
+            ->add('port', null, [
+                'attr' => [
+                    'data-login-type' => implode(' ', [Login::TYPE_SSH, Login::TYPE_DB])
+                ]
+            ])
+            ->add('url', null, [
+                'attr' => [
+                    'data-login-type' => Login::TYPE_SITE
+                ]
+            ])
         ;
     }
 

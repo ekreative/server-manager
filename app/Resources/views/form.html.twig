@@ -55,3 +55,16 @@
     {{ parent() }}
     {{- block('form_help') -}}
 {%- endblock form_errors %}
+
+{% block radio_widget -%}
+    {%- set parent_label_class = (parent_label_class|default('') ~ ' radio-inline')|trim -%}
+    {{- parent() -}}
+{%- endblock radio_widget %}
+
+{% block radio_label %}
+    {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' btn btn-default')|trim}) %}
+    {% if checked %}
+        {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' active')|trim}) %}
+    {% endif %}
+    {{- parent() -}}
+{% endblock radio_label %}

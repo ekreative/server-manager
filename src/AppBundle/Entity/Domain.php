@@ -56,6 +56,11 @@ class Domain
      */
     private $managementLogin;
 
+    public function __construct()
+    {
+        $this->setManagementLogin(new Login(Login::TYPE_SITE));
+    }
+
     /**
      * @return integer
      */

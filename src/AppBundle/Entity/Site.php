@@ -102,6 +102,8 @@ class Site
     {
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
+        $this->setAdminLogin(new Login(Login::TYPE_SITE));
+        $this->setDatabaseLogin(new Login(Login::TYPE_DB));
     }
 
     /**

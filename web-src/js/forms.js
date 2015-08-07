@@ -21,3 +21,18 @@ $('input[typeahead]').each(function(i, input) {
         })
     })
 });
+
+function loginTypeToggle($input) {
+    var val = $input.val(),
+        $root = $input.closest('.form-group').parent();
+    $root.find(`[data-login-type]:not([data-login-type~=${val}])`).closest('.form-group').addClass('hide');
+    $root.find(`[data-login-type~=${val}]`).closest('.form-group').removeClass('hide');
+}
+
+$(document).on('change', '[data-login-type-toggle] input', function() {
+    loginTypeToggle($(this));
+});
+
+$('[data-login-type-toggle] [checked]').each(function(i, input) {
+    loginTypeToggle($(input));
+});

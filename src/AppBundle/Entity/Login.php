@@ -12,6 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Login
 {
+    const TYPE_SITE = 'site';
+    const TYPE_SSH = 'ssh';
+    const TYPE_DB = 'db';
+
     /**
      * @var integer
      *
@@ -69,6 +73,14 @@ class Login
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Choice({"site", "ssh", "db"})
+     */
+    private $loginType;
+
+    /**
      * @var Site
      *
      * @ORM\OneToOne(targetEntity="Site", inversedBy="adminLogin")
@@ -109,6 +121,11 @@ class Login
      * @ORM\OneToOne(targetEntity="Domain", inversedBy="managementLogin")
      */
     private $domainManagement;
+
+    public function __construct($loginType = null)
+    {
+        $this->setLoginType($loginType ?: self::TYPE_SITE);
+    }
 
     /**
      * @return integer
@@ -344,5 +361,23 @@ class Login
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLoginType()
+    {
+        return $this->loginType;
+    }
+
+    /**
+     * @param string $loginType
+     * @return Login
+     */
+    public function setLoginType($loginType)
+    {
+        $this->loginType = $loginType;
+        return $this;
     }
 }
