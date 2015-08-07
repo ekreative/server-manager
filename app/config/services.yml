@@ -27,6 +27,7 @@ services:
         class: Doctrine\Common\Cache\RedisCache
         calls:
             - [setRedis, [@redis]]
+            - [ setNamespace, [ 'sm:' ]]
 
     redis:
         class: Redis
