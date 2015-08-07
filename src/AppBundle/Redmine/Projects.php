@@ -77,7 +77,7 @@ class Projects
             }
             /** @var Response[] $responses */
             $responses = Promise\unwrap($requests);
-            $responseProjects = array_map(function($response) {
+            $responseProjects = array_map(function(Response $response) {
                 return json_decode($response->getBody(), true)['projects'];
             }, $responses);
             $responseProjects[] = $projects;

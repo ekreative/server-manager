@@ -6,7 +6,6 @@ use AppBundle\Entity\Login;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class LoginType extends AbstractType
 {
@@ -73,9 +72,9 @@ class LoginType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'AppBundle\Entity\Login'
-        ));
+        ]);
     }
 
 
