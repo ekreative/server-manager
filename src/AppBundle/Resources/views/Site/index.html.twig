@@ -7,6 +7,7 @@
         <thead>
         <tr>
             <th>Id</th>
+            <th>Project</th>
             <th>Name</th>
             <th>Live</th>
             <th>Framework Version</th>
@@ -17,6 +18,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('site_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.project %}{{ entity.project.name }}{% endif %}</td>
                 <td>{{ entity.name }}</td>
                 <td>{{ entity.live }}</td>
                 <td>{{ entity.frameworkVersion }}</td>
