@@ -18,10 +18,16 @@ class ServerType extends AbstractType
             ->add('ip')
             ->add('os')
             ->add('autoUpdates', 'checkbox', [
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'help-block' => 'Did you enable <a href="https://help.ubuntu.com/community/AutomaticSecurityUpdates">automatic updates</a>?. You should also set <code>Unattended-Upgrade::Remove-Unused-Dependencies</code> to <code>true</code> and possibly enable <code>"${distro_id} ${distro_codename}-updates";</code>'
+                ]
             ])
             ->add('ntp', 'checkbox', [
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'help-block' => 'Did you install NTP (<code>apt-get install ntp</code>)? If this is an OpsWorks server it is installed by default'
+                ]
             ])
             ->add('hostingLogin', new LoginType())
             ->add('rootLogin', new LoginType())
