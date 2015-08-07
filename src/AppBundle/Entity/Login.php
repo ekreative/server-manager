@@ -15,6 +15,7 @@ class Login
     const TYPE_SITE = 'site';
     const TYPE_SSH = 'ssh';
     const TYPE_DB = 'db';
+    const TYPE_NONE = 'none';
 
     /**
      * @var integer
@@ -75,7 +76,7 @@ class Login
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\Choice({"site", "ssh", "db"})
+     * @Assert\Choice({"site", "ssh", "db", "none"})
      */
     private $loginType;
 
@@ -123,7 +124,7 @@ class Login
 
     public function __construct($loginType = null)
     {
-        $this->setLoginType($loginType ?: self::TYPE_SITE);
+        $this->setLoginType($loginType ?: self::TYPE_NONE);
     }
 
     /**

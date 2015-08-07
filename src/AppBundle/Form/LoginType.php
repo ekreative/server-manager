@@ -19,6 +19,7 @@ class LoginType extends AbstractType
         $builder
             ->add('loginType', 'choice', [
                 'choices' => [
+                    Login::TYPE_NONE => 'None',
                     Login::TYPE_SITE => 'Site',
                     Login::TYPE_SSH => 'SSH',
                     Login::TYPE_DB => 'Database'
@@ -30,8 +31,16 @@ class LoginType extends AbstractType
                     'data-login-type-toggle' => null
                 ]
             ])
-            ->add('username')
-            ->add('password')
+            ->add('username', null, [
+                'attr' => [
+                    'data-login-type' => implode(' ', [Login::TYPE_SITE, Login::TYPE_SSH, Login::TYPE_DB])
+                ]
+            ])
+            ->add('password', null, [
+                'attr' => [
+                    'data-login-type' => implode(' ', [Login::TYPE_SITE, Login::TYPE_SSH, Login::TYPE_DB])
+                ]
+            ])
             ->add('sshKey', null, [
                 'attr' => [
                     'help-block' => 'The text of a PEM file used for login',
