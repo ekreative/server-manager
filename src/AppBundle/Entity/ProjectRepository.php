@@ -6,6 +6,10 @@ use Doctrine\ORM\EntityRepository;
 
 class ProjectRepository extends EntityRepository
 {
+    /**
+     * @param array $redmineProject
+     * @return Project
+     */
     public function getProject(array $redmineProject)
     {
         $project = $this->find($redmineProject['id']);

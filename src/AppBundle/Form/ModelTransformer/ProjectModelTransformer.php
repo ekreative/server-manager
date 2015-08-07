@@ -37,6 +37,10 @@ class ProjectModelTransformer implements DataTransformerInterface
         return null;
     }
 
+    /**
+     * @param string $value
+     * @return Project
+     */
     public function reverseTransform($value)
     {
         if ($value) {
