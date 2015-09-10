@@ -27,7 +27,9 @@ class SiteType extends AbstractType
                     'help-block' => 'Is this a live server or a test server?'
                 ]
             ])
-            ->add('framework')
+            ->add('framework', null, [
+                'required' => true
+            ])
             ->add('frameworkVersion', null, [
                 'attr' => [
                     'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
