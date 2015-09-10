@@ -26,13 +26,12 @@ class ServerType extends AbstractType
             ->add('ntp', 'checkbox', [
                 'required' => false,
                 'attr' => [
-                    'help-block' => 'Did you install NTP (<code>apt-get install ntp</code>)? If this is an OpsWorks server it is installed by default'
+                    'help-block' => 'Did you install NTP (<kbd>apt-get install ntp</kbd>)? If this is an OpsWorks server it is installed by default'
                 ]
             ])
             ->add('hostingLogin', new LoginType())
             ->add('rootLogin', new LoginType())
-            ->add('userLogin', new LoginType())
-        ;
+            ->add('userLogin', new LoginType());
     }
 
     /**
