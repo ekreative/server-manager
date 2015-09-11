@@ -26,7 +26,8 @@
         "jrschumacher/symfony-redis-session-handler": "^1.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "^4.8"
     },
     "scripts": {
         "post-root-package-install": [
