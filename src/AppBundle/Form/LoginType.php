@@ -32,7 +32,7 @@ class LoginType extends AbstractType
             ])
             ->add('databaseName', null, [
                 'attr' => [
-                    'data-login-type' => implode(' ', [Login::TYPE_DB])
+                    'data-login-type' => Login::TYPE_DB
                 ]
             ])
             ->add('username', null, [
