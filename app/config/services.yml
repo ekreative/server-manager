@@ -33,3 +33,10 @@ services:
         class: Redis
         calls:
             - [connect, [%redis%, 6379]]
+
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]

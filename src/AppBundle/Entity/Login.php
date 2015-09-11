@@ -115,6 +115,7 @@ class Login
      */
     private $serverUser;
 
+
     /**
      * @var Server
      *
@@ -380,4 +381,7 @@ class Login
         $this->loginType = $loginType;
         return $this;
     }
+
+
+
 }
