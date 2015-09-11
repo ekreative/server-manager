@@ -93,6 +93,7 @@ class Site
     /**
      * @var Framework
      *
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="Framework", inversedBy="sites")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
