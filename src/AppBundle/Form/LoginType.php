@@ -30,6 +30,11 @@ class LoginType extends AbstractType
                     'data-login-type-toggle' => null
                 ]
             ])
+            ->add('databaseName', null, [
+                'attr' => [
+                    'data-login-type' => implode(' ', [Login::TYPE_DB])
+                ]
+            ])
             ->add('username', null, [
                 'attr' => [
                     'data-login-type' => implode(' ', [Login::TYPE_SITE, Login::TYPE_SSH, Login::TYPE_DB])
