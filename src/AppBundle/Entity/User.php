@@ -19,4 +19,11 @@ class User extends RedmineUser
     public function __construct() {
 
     }
+
+
+    public function __toString()
+    {
+        return $this->username;
+    }
+
 }

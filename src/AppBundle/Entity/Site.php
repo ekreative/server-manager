@@ -5,8 +5,9 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Site
@@ -108,21 +109,11 @@ class Site
     private $author;
 
     /**
-     * @var \DateTime $created
-     *
-     * @Assert\Valid()
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * Hook timestampable behavior
+     * updates created, updated fields
      */
-    private $created;
+    use TimestampableEntity;
 
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updated;
 
     public function __construct()
     {
