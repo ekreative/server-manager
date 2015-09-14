@@ -100,15 +100,17 @@ class Site
     private $framework;
 
     /**
-     * @var string
+     * @var User
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sites")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $author;
 
     /**
      * @var \DateTime $created
      *
+     * @Assert\Valid()
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
@@ -330,10 +332,10 @@ class Site
     }
 
     /**
-     * @param string $author
-     * @return Login
+     * @param User $author
+     * @return Site
      */
-    public function setAuthor($author)
+    public function setAuthor(User $author = null)
     {
         $this->author = $author;
 
@@ -341,7 +343,7 @@ class Site
     }
 
     /**
-     * @return string
+     * @return User
      */
     public function getAuthor()
     {
@@ -375,5 +377,7 @@ class Site
     public function setUpdated($updated) {
         $this->updated = $updated;
     }
+
+
 
 }

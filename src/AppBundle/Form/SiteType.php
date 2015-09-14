@@ -5,6 +5,10 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormValidatorInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormError;
 
 class SiteType extends AbstractType
 {
@@ -61,7 +65,17 @@ class SiteType extends AbstractType
                     'help-block' => 'Domain names associated with this site'
                 ]
             ])
-            ->add('author', null)
+        ;
+
+        $builder-> addValidator(new CallbackValidator(function(FormInterface $form){
+            $screenName = $form->get('author')->getData();
+            if (empty($screenName)) {
+                $form['author']->addError(new FormError("Du måste ange ett namn för den nya skärmen"));
+            }
+        }));
+
+        $builder
+            ->add('author', null, ['required' => true])
         ;
     }
 
