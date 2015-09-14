@@ -19,11 +19,6 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-        $session = $request->getSession();
-        $user = $session->get('datauser');
-        var_dump($user);
-
-
         return [];
     }
 }
