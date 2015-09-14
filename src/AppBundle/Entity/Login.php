@@ -59,7 +59,9 @@ class Login
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity="Login")
+     * @ORM\JoinColumn(name="proxyHost", referencedColumnName="id")
+     *
      */
     private $proxyHost;
 
@@ -404,4 +406,10 @@ class Login
         $this->loginType = $loginType;
         return $this;
     }
+
+    public function __toString()
+    {
+        return (string) $this->getHostname();
+    }
+
 }
