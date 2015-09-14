@@ -65,16 +65,6 @@ class SiteType extends AbstractType
                     'help-block' => 'Domain names associated with this site'
                 ]
             ])
-        ;
-
-        $builder-> addValidator(new CallbackValidator(function(FormInterface $form){
-            $screenName = $form->get('author')->getData();
-            if (empty($screenName)) {
-                $form['author']->addError(new FormError("Du måste ange ett namn för den nya skärmen"));
-            }
-        }));
-
-        $builder
             ->add('author', null, ['required' => true])
         ;
     }
