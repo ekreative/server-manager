@@ -52,7 +52,7 @@ class Login
      * DNS regex - http://stackoverflow.com/a/10306731/859027
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex("^(?=.{1,255})([0-9A-Za-z]|_{1}|\*{1}$)(?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*\.?$/")
+     * @Assert\Regex("/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/")
      */
     private $hostname;
 
