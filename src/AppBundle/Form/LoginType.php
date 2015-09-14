@@ -57,6 +57,11 @@ class LoginType extends AbstractType
                     'data-login-type' => implode(' ', [Login::TYPE_SSH, Login::TYPE_DB])
                 ]
             ])
+            ->add('proxyHost', null, [
+                'attr' => [
+                    'data-login-type' => Login::TYPE_SSH
+                ]
+            ])
             ->add('url', null, [
                 'attr' => [
                     'data-login-type' => Login::TYPE_SITE

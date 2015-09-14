@@ -57,6 +57,13 @@ class Login
     private $hostname;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $proxyHost;
+
+    /**
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -210,6 +217,23 @@ class Login
     {
         return $this->hostname;
     }
+
+    /**
+     * @return string
+     */
+    public function getProxyHost()
+    {
+        return $this->proxyHost;
+    }
+
+    /**
+     * @param string $proxyHost
+     */
+    public function setProxyHost($proxyHost)
+    {
+        $this->proxyHost = $proxyHost;
+    }
+
 
     /**
      * @param Site $siteAdmin
