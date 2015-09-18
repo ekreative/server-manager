@@ -52,9 +52,16 @@ class Login
      * DNS regex - http://stackoverflow.com/a/10306731/859027
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex("/^([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$/")
+     * @Assert\Regex("/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/")
      */
     private $hostname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $databaseName;
 
     /**
      * @var int
@@ -209,6 +216,25 @@ class Login
     public function getHostname()
     {
         return $this->hostname;
+    }
+
+    /**
+     * @param string $databaseName
+     * @return Login
+     */
+    public function setDatabaseName($databaseName)
+    {
+        $this->databaseName = $databaseName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDatabaseName()
+    {
+        return $this->databaseName;
     }
 
     /**
