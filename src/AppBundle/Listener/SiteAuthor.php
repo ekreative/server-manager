@@ -10,8 +10,7 @@ class SiteAuthor
 
     private $security;
 
-    public function __construct(SecurityContextInterface $security)
-    {
+    public function __construct(SecurityContextInterface $security) {
         $this->security = $security;
     }
 
