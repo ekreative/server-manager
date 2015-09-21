@@ -20,26 +20,27 @@ class UserRegisterRedmine
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param InteractiveLoginEvent $event
+     */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-        /**
-         * @var RedmineUser $datauser;
-         */
         $datauser = $this->security->getToken()->getUser();
         $user = $this->entityManager->getRepository('AppBundle:User')->find($datauser->getId());
-        if(!$user) {
-            $user = new User();
-        }
-        $user->setId($datauser->getId());
-        $user->setUsername($datauser->getUsername());
-        $user->setFirstName($datauser->getFirstName());
-        $user->setLastName($datauser->getLastName());
-        $user->setEmail($datauser->getEmail());
-        $user->setIsAdmin($datauser->getIsAdmin());
-        $user->setCreatedAt($datauser->getCreatedAt());
-        $user->setApiKey($datauser->getApiKey());
 
-        $this->entityManager->persist($user);
+        if ($user) {
+            $user->setUsername($datauser->getUsername());
+            $user->setFirstName($datauser->getFirstName());
+            $user->setLastName($datauser->getLastName());
+            $user->setEmail($datauser->getEmail());
+            $user->setLastLoginAt($datauser->getLastLoginAt());
+            $user->setApiKey($datauser->getApiKey());
+            $user->setIsAdmin($datauser->getIsAdmin());
+        } else {
+            $this->security->getToken()->setUser($datauser);
+            $this->entityManager->persist($datauser);
+        }
+
         $this->entityManager->flush();
     }
 

@@ -16,10 +16,6 @@ use Ekreative\RedmineLoginBundle\Security\RedmineUser;
  */
 class User extends RedmineUser
 {
-    public function __construct() {
-
-    }
-
 
     public function __toString()
     {
