@@ -65,7 +65,6 @@ class SiteType extends AbstractType
                     'help-block' => 'Domain names associated with this site'
                 ]
             ])
-            ->add('author', null, ['required' => true])
         ;
     }
 

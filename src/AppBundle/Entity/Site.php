@@ -101,12 +101,18 @@ class Site
     private $framework;
 
     /**
-     * @var User
+     * @var Collection
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sites")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
      */
     private $author;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
+     */
+    private $editor;
 
     /**
      * Hook timestampable behavior
@@ -339,6 +345,25 @@ class Site
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * @param User $editor
+     * @return User
+     */
+    public function setEditor(User $editor = null)
+    {
+        $this->editor = $editor;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getEditor()
+    {
+        return $this->editor;
     }
 
     /**

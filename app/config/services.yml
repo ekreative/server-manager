@@ -8,6 +8,15 @@ services:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
 
+
+    site_author.listener:
+        class: AppBundle\Listener\SiteAuthor
+        arguments:
+            - @security.context
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+
     project_type:
         class: AppBundle\Form\ProjectType
         arguments:
