@@ -10,7 +10,7 @@ services:
 
 
     site_author.listener:
-        class: AppBundle\Listener\SiteAuthor
+        class: AppBundle\Listener\AuthorEditorListener
         arguments:
             - @service_container
         tags:

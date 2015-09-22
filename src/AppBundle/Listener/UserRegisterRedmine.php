@@ -36,7 +36,7 @@ class UserRegisterRedmine
             $user->setLastLoginAt($datauser->getLastLoginAt());
             $user->setApiKey($datauser->getApiKey());
             $user->setIsAdmin($datauser->getIsAdmin());
-            $this->security->getToken()->setUser($authUser);
+            $this->security->getToken()->setUser($user);
         } else {
             $this->entityManager->persist($datauser);
         }

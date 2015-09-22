@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use AppBundle\Traits\AuthoreditorEntity;
+use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Site
@@ -105,7 +105,7 @@ class Site
      * Hook authoreditor behavior
      * author, editor fields
      */
-    use AuthoreditorEntity;
+    use AuthorEditorEntity;
 
     /**
      * Hook timestampable behavior
