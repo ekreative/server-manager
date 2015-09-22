@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Traits\AuthoreditorEntity;
 
 /**
  * Project
@@ -37,6 +38,8 @@ class Project
      * @Assert\Valid()
      */
     private $sites;
+
+    use AuthoreditorEntity;
 
     public function __construct($id)
     {

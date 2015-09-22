@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Traits\AuthoreditorEntity;
 
 /**
  * Domain
@@ -55,6 +56,8 @@ class Domain
      * @Assert\Valid()
      */
     private $managementLogin;
+
+    use AuthoreditorEntity;
 
     public function __construct()
     {

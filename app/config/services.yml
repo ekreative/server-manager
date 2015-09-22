@@ -12,9 +12,9 @@ services:
     site_author.listener:
         class: AppBundle\Listener\SiteAuthor
         arguments:
-            - @security.context
+            - @service_container
         tags:
-            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
 
     project_type:

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use AppBundle\Traits\AuthoreditorEntity;
 
 /**
  * Site
@@ -101,18 +102,10 @@ class Site
     private $framework;
 
     /**
-     * @var Collection
-     *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
+     * Hook authoreditor behavior
+     * author, editor fields
      */
-    private $author;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"persist", "remove"})
-     */
-    private $editor;
+    use AuthoreditorEntity;
 
     /**
      * Hook timestampable behavior
@@ -328,43 +321,7 @@ class Site
         return $this->framework;
     }
 
-    /**
-     * @param User $author
-     * @return Site
-     */
-    public function setAuthor(User $author = null)
-    {
-        $this->author = $author;
 
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param User $editor
-     * @return User
-     */
-    public function setEditor(User $editor = null)
-    {
-        $this->editor = $editor;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getEditor()
-    {
-        return $this->editor;
-    }
 
 
 }
