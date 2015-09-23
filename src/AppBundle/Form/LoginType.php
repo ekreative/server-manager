@@ -9,12 +9,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
             ->add('loginType', 'choice', [
                 'choices' => [
@@ -57,7 +59,16 @@ class LoginType extends AbstractType
                     'data-login-type' => implode(' ', [Login::TYPE_SSH, Login::TYPE_DB])
                 ]
             ])
-            ->add('proxyHost', null, [
+            ->add('proxyHostLogin', null, [
+                'attr' => [
+                    'data-login-type' => Login::TYPE_SSH
+                ]
+            ])
+            ->add('proxyHost', 'collection', [
+                'allow_add' => true,
+                'allow_delete' => true,
+                'type' => new ProxyHostType(),
+                'by_reference' => false,
                 'attr' => [
                     'data-login-type' => Login::TYPE_SSH
                 ]

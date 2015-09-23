@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Login
  *
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LoginRepository")
  */
 class Login
 {
@@ -57,13 +58,18 @@ class Login
     private $hostname;
 
     /**
-     * @var string
+     * @var Login
      *
-     * @ORM\OneToOne(targetEntity="Login")
-     * @ORM\JoinColumn(name="proxyHost", referencedColumnName="id")
-     *
+     * @ORM\OneToOne(targetEntity="ProxyHost", mappedBy="login", cascade={"persist"})
      */
     private $proxyHost;
+
+    /**
+     * @var Login
+     *
+     * @ORM\OneToOne(targetEntity="ProxyHost", mappedBy="login")
+     */
+    private $proxyHostLogin;
 
     /**
      * @var int
@@ -221,7 +227,7 @@ class Login
     }
 
     /**
-     * @return string
+     * @return Login
      */
     public function getProxyHost()
     {
@@ -229,11 +235,27 @@ class Login
     }
 
     /**
-     * @param string $proxyHost
+     * @param Login $proxyHost
      */
-    public function setProxyHost($proxyHost)
+    public function setProxyHost(Login $proxyHost = null)
     {
         $this->proxyHost = $proxyHost;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyHostLogin()
+    {
+        return $this->proxyHostLogin;
+    }
+
+    /**
+     * @param Login $proxyHostLogin
+     */
+    public function setProxyHostLogin($proxyHostLogin)
+    {
+        $this->proxyHostLogin = $proxyHostLogin;
     }
 
 
