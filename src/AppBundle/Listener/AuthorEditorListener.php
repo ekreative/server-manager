@@ -19,7 +19,8 @@ class AuthorEditorListener
         $entityManager = $args->getEntityManager();
         if (!$entity instanceof \AppBundle\Entity\User) {
             $user = $this->container->get('security.context')->getToken()->getUser();
-            $user = $entityManager->getRepository('AppBundle\Entity\User')->find($user->getId());
+
+//            $user = $entityManager->getRepository('AppBundle\Entity\User')->find($user->getId());
             $entity->setEditor($user);
         }
     }
@@ -33,10 +34,11 @@ class AuthorEditorListener
         $entityManager = $args->getEntityManager();
         if (!$entity instanceof \AppBundle\Entity\User) {
             $user = $this->container->get('security.context')->getToken()->getUser();
-            $user = $entityManager->getRepository('AppBundle\Entity\User')->find($user->getId());
+            // $user2 = $entityManager->getRepository('AppBundle\Entity\User')->find($user->getId());
             $entity->setAuthor($user);
             $entity->setEditor($user);
         }
+
 
     }
 
