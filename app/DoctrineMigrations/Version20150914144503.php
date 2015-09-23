@@ -18,7 +18,9 @@ class Version20150914144503 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE login ADD proxyHost VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE login ADD proxy_host_login_id INT DEFAULT NULL');
+        $this->addSql('CREATE TABLE proxy_host (id INT AUTO_INCREMENT NOT NULL, name VARCHAR NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+
     }
 
     /**
@@ -29,6 +31,6 @@ class Version20150914144503 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE login DROP proxyHost');
+        $this->addSql('DROP TABLE proxy_host');
     }
 }
