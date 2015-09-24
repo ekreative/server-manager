@@ -9,12 +9,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType
 {
+    private $includeProxy;
+
+    public function __construct($includeProxy = true)
+    {
+        $this->includeProxy = $includeProxy;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
             ->add('loginType', 'choice', [
                 'choices' => [
@@ -68,6 +76,13 @@ class LoginType extends AbstractType
                 ]
             ])
         ;
+        if ($this->includeProxy) {
+            $builder->add('proxyHost', new LoginType(false), [
+                'attr' => [
+                    'data-login-type' => Login::TYPE_DB
+                ]
+            ]);
+        }
     }
 
     /**

@@ -53,6 +53,13 @@ class Version20150616120340 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('DROP TABLE domain');
+        $this->addSql('DROP TABLE framework');
+        $this->addSql('DROP TABLE login');
+        $this->addSql('DROP TABLE project');
+        $this->addSql('DROP TABLE server');
+        $this->addSql('DROP TABLE server_site');
+        $this->addSql('DROP TABLE site');
         $this->addSql('ALTER TABLE login DROP FOREIGN KEY FK_AA08CB101345EDE5');
         $this->addSql('ALTER TABLE site DROP FOREIGN KEY FK_694309E437AECF72');
         $this->addSql('ALTER TABLE domain DROP FOREIGN KEY FK_A7A91E0B6ACA2D99');
@@ -71,12 +78,5 @@ class Version20150616120340 extends AbstractMigration
         $this->addSql('ALTER TABLE login DROP FOREIGN KEY FK_AA08CB1068663DCA');
         $this->addSql('ALTER TABLE login DROP FOREIGN KEY FK_AA08CB101B84366B');
         $this->addSql('ALTER TABLE server_site DROP FOREIGN KEY FK_E2C37804F6BD1646');
-        $this->addSql('DROP TABLE domain');
-        $this->addSql('DROP TABLE framework');
-        $this->addSql('DROP TABLE login');
-        $this->addSql('DROP TABLE project');
-        $this->addSql('DROP TABLE server');
-        $this->addSql('DROP TABLE server_site');
-        $this->addSql('DROP TABLE site');
     }
 }

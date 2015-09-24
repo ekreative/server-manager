@@ -10,6 +10,7 @@ use AppBundle\Traits\AuthorEditorEntity;
  * Login
  *
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LoginRepository")
  */
 class Login
 {
@@ -63,6 +64,22 @@ class Login
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $databaseName;
+
+    /**
+     * @var Login
+     *
+     * @ORM\OneToOne(targetEntity="Login", mappedBy="proxyHostLogin", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Assert\Valid()
+     */
+    private $proxyHost;
+
+    /**
+     * @var Login
+     *
+     * @ORM\OneToOne(targetEntity="Login", inversedBy="proxyHost")
+     */
+    private $proxyHostLogin;
 
     /**
      * @var int
@@ -131,13 +148,14 @@ class Login
      */
     private $domainManagement;
 
-
     use AuthorEditorEntity;
 
-
-    public function __construct($loginType = null)
+    public function __construct($loginType = null, $includeProxyHost = true)
     {
         $this->setLoginType($loginType ?: self::TYPE_NONE);
+        if ($includeProxyHost) {
+            $this->setProxyHost(new Login(self::TYPE_NONE, false));
+        }
     }
 
     /**
@@ -223,7 +241,7 @@ class Login
     {
         return $this->hostname;
     }
-
+    
     /**
      * @param string $databaseName
      * @return Login
@@ -413,6 +431,49 @@ class Login
         return $this;
     }
 
+    /**
+     * Set proxyHost
+     *
+     * @param \AppBundle\Entity\Login $proxyHost
+     * @return Login
+     */
+    public function setProxyHost(Login $proxyHost = null)
+    {
+        $this->proxyHost = $proxyHost;
 
+        return $this;
+    }
 
+    /**
+     * Get proxyHost
+     *
+     * @return \AppBundle\Entity\Login 
+     */
+    public function getProxyHost()
+    {
+        return $this->proxyHost;
+    }
+
+    /**
+     * Set proxyHostLogin
+     *
+     * @param \AppBundle\Entity\Login $proxyHostLogin
+     * @return Login
+     */
+    public function setProxyHostLogin(Login $proxyHostLogin = null)
+    {
+        $this->proxyHostLogin = $proxyHostLogin;
+
+        return $this;
+    }
+
+    /**
+     * Get proxyHostLogin
+     *
+     * @return \AppBundle\Entity\Login 
+     */
+    public function getProxyHostLogin()
+    {
+        return $this->proxyHostLogin;
+    }
 }
