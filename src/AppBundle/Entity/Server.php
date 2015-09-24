@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Server
@@ -94,6 +95,8 @@ class Server
      * @ORM\OneToMany(targetEntity="Domain", mappedBy="server", cascade={"persist", "remove"})
      */
     private $domains;
+
+    use AuthorEditorEntity;
 
     public function __construct()
     {

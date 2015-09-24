@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Login
@@ -122,12 +123,17 @@ class Login
      */
     private $serverUser;
 
+
     /**
      * @var Server
      *
      * @ORM\OneToOne(targetEntity="Domain", inversedBy="managementLogin")
      */
     private $domainManagement;
+
+
+    use AuthorEditorEntity;
+
 
     public function __construct($loginType = null)
     {
@@ -406,4 +412,7 @@ class Login
         $this->loginType = $loginType;
         return $this;
     }
+
+
+
 }

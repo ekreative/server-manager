@@ -19,3 +19,5 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
     redmine: 'https://redmine.org'
     redis: 'localhost'
+
+    ekreative_redmine_login.user.class: AppBundle\Entity\User
