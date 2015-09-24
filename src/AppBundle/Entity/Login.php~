@@ -60,9 +60,7 @@ class Login
     /**
      * @var Login
      *
-     * @ORM\OneToOne(targetEntity="Login", mappedBy="proxyHostLogin", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Assert\Valid()
+     * @ORM\OneToOne(targetEntity="Login", mappedBy="proxyHostLogin", cascade={"persist"})
      */
     private $proxyHost;
 
@@ -139,12 +137,9 @@ class Login
      */
     private $domainManagement;
 
-    public function __construct($loginType = null, $includeProxyHost = true)
+    public function __construct($loginType = null)
     {
         $this->setLoginType($loginType ?: self::TYPE_NONE);
-        if ($includeProxyHost) {
-            $this->setProxyHost(new Login(self::TYPE_NONE, false));
-        }
     }
 
     /**
@@ -406,50 +401,4 @@ class Login
         return (string) $this->getHostname();
     }
 
-
-    /**
-     * Set proxyHost
-     *
-     * @param \AppBundle\Entity\Login $proxyHost
-     * @return Login
-     */
-    public function setProxyHost(Login $proxyHost = null)
-    {
-        $this->proxyHost = $proxyHost;
-
-        return $this;
-    }
-
-    /**
-     * Get proxyHost
-     *
-     * @return \AppBundle\Entity\Login 
-     */
-    public function getProxyHost()
-    {
-        return $this->proxyHost;
-    }
-
-    /**
-     * Set proxyHostLogin
-     *
-     * @param \AppBundle\Entity\Login $proxyHostLogin
-     * @return Login
-     */
-    public function setProxyHostLogin(Login $proxyHostLogin = null)
-    {
-        $this->proxyHostLogin = $proxyHostLogin;
-
-        return $this;
-    }
-
-    /**
-     * Get proxyHostLogin
-     *
-     * @return \AppBundle\Entity\Login 
-     */
-    public function getProxyHostLogin()
-    {
-        return $this->proxyHostLogin;
-    }
 }

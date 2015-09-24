@@ -9,6 +9,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType
 {
+    private $includeProxy;
+
+    public function __construct($includeProxy = true)
+    {
+        $this->includeProxy = $includeProxy;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -59,26 +65,19 @@ class LoginType extends AbstractType
                     'data-login-type' => implode(' ', [Login::TYPE_SSH, Login::TYPE_DB])
                 ]
             ])
-            ->add('proxyHostLogin', null, [
-                'attr' => [
-                    'data-login-type' => Login::TYPE_SSH
-                ]
-            ])
-            ->add('proxyHost', 'collection', [
-                'allow_add' => true,
-                'allow_delete' => true,
-                'type' => new ProxyHostType(),
-                'by_reference' => false,
-                'attr' => [
-                    'data-login-type' => Login::TYPE_SSH
-                ]
-            ])
             ->add('url', null, [
                 'attr' => [
                     'data-login-type' => Login::TYPE_SITE
                 ]
             ])
         ;
+        if ($this->includeProxy) {
+            $builder->add('proxyHost', new LoginType(false), [
+                'attr' => [
+                    'data-login-type' => Login::TYPE_DB
+                ]
+            ]);
+        }
     }
 
     /**
