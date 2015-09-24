@@ -5,13 +5,13 @@ namespace AppBundle\Traits;
 use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
-trait AuthoreditorEntity
+trait AuthorEditorEntity
 {
 
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $author;
@@ -19,7 +19,7 @@ trait AuthoreditorEntity
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $editor;
