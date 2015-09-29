@@ -32,7 +32,7 @@
         <tr>
             <th>Servers</th>
             <td>
-                {%  for server in entity.servers %}
+                {% for server in entity.servers %}
                     {{ render(controller('AppBundle:Server:show', {'server': server})) }}
                 {% endfor %}
             </td>
@@ -40,7 +40,7 @@
         <tr>
             <th>Domains</th>
             <td>
-                {%  for domain in entity.domains %}
+                {% for domain in entity.domains %}
                     {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
                 {% endfor %}
             </td>

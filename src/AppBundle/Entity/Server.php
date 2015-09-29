@@ -2,19 +2,24 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Server
  *
  * @ORM\Entity
  */
-class Server
+class Server implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
@@ -95,8 +100,6 @@ class Server
      * @ORM\OneToMany(targetEntity="Domain", mappedBy="server", cascade={"persist", "remove"})
      */
     private $domains;
-
-    use AuthorEditorEntity;
 
     public function __construct()
     {

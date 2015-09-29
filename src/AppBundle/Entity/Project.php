@@ -2,19 +2,24 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Project
  *
  * @ORM\Entity(repositoryClass="ProjectRepository")
  */
-class Project
+class Project implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
@@ -38,8 +43,6 @@ class Project
      * @Assert\Valid()
      */
     private $sites;
-
-    use AuthorEditorEntity;
 
     public function __construct($id)
     {

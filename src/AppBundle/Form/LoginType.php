@@ -74,8 +74,7 @@ class LoginType extends AbstractType
                 'attr' => [
                     'data-login-type' => Login::TYPE_SITE
                 ]
-            ])
-        ;
+            ]);
         if ($this->includeProxy) {
             $builder->add('proxyHost', new LoginType(false), [
                 'attr' => [

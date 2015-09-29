@@ -2,21 +2,25 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use AppBundle\Traits\AuthorEditorEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Site
  *
  * @ORM\Entity
  */
-class Site
+class Site implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
@@ -101,19 +105,6 @@ class Site
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $framework;
-
-    /**
-     * Hook authoreditor behavior
-     * author, editor fields
-     */
-    use AuthorEditorEntity;
-
-    /**
-     * Hook timestampable behavior
-     * updates created, updated fields
-     */
-    use TimestampableEntity;
-
 
     public function __construct()
     {
@@ -321,8 +312,6 @@ class Site
     {
         return $this->framework;
     }
-
-
 
 
 }

@@ -77,14 +77,14 @@ class Projects
             }
             /** @var Response[] $responses */
             $responses = Promise\unwrap($requests);
-            $responseProjects = array_map(function(Response $response) {
+            $responseProjects = array_map(function (Response $response) {
                 return json_decode($response->getBody(), true)['projects'];
             }, $responses);
             $responseProjects[] = $projects;
             $projects = call_user_func_array('array_merge', $responseProjects);
         }
 
-        usort($projects, function($projectA, $projectB) {
+        usort($projects, function ($projectA, $projectB) {
             return strcasecmp($projectA['name'], $projectB['name']);
         });
 

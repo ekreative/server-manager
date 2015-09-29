@@ -2,11 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Framework
@@ -14,12 +16,15 @@ use AppBundle\Traits\AuthorEditorEntity;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Framework
+class Framework implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -28,7 +33,7 @@ class Framework
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;
@@ -37,7 +42,7 @@ class Framework
      * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
-     * @ORM\Column(name="currentVersion", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Regex("/\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b/i", message="Enter a valid semvar version")
      */
@@ -49,8 +54,6 @@ class Framework
      * @ORM\OneToMany(targetEntity="Site", mappedBy="framework")
      */
     private $sites;
-
-    use AuthorEditorEntity;
 
     public function __construct()
     {

@@ -71,3 +71,8 @@ swiftmailer:
 
 ekreative_redmine_login:
     redmine: %redmine%
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            timestampable: true

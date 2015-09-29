@@ -2,21 +2,26 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Domain
  *
  * @ORM\Entity
  */
-class Domain
+class Domain implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -26,7 +31,7 @@ class Domain
      * @var string
      * DNS regex - http://stackoverflow.com/a/10306731/859027
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Regex("/^([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$/")
      */
@@ -56,8 +61,6 @@ class Domain
      * @Assert\Valid()
      */
     private $managementLogin;
-
-    use AuthorEditorEntity;
 
     public function __construct()
     {

@@ -5,10 +5,6 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\CallbackValidator;
-use Symfony\Component\Form\FormValidatorInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormError;
 
 class SiteType extends AbstractType
 {
@@ -18,7 +14,6 @@ class SiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
 
 
         $builder
@@ -69,8 +64,7 @@ class SiteType extends AbstractType
                 'attr' => [
                     'help-block' => 'Domain names associated with this site'
                 ]
-            ])
-        ;
+            ]);
     }
 
     /**

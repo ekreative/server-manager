@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Traits;
+namespace AppBundle\AuthorEditor;
 
 use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
-trait AuthorEditorEntity
+trait AuthorEditorableEntity
 {
 
     /**
@@ -26,7 +26,7 @@ trait AuthorEditorEntity
 
     /**
      * @param User $author
-     * @return Site
+     * @return self
      */
     public function setAuthor(User $author = null)
     {
@@ -45,7 +45,7 @@ trait AuthorEditorEntity
 
     /**
      * @param User $editor
-     * @return User
+     * @return self
      */
     public function setEditor(User $editor = null)
     {

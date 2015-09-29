@@ -20,8 +20,7 @@ class DomainType extends AbstractType
                 'attr' => [
                     'help-block' => 'Where can we change things for this domain name? e.g. 123-reg.co.uk'
                 ]
-            ])
-        ;
+            ]);
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use GuzzleHttp\Promise;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use GuzzleHttp\Promise;
 
 class ProjectController extends Controller
 {
@@ -16,9 +16,9 @@ class ProjectController extends Controller
     public function typeaheadAction(Request $request)
     {
         $q = $request->query->get('q', '');
-        return new JsonResponse(array_map(function($project) {
+        return new JsonResponse(array_map(function ($project) {
             return $project['name'];
-        }, array_filter($this->get('projects')->getAllProjects(), function($project) use ($q) {
+        }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q) {
             return empty($q) || stripos($project['name'], $q) !== false;
         })));
     }

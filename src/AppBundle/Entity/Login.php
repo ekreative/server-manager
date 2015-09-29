@@ -2,9 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AuthorEditor\AuthorEditorable;
+use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Traits\AuthorEditorEntity;
 
 /**
  * Login
@@ -12,8 +14,11 @@ use AppBundle\Traits\AuthorEditorEntity;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="LoginRepository")
  */
-class Login
+class Login implements AuthorEditorable
 {
+    use AuthorEditorableEntity;
+    use TimestampableEntity;
+
     const TYPE_SITE = 'site';
     const TYPE_SSH = 'ssh';
     const TYPE_DB = 'db';
@@ -148,8 +153,6 @@ class Login
      */
     private $domainManagement;
 
-    use AuthorEditorEntity;
-
     public function __construct($loginType = null, $includeProxyHost = true)
     {
         $this->setLoginType($loginType ?: self::TYPE_NONE);
@@ -241,7 +244,7 @@ class Login
     {
         return $this->hostname;
     }
-    
+
     /**
      * @param string $databaseName
      * @return Login
@@ -447,7 +450,7 @@ class Login
     /**
      * Get proxyHost
      *
-     * @return \AppBundle\Entity\Login 
+     * @return \AppBundle\Entity\Login
      */
     public function getProxyHost()
     {
@@ -470,7 +473,7 @@ class Login
     /**
      * Get proxyHostLogin
      *
-     * @return \AppBundle\Entity\Login 
+     * @return \AppBundle\Entity\Login
      */
     public function getProxyHostLogin()
     {

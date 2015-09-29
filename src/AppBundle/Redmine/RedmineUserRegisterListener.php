@@ -1,31 +1,33 @@
 <?php
 
-namespace AppBundle\Listener;
+namespace AppBundle\Redmine;
 
 use AppBundle\Entity\User;
-use Ekreative\RedmineLoginBundle\Security\RedmineUser;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-class UserRegisterRedmine
+class RedmineUserRegisterListener
 {
-
+    /**
+     * @var EntityManager
+     */
     private $entityManager;
-    private $security;
 
-    public function __construct(SecurityContextInterface $security, EntityManager $entityManager)
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
+    public function __construct(TokenStorage $tokenStorage, EntityManager $entityManager)
     {
-        $this->security = $security;
+        $this->tokenStorage = $tokenStorage;
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param InteractiveLoginEvent $event
-     */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-        $datauser = $this->security->getToken()->getUser();
+        $datauser = $this->tokenStorage->getToken()->getUser();
         $user = $this->entityManager->getRepository('AppBundle:User')->find($datauser->getId());
 
         if ($user) {
@@ -36,12 +38,11 @@ class UserRegisterRedmine
             $user->setLastLoginAt($datauser->getLastLoginAt());
             $user->setApiKey($datauser->getApiKey());
             $user->setIsAdmin($datauser->getIsAdmin());
-            $this->security->getToken()->setUser($user);
+            $this->tokenStorage->getToken()->setUser($user);
         } else {
             $this->entityManager->persist($datauser);
         }
 
         $this->entityManager->flush();
     }
-
 }
