@@ -10,6 +10,7 @@
             <th>Project</th>
             <th>Name</th>
             <th>Live</th>
+            <th>Framework</th>
             <th>Framework Version</th>
             <th>Actions</th>
         </tr>
@@ -21,6 +22,7 @@
                 <td>{% if entity.project %}{{ entity.project.name }}{% endif %}</td>
                 <td>{{ entity.name }}</td>
                 <td>{{ entity.live }}</td>
+                <td>{{ entity.framework ? entity.framework.name : '' }}</td>
                 <td>{{ entity.frameworkVersion }}</td>
                 <td>
                     <ul>
