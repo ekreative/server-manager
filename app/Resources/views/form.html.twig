@@ -1,5 +1,20 @@
 {% extends 'bootstrap_3_horizontal_layout.html.twig' %}
 
+{%- block form -%}
+    {% if attr.delete_form is defined and attr.delete_form %}
+        {{ form_start(form, {'attr': {'class': 'form-single-button'}}) }}
+        {{- form_widget(form) -}}
+        {#{% block submit_row %}#}
+            {#{{ form_widget(form, {'attr': {'class': 'btn-danger'}}) }}#}
+        {#{% endblock %}#}
+        {{ form_end(form) }}
+    {% else %}
+        {{ form_start(form) }}
+        {{- form_widget(form) -}}
+        {{ form_end(form) }}
+    {% endif %}
+{%- endblock form -%}
+
 {% block collection_widget %}
     {% spaceless %}
         <div class="form-collection">
