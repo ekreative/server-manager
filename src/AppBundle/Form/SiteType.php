@@ -18,7 +18,9 @@ class SiteType extends AbstractType
 
 
         $builder
-            ->add('project', 'project')
+            ->add('project', 'project', [
+                'required'=>true
+            ])
             ->add('name', null, [
                 'attr' => [
                     'help-block' => 'A name for the server'

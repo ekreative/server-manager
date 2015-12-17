@@ -59,6 +59,7 @@ class Site implements AuthorEditorable
      * @var Project
      *
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="sites")
+     * @Assert\NotBlank(message="Enter a current name of Redmine project")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $project;
