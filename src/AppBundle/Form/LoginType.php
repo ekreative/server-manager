@@ -22,6 +22,7 @@ class LoginType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $data = $builder->getData();
 
         $builder
             ->add('loginType', 'choice', [
@@ -36,7 +37,11 @@ class LoginType extends AbstractType
                     'class' => 'btn-group',
                     'data-toggle' => 'buttons',
                     'data-login-type-toggle' => null
-                ]
+                ],
+                'data'=>$data && $data->getLoginType()?$data->getLoginType():Login::TYPE_NONE,
+//                'empty_data' => Login::TYPE_NONE,
+//                'empty_value' => 'None',
+
             ])
             ->add('databaseName', null, [
                 'attr' => [

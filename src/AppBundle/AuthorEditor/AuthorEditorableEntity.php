@@ -11,7 +11,7 @@ trait AuthorEditorableEntity
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $author;
@@ -19,7 +19,7 @@ trait AuthorEditorableEntity
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $editor;

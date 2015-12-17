@@ -23,8 +23,12 @@ class SiteType extends AbstractType
                     'help-block' => 'A name for the server'
                 ]
             ])
-            ->add('live', 'checkbox', [
-                'required' => false,
+            ->add('live', 'choice', [
+                'required' => true,
+                'choices'=>[
+                    1 => 'Yes',
+                    0 => 'No'
+                ],
                 'attr' => [
                     'help-block' => 'Is this a live server or a test server?'
                 ]
@@ -53,7 +57,7 @@ class SiteType extends AbstractType
                 'type' => new ServerType(),
                 'by_reference' => false,
                 'attr' => [
-                    'help-block' => 'Servers associated with this site'
+                    'help-block' => 'Servers credentials associated with this site'
                 ]
             ])
             ->add('domains', 'collection', [
@@ -62,7 +66,7 @@ class SiteType extends AbstractType
                 'type' => new DomainType(),
                 'by_reference' => false,
                 'attr' => [
-                    'help-block' => 'Domain names associated with this site'
+                    'help-block' => 'Domain names credentials associated with this site'
                 ]
             ]);
     }

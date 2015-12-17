@@ -59,7 +59,7 @@ class Login implements AuthorEditorable
      * DNS regex - http://stackoverflow.com/a/10306731/859027
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex("/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/")
+     * @Assert\Regex("/^((([a-zA-Z0-9][a-zA-Z0-9\-\_\.]*[a-zA-Z0-9]))*\.([A-Za-z]{1,}))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]$)/")
      */
     private $hostname;
 

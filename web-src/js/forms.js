@@ -6,6 +6,7 @@ $('.form-collection').each(function(i, formCollection) {
         var prototype = $(this).data('prototype');
         prototype = prototype.replace(/__name__/g, idx++);
         $elements.append($(prototype));
+        refreshTogles();
     });
     $elements.on('click', '.form-collection-delete', function() {
         $(this).parents('.form-collection-element').remove();
@@ -33,6 +34,9 @@ $(document).on('change', '[data-login-type-toggle] input', function() {
     loginTypeToggle($(this));
 });
 
-$('[data-login-type-toggle] [checked]').each(function(i, input) {
-    loginTypeToggle($(input));
-});
+function refreshTogles() {
+    $('[data-login-type-toggle] [checked]').each(function(i, input) {
+        loginTypeToggle($(input));
+    });
+}
+refreshTogles();

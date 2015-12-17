@@ -25,25 +25,18 @@
                 <td>{{ entity.framework ? entity.framework.name : '' }}</td>
                 <td>{{ entity.frameworkVersion }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('site_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('site_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <div class="btn-group">
+                            <a href="{{ path('site_show', { 'id': entity.id }) }}" class="btn-default btn">show</a>
+
+                            <a href="{{ path('site_edit', { 'id': entity.id }) }}" class="btn-default btn">edit</a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('site_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <a href="{{ path('site_new') }}" class="btn-default btn">
+        Create a new entry
+    </a>
 {% endblock %}

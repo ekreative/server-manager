@@ -28,8 +28,8 @@ class AuthorEditorListener
     {
         $entity = $args->getEntity();
         if ($entity instanceof AuthorEditorable) {
-            $user = $this->getUser();
-            $entity->setEditor($user);
+//            $user = $this->getUser();
+//            $entity->setEditor($user);
         }
     }
 
@@ -39,10 +39,12 @@ class AuthorEditorListener
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
+//        $userState = $this->container->get('doctrine')->getEntityManager()->getUnitOfWork()->getEntityState($this->getUser());
         if ($entity instanceof AuthorEditorable) {
-            $user = $this->getUser();
-            $entity->setAuthor($user);
-            $entity->setEditor($user);
+//            var_dump(get_class($entity), $entity->getId(), $userState);
+//            $user = $this->getUser();
+//            $entity->setAuthor($user);
+//            $entity->setEditor($user);
         }
     }
 }

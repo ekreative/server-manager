@@ -17,6 +17,7 @@ class ServerType extends AbstractType
         $builder
             ->add('ip')
             ->add('os')
+            ->add('hostedOn')
             ->add('autoUpdates', 'checkbox', [
                 'required' => false,
                 'attr' => [

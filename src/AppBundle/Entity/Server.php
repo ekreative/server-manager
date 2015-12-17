@@ -47,6 +47,14 @@ class Server implements AuthorEditorable
     private $os;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     */
+    private $hostedOn;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean")
@@ -303,5 +311,21 @@ class Server implements AuthorEditorable
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHostedOn()
+    {
+        return $this->hostedOn;
+    }
+
+    /**
+     * @param string $hostedOn
+     */
+    public function setHostedOn($hostedOn)
+    {
+        $this->hostedOn = $hostedOn;
     }
 }
