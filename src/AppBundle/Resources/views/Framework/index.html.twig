@@ -2,6 +2,14 @@
 
 {% block title %}Frameworks{% endblock %}
 
+{% block headerPanel %}
+    <div class="pull-right">
+        <a href="{{ path('framework_new') }}" class="btn-default btn">
+            Create a new entry
+        </a>
+    </div>
+{% endblock headerPanel %}
+
 {% block body %}
     <table class="table table-stripped va">
         <thead>
