@@ -14,7 +14,7 @@
     </tr>
     <tr>
         <th>Host</th>
-        <td>{{ entity.hostname }}:{{ entity.port }}</td>
+        <td>{{ entity.hostname }}{{ entity.port!=''?''.entity.port:'' }}</td>
     </tr>
     <tr>
         <th>Url</th>
