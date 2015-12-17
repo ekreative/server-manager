@@ -2,6 +2,26 @@
 
 {% block title %}Home{% endblock %}
 
+{% block header %}<br><br><br><br><br>{% endblock %}
+
+
 {% block body %}
-    <a href="{{ path('site') }}">Sites</a>
+
+    <div class="row home-page-grid">
+        <div class="col-sm-4">
+            <a href="{{ path('site') }}">Sites
+                <i class="glyphicon glyphicon-globe"></i></a>
+        </div>
+        {#{% if is_granted('ROLE_REDMINE_ADMIN') %}#}
+            <div class="col-sm-4">
+                <a href="{{ path('framework') }}">Frameworks
+                    <i class="glyphicon glyphicon-briefcase"></i></a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{ path('hosting') }}">Hosting
+                    <i class="glyphicon glyphicon-home"></i></a>
+            </div>
+        {#{% endif %}#}
+    </div>
+
 {% endblock %}
