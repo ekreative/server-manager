@@ -34,6 +34,22 @@ $(document).on('change', '[data-login-type-toggle] input', function() {
     loginTypeToggle($(this));
 });
 
+var oldFramework = '';
+var oldFrameworkVersion = '';
+
+$(document).on('change', '#appbundle_site_framework', function() {
+    $('#appbundle_site_frameworkVersion').val(oldFramework==$(this).val()?oldFrameworkVersion:$(this).find('option[value='+$(this).val()+']').attr('data-framework-version'));
+});
+
+if ($("#appbundle_site_frameworkVersion").size()){
+    oldFrameworkVersion = $("#appbundle_site_frameworkVersion").val();
+    console.log(oldFrameworkVersion);
+}
+if ($("#appbundle_site_framework").size()){
+    oldFramework = $("#appbundle_site_framework").val();
+    $("#appbundle_site_framework").change();
+}
+
 function refreshTogles() {
     $('[data-login-type-toggle] [checked]').each(function(i, input) {
         loginTypeToggle($(input));

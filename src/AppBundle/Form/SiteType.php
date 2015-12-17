@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Framework;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,7 +35,11 @@ class SiteType extends AbstractType
                 ]
             ])
             ->add('framework', null, [
-                'required' => true
+                'required' => true,
+                'choice_attr' => function($framework, $key, $index) {
+                    /** @var Framework $framework */
+                    return ['data-framework-version' => $framework->getCurrentVersion()];
+                },
             ])
             ->add('frameworkVersion', null, [
                 'attr' => [
