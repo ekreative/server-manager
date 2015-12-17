@@ -16,6 +16,48 @@ class LoginType extends AbstractType
         $this->includeProxy = $includeProxy;
     }
 
+    public function getAvailableTypes($referenceName) {
+        $types = [Login::TYPE_NONE => Login::TYPE_NONE_READ];
+
+        if($referenceName == 'hostingLogin'){
+            $types[Login::TYPE_SITE] = Login::TYPE_SITE_READ;
+        }
+
+        if($referenceName == 'rootLogin'){
+            $types[Login::TYPE_SSH] = Login::TYPE_SSH_READ;
+            $types[Login::TYPE_DB] = Login::TYPE_DB_READ;
+        }
+
+        if($referenceName == 'userLogin'){
+            $types[Login::TYPE_SSH] = Login::TYPE_SSH_READ;
+            $types[Login::TYPE_DB] = Login::TYPE_DB_READ;
+        }
+
+        if($referenceName == 'hostingLogin'){
+            $types[Login::TYPE_SSH] = Login::TYPE_SSH_READ;
+        }
+
+        if($referenceName == 'managementLogin'){
+            $types[Login::TYPE_SITE] = Login::TYPE_SITE_READ;
+        }
+
+        if($referenceName == 'adminLogin'){
+            $types[Login::TYPE_SITE] = Login::TYPE_SITE_READ;
+        }
+
+        if($referenceName == 'databaseLogin'){
+            $types[Login::TYPE_SITE] = Login::TYPE_SITE_READ;
+            $types[Login::TYPE_SSH] = Login::TYPE_SSH_READ;
+            $types[Login::TYPE_DB] = Login::TYPE_DB_READ;
+        }
+
+        if($referenceName == 'proxyHost'){
+            $types[Login::TYPE_SSH] = Login::TYPE_SSH_READ;
+        }
+
+        return $types;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -26,12 +68,7 @@ class LoginType extends AbstractType
 
         $builder
             ->add('loginType', 'choice', [
-                'choices' => [
-                    Login::TYPE_NONE => 'None',
-                    Login::TYPE_SITE => 'Site',
-                    Login::TYPE_SSH => 'SSH',
-                    Login::TYPE_DB => 'Database'
-                ],
+                'choices' => $this->getAvailableTypes((string) $builder->getForm()->getPropertyPath()),
                 'expanded' => true,
                 'attr' => [
                     'class' => 'btn-group',
@@ -39,9 +76,6 @@ class LoginType extends AbstractType
                     'data-login-type-toggle' => null
                 ],
                 'data'=>$data && $data->getLoginType()?$data->getLoginType():Login::TYPE_NONE,
-//                'empty_data' => Login::TYPE_NONE,
-//                'empty_value' => 'None',
-
             ])
             ->add('databaseName', null, [
                 'attr' => [

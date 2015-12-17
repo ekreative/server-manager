@@ -20,9 +20,16 @@ class Login implements AuthorEditorable
     use TimestampableEntity;
 
     const TYPE_SITE = 'site';
+    const TYPE_SITE_READ = 'Site';
+
     const TYPE_SSH = 'ssh';
+    const TYPE_SSH_READ = 'SSH';
+
     const TYPE_DB = 'db';
+    const TYPE_DB_READ = 'Database';
+
     const TYPE_NONE = 'none';
+    const TYPE_NONE_READ = 'None';
 
     /**
      * @var integer

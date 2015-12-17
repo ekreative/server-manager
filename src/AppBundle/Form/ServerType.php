@@ -17,7 +17,6 @@ class ServerType extends AbstractType
         $builder
             ->add('ip')
             ->add('os')
-            ->add('hostedOn')
             ->add('autoUpdates', 'checkbox', [
                 'required' => false,
                 'attr' => [
@@ -30,6 +29,7 @@ class ServerType extends AbstractType
                     'help-block' => 'Did you install NTP (<kbd>apt-get install ntp</kbd>)? If this is an OpsWorks server it is installed by default'
                 ]
             ])
+            ->add('hosting')
             ->add('hostingLogin', new LoginType())
             ->add('rootLogin', new LoginType())
             ->add('userLogin', new LoginType());
