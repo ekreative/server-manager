@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Framework{% endblock %}
+{% block title %}Hosting{% endblock %}
 
 {% block header %}
     <div class="page-header">
@@ -11,7 +11,7 @@
                 {{ form_end(delete_form) }}
             </div>
             <div class="pull-right">
-                <a href="{{ path('framework_edit', { 'id': entity.id }) }}" class="btn btn-default header-edit-btn">Edit</a>
+                <a href="{{ path('hosting_edit', { 'id': entity.id }) }}" class="btn btn-default header-edit-btn">Edit</a>
             </div>
         </h1>
     </div>
@@ -27,10 +27,6 @@
         <tr>
             <th>Name</th>
             <td>{{ entity.name }}</td>
-        </tr>
-        <tr>
-            <th>Current Version</th>
-            <td>{{ entity.currentVersion }}</td>
         </tr>
         </tbody>
     </table>

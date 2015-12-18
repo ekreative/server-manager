@@ -2,48 +2,52 @@
 
 {% block title %}Sites{% endblock %}
 
+{% block headerPanel %}
+    <div class="pull-right">
+        <a href="{{ path('site_new') }}" class="btn-default btn">
+            Create a new entry
+        </a>
+    </div>
+{% endblock headerPanel %}
+
 {% block body %}
-    <table class="table table-stripped">
+    <table class="table table-stripped va">
         <thead>
         <tr>
-            <th>Id</th>
+            <th class="text-center">Id</th>
             <th>Project</th>
             <th>Name</th>
-            <th>Live</th>
-            <th>Framework</th>
-            <th>Framework Version</th>
-            <th>Actions</th>
+            <th class="text-center">Live</th>
+            <th class="text-center">Framework</th>
+            <th class="text-center">Framework Version</th>
+            <th class="text-center">Framework Current Version</th>
+            <th class="text-center">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('site_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+
+            {% set version = entity.frameworkVersion %}
+            {% set currentVersion = entity.framework ? entity.framework.currentVersion : '' %}
+            {% set actual = version==currentVersion %}
+
+            <tr class="{{ actual?'actual':'not-actual' }}">
+                <td class="text-center"><a href="{{ path('site_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{% if entity.project %}{{ entity.project.name }}{% endif %}</td>
                 <td>{{ entity.name }}</td>
-                <td>{{ entity.live }}</td>
-                <td>{{ entity.framework ? entity.framework.name : '' }}</td>
-                <td>{{ entity.frameworkVersion }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('site_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('site_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                <td class="text-center">{{ entity.live?'<b>Yes</b>':'No' }}</td>
+                <td class="text-center">{{ entity.framework ? entity.framework.name : '' }}</td>
+                <td class="text-center">{{ version }}</td>
+                <td class="text-center">{{ currentVersion }}</td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <a href="{{ path('site_show', { 'id': entity.id }) }}" class="btn-default btn">show</a>
+
+                        <a href="{{ path('site_edit', { 'id': entity.id }) }}" class="btn-default btn">edit</a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('site_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
 {% endblock %}

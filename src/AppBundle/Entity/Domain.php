@@ -33,7 +33,7 @@ class Domain implements AuthorEditorable
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\Regex("/^([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$/")
+     * @Assert\Regex("/^((([a-zA-Z0-9][a-zA-Z0-9\-\_\.]*[a-zA-Z0-9]))*\.([A-Za-z]{1,}))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]$)/")
      */
     private $name;
 

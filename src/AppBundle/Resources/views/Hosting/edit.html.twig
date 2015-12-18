@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Edit Site{% endblock %}
+{% block title %}Edit Hosting{% endblock %}
 
 {% block headerPanel %}
     <div class="pull-right">
         {{ form_start(delete_form) }}
-        {{ form_widget(delete_form.submit,{'attr':{'class':'btn-danger','onclick':'return confirm("Are you sure you want to delete?")'}}) }}
+        {{ form_widget(delete_form.submit,{'attr':{'class':'btn-danger', 'onclick':'return confirm("Are you sure you want to delete?")'}}) }}
         {{ form_end(delete_form) }}
     </div>
 {% endblock headerPanel %}
 
-{% block body -%}
+{% block body %}
     {{ form(edit_form) }}
 {% endblock %}
