@@ -6,7 +6,7 @@ $('.form-collection').each(function(i, formCollection) {
         var prototype = $(this).data('prototype');
         prototype = prototype.replace(/__name__/g, idx++);
         $elements.append($(prototype));
-        refreshTogles();
+        refreshTogles($(this));
     });
     $elements.on('click', '.form-collection-delete', function() {
         $(this).parents('.form-collection-element').remove();
@@ -50,9 +50,15 @@ if ($("#appbundle_site_framework").size()){
     $("#appbundle_site_framework").change();
 }
 
-function refreshTogles() {
-    $('[data-login-type-toggle] [checked]').each(function(i, input) {
-        loginTypeToggle($(input));
-    });
+function refreshTogles(elem) {
+    if (elem) {
+        elem.parents('.form-collection').find('[data-login-type-toggle] [checked]').each(function(i, input) {
+            loginTypeToggle($(input));
+        });
+    } else {
+        $('[data-login-type-toggle] [checked]').each(function(i, input) {
+            loginTypeToggle($(input));
+        });
+    }
 }
 refreshTogles();
