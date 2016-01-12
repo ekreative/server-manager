@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Form\Model\Search;
+use AppBundle\Form\SearchType;
 use AppBundle\Form\SiteType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,19 +23,62 @@ class SiteController extends Controller
     /**
      * Lists all Site entities.
      *
+     * @param Request $request
+     *
      * @Route("/", name="site")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Template()
+     *
+     * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $search = new Search();
+        $form = $this->createSearchForm($search);
+
         $em = $this->getDoctrine()->getManager();
 
+        if ($request->getMethod() == "POST") {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $name = $search->getName();
+                $framework = $search->getFramework();
+                if ($name || $framework) {
+                    $entities = $em->getRepository('AppBundle:Site')->search($name, $framework);
+                    return [
+                        'entities' => $entities,
+                        'form' => $form->createView(),
+                    ];
+                }
+            }
+        }
         $entities = $em->getRepository('AppBundle:Site')->findAll();
+
 
         return [
             'entities' => $entities,
+            'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * Creates a form to create a Site entity.
+     *
+     * @param Search $search The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createSearchForm(Search $search)
+    {
+        $form = $this->createForm(new SearchType(), $search, [
+            'action' => $this->generateUrl('site'),
+            'method' => 'POST',
+        ]);
+
+        $form->add('submit', 'submit', ['label' => 'Search']);
+
+        return $form;
     }
 
     /**

@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Site
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SiteRepository")
  */
 class Site implements AuthorEditorable
 {
