@@ -110,6 +110,13 @@ class Server implements AuthorEditorable
      */
     private $domains;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $live;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -117,6 +124,25 @@ class Server implements AuthorEditorable
         $this->setHostingLogin(new Login(Login::TYPE_SITE));
         $this->setRootLogin(new Login(Login::TYPE_SSH));
         $this->setUserLogin(new Login(Login::TYPE_SSH));
+    }
+
+    /**
+     * @param boolean $live
+     * @return Server
+     */
+    public function setLive($live)
+    {
+        $this->live = $live;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getLive()
+    {
+        return $this->live;
     }
 
     /**

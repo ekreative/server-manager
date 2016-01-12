@@ -38,12 +38,7 @@ class Site implements AuthorEditorable
      */
     private $name;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean")
-     */
-    private $live;
+
 
     /**
      * @var string
@@ -123,24 +118,7 @@ class Site implements AuthorEditorable
         return $this->id;
     }
 
-    /**
-     * @param boolean $live
-     * @return Site
-     */
-    public function setLive($live)
-    {
-        $this->live = $live;
 
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getLive()
-    {
-        return $this->live;
-    }
 
     /**
      * @param string $frameworkVersion

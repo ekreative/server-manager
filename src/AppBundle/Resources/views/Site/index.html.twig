@@ -20,7 +20,6 @@
             <th class="text-center">Id</th>
             <th>Project</th>
             <th>Name</th>
-            <th class="text-center">Live</th>
             <th class="text-center">Framework</th>
             <th class="text-center">Framework Version</th>
             <th class="text-center">Framework Current Version</th>
@@ -38,7 +37,6 @@
                 <td class="text-center"><a href="{{ path('site_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{% if entity.project %}{{ entity.project.name }}{% endif %}</td>
                 <td>{{ entity.name }}</td>
-                <td class="text-center">{{ entity.live?'<b>Yes</b>':'No' }}</td>
                 <td class="text-center">{{ entity.framework ? entity.framework.name : '' }}</td>
                 <td class="text-center">{{ version }}</td>
                 <td class="text-center">{{ currentVersion }}</td>

@@ -63,7 +63,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Creates a form to create a Site entity.
+     * Creates a form to search a Site entity.
      *
      * @param Search $search The entity
      *
@@ -84,7 +84,7 @@ class SiteController extends Controller
     /**
      * Creates a new Site entity.
      *
-     * @Route("/", name="site_create")
+     * @Route("/create", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
      */
