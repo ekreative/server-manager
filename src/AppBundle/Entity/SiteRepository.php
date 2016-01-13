@@ -17,7 +17,7 @@ class SiteRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         if ($name) {
             $qb->andWhere('s.name LIKE :name')
-                ->setParameter('name', "%" . $name . "%");
+                ->setParameter('name', "%" . addcslashes($name, '%_') . "%");
         }
         if ($framework) {
             $qb->andWhere('s.framework = :framework')
