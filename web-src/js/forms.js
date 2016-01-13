@@ -1,3 +1,16 @@
+(function($) {
+    $.fn.closest_descendent = function(filter) {
+        var $found = $(),
+            $currentSet = this; // Current place
+        while ($currentSet.length) {
+            $found = $currentSet.filter(filter);
+            if ($found.length) break;  // At least one match: break loop
+            // Get all children of the current set
+            $currentSet = $currentSet.children();
+        }
+        return $found.first(); // Return first match of the collection
+    }
+})(jQuery);
 $('.form-collection').each(function(i, formCollection) {
     var $formCollection = $(formCollection),
         $elements = $formCollection.find('.form-collection-elements'),
@@ -26,8 +39,10 @@ $('input[typeahead]').each(function(i, input) {
 function loginTypeToggle($input) {
     var val = $input.val(),
         $root = $input.closest('.form-group').parent();
-    $root.find(`[data-login-type]:not([data-login-type~=${val}])`).closest('.form-group').addClass('hide');
-    $root.find(`[data-login-type~=${val}]`).closest('.form-group').removeClass('hide');
+
+    $root.find(`> .form-group > div > [data-login-type]:not([data-login-type~=${val}])`).closest('.form-group').addClass('hide');
+    $root.find(`> .form-group > div > [data-login-type~=${val}]`).closest('.form-group').removeClass('hide');
+
 }
 
 $(document).on('change', '[data-login-type-toggle] input', function() {
