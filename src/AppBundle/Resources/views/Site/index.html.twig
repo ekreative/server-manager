@@ -52,3 +52,9 @@
         </tbody>
     </table>
 {% endblock %}
+
+{% form_theme form _self %}
+{% block submit_row %}
+    {% set submit_id = form.vars.name ? form.vars.name ~ '_submit' : 'form_submit' %}
+    <button type="submit" id="{{ submit_id }}" class="btn-default btn">Search</button>
+{% endblock %}

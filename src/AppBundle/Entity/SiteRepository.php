@@ -8,10 +8,10 @@ class SiteRepository extends EntityRepository
 {
     /**
      * @param string $name
-     * @param Framework $framework
+     * @param int $framework
      * @return array
      */
-    public function search( $name = null, Framework $framework = null)
+    public function search( $name = null, $framework = null)
     {
 
         $qb = $this->createQueryBuilder('s');
@@ -20,7 +20,9 @@ class SiteRepository extends EntityRepository
                 ->setParameter('name', "%" . addcslashes($name, '%_') . "%");
         }
         if ($framework) {
-            $qb->andWhere('s.framework = :framework')
+            $qb
+                ->join('s.framework', 'framework')
+                ->andWhere('framework.id = :framework')
                 ->setParameter('framework', $framework);
         }
         return $qb->getQuery()->getResult();

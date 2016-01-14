@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,27 +34,19 @@ class SiteController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $search = new Search();
-        $form = $this->createSearchForm($search);
+
 
         $em = $this->getDoctrine()->getManager();
+        $name = $request->query->get('name');
+        $framework = $request->query->get('framework');
 
-        if ($request->getMethod() == "POST") {
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $name = $search->getName();
-                $framework = $search->getFramework();
-                if ($name || $framework) {
-                    $entities = $em->getRepository('AppBundle:Site')->search($name, $framework);
-                    return [
-                        'entities' => $entities,
-                        'form' => $form->createView(),
-                    ];
-                }
-            }
+        if ($name || $framework) {
+            $entities = $em->getRepository('AppBundle:Site')->search($name, $framework);
+        } else {
+            $entities = $em->getRepository('AppBundle:Site')->findAll();
         }
-        $entities = $em->getRepository('AppBundle:Site')->findAll();
+
+        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
 
 
         return [
@@ -65,20 +58,31 @@ class SiteController extends Controller
     /**
      * Creates a form to search a Site entity.
      *
-     * @param Search $search The entity
+     * @param array $data Data from request
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createSearchForm(Search $search)
+    private function createSearchForm(array $data = [])
     {
-        $form = $this->createForm(new SearchType(), $search, [
-            'action' => $this->generateUrl('site'),
-            'method' => 'POST',
-        ]);
+        if ($data['framework']) {
+            $data['framework'] =  $this->getDoctrine()->getManager()->getRepository('AppBundle:Framework')->find($data['framework']);
+        }
+        return $this->get('form.factory')->createNamedBuilder(null, 'form', $data, [
+            'method' => Request::METHOD_GET,
+            'csrf_protection' => false
+        ])
+            ->add('name', null, [
+                'attr' => ['placeholder' => 'Name'],
+                'required' => false,
+            ])
+            ->add('framework', 'entity', [
+                'class' => 'AppBundle\Entity\Framework',
+                'required' => false,
+                'empty_value' => '-Select-',
+            ])
+            ->add('submit', 'submit')
+            ->getForm();
 
-        $form->add('submit', 'submit', ['label' => 'Search']);
-
-        return $form;
     }
 
     /**
