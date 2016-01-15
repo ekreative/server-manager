@@ -11,13 +11,15 @@
 {% endblock headerPanel %}
 
 {% block body %}
+    <div class="search-wrapper clearfix">
+        {{ form(form) }}
+    </div>
     <table class="table table-stripped va">
         <thead>
         <tr>
             <th class="text-center">Id</th>
             <th>Project</th>
             <th>Name</th>
-            <th class="text-center">Live</th>
             <th class="text-center">Framework</th>
             <th class="text-center">Framework Version</th>
             <th class="text-center">Framework Current Version</th>
@@ -35,7 +37,6 @@
                 <td class="text-center"><a href="{{ path('site_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{% if entity.project %}{{ entity.project.name }}{% endif %}</td>
                 <td>{{ entity.name }}</td>
-                <td class="text-center">{{ entity.live?'<b>Yes</b>':'No' }}</td>
                 <td class="text-center">{{ entity.framework ? entity.framework.name : '' }}</td>
                 <td class="text-center">{{ version }}</td>
                 <td class="text-center">{{ currentVersion }}</td>
@@ -50,4 +51,10 @@
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% form_theme form _self %}
+{% block submit_row %}
+    {% set submit_id = form.vars.name ? form.vars.name ~ '_submit' : 'form_submit' %}
+    <button type="submit" id="{{ submit_id }}" class="btn-default btn">Search</button>
 {% endblock %}
