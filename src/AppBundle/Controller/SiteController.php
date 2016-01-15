@@ -3,8 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
-use AppBundle\Form\Model\Search;
-use AppBundle\Form\SearchType;
 use AppBundle\Form\SiteType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,7 +25,7 @@ class SiteController extends Controller
      * @param Request $request
      *
      * @Route("/", name="site")
-     * @Method({"GET", "POST"})
+     * @Method("GET")
      * @Template()
      *
      * @return array
@@ -88,7 +86,7 @@ class SiteController extends Controller
     /**
      * Creates a new Site entity.
      *
-     * @Route("/create", name="site_create")
+     * @Route("/", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
      */
