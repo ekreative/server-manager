@@ -15,6 +15,16 @@ class ServerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('live', 'choice', [
+                'required' => true,
+                'choices'=>[
+                    1 => 'Yes',
+                    0 => 'No'
+                ],
+                'attr' => [
+                    'help-block' => 'Is this a live server or a test server?'
+                ]
+            ])
             ->add('ip')
             ->add('os')
             ->add('autoUpdates', 'checkbox', [

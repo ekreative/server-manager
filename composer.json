@@ -1,15 +1,23 @@
 {
-    "name": "mcfedr/server-manager",
+    "name": "ekreative/server-manager",
     "license": "MIT",
     "type": "project",
+    "description": "An app for storing data about servers",
     "autoload": {
         "psr-4": {
-            "": "src/",
+            "AppBundle\\": "src/AppBundle/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AppBundle\\Tests\\": "tests/AppBundle/Tests/"
         }
     },
     "require": {
         "php": ">=5.5",
+        "ext-apc": "*",
+        "ext-redis": "*",
         "symfony/symfony": "^2.7",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
