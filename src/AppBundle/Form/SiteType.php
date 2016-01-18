@@ -23,17 +23,7 @@ class SiteType extends AbstractType
             ])
             ->add('name', null, [
                 'attr' => [
-                    'help-block' => 'A name for the server'
-                ]
-            ])
-            ->add('live', 'choice', [
-                'required' => true,
-                'choices'=>[
-                    1 => 'Yes',
-                    0 => 'No'
-                ],
-                'attr' => [
-                    'help-block' => 'Is this a live server or a test server?'
+                    'help-block' => 'A name for the site'
                 ]
             ])
             ->add('framework', null, [

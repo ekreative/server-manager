@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,19 +22,65 @@ class SiteController extends Controller
     /**
      * Lists all Site entities.
      *
+     * @param Request $request
+     *
      * @Route("/", name="site")
      * @Method("GET")
      * @Template()
+     *
+     * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Site')->findAll();
+
+        $em = $this->getDoctrine()->getManager();
+        $name = $request->query->get('name');
+        $framework = $request->query->get('framework');
+
+        if ($name || $framework) {
+            $entities = $em->getRepository('AppBundle:Site')->search($name, $framework);
+        } else {
+            $entities = $em->getRepository('AppBundle:Site')->findAll();
+        }
+
+        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
+
 
         return [
             'entities' => $entities,
+            'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * Creates a form to search a Site entity.
+     *
+     * @param array $data Data from request
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createSearchForm(array $data = [])
+    {
+        if ($data['framework']) {
+            $data['framework'] =  $this->getDoctrine()->getManager()->getRepository('AppBundle:Framework')->find($data['framework']);
+        }
+        return $this->get('form.factory')->createNamedBuilder(null, 'form', $data, [
+            'method' => Request::METHOD_GET,
+            'csrf_protection' => false
+        ])
+            ->add('name', null, [
+                'attr' => ['placeholder' => 'Name'],
+                'required' => false,
+            ])
+            ->add('framework', 'entity', [
+                'class' => 'AppBundle\Entity\Framework',
+                'required' => false,
+                'empty_value' => '-Select-',
+            ])
+            ->add('submit', 'submit')
+            ->getForm();
+
     }
 
     /**
