@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Server;
 use AppBundle\Entity\Site;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -17,7 +19,11 @@ class ApiController extends Controller
 {
 
     /**
+     * Get a list of sites
+     *
      * @Route("/api/sites", name="api_sites")
+     * @ApiDoc(output={"class"="AppBundle\Entity\Site", "name"="sites"})
+     * @Method({"GET"})
      */
     public function sitesAction()
     {
