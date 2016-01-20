@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="LoginRepository")
  */
-class Login implements AuthorEditorable
+class Login implements AuthorEditorable, \JsonSerializable
 {
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -485,5 +485,16 @@ class Login implements AuthorEditorable
     public function getProxyHostLogin()
     {
         return $this->proxyHostLogin;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'sshKey' => $this->getSshKey(),
+            'host' => $this->getHostname(),
+            'port' => $this->getPort()
+        ];
     }
 }

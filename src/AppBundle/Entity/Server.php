@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  */
-class Server implements AuthorEditorable
+class Server implements AuthorEditorable, \JsonSerializable
 {
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -60,14 +60,14 @@ class Server implements AuthorEditorable
      *
      * @ORM\Column(type="boolean")
      */
-    private $autoUpdates;
+    private $autoUpdates = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(type="boolean")
      */
-    private $ntp;
+    private $ntp = false;
 
     /**
      * @var Collection
@@ -115,7 +115,7 @@ class Server implements AuthorEditorable
      *
      * @ORM\Column(type="boolean")
      */
-    private $live;
+    private $live = false;
 
     public function __construct()
     {
@@ -361,5 +361,13 @@ class Server implements AuthorEditorable
     public function getHosting()
     {
         return $this->hosting;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'host' => $this->getIp(),
+            'login' => $this->getUserLogin()
+        ];
     }
 }

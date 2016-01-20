@@ -17,29 +17,24 @@ class ApiController extends Controller
 {
 
     /**
-     * @Route("/api/servers", name="api_servers")
+     * @Route("/api/sites", name="api_sites")
      */
-    public function serversAction()
+    public function sitesAction()
     {
         $doctrine = $this->getDoctrine();
-        $projects = $doctrine->getRepository('AppBundle:Project')->findById(array_map(function ($project) {
+
+        $projects = $doctrine->getRepository('AppBundle:Project')->findBy(['id' => array_map(function ($project) {
             return $project['id'];
-        }, $this->get('projects')->getAllProjects()));
-        /** @var Project $project */
-        $sitesResult = [];
-        foreach ($projects as $project) {
-            /** @var Site $site */
-            foreach ($project->getSites() as $site) {
-                $siteResult = (object)['id'=>$site->getId(), 'slug'=>$site->getName(), 'name'=>$site->getName(), 'servers'=> null];
-                $siteResult->servers = [];
-                /** @var Server $server */
-                foreach ($site->getServers() as $server) {
-                    $siteResult->servers[] = (object)['name'=>'user login','user'=> $server->getUserLogin()->getUsername(),'host'=>$server->getIp()];
-                    $siteResult->servers[] = (object)['name'=>'root login','user'=> $server->getRootLogin()->getUsername(),'host'=>$server->getIp()];
-                }
-                $sitesResult[] = $siteResult;
-            }
-        }
-        return JsonResponse::create($sitesResult);
+        }, $this->get('projects')->getAllProjects())]);
+
+        $sitesArrays = array_map(function(Project $project) {
+            return $project->getSites()->toArray();
+        }, $projects);
+
+        $sites = call_user_func_array('array_merge', $sitesArrays);
+
+        return new JsonResponse([
+            'sites' =>  $sites
+        ]);
     }
 }

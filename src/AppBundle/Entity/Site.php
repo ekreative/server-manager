@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="SiteRepository")
  */
-class Site implements AuthorEditorable
+class Site implements AuthorEditorable, \JsonSerializable
 {
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -37,8 +37,6 @@ class Site implements AuthorEditorable
      * @Assert\NotBlank()
      */
     private $name;
-
-
 
     /**
      * @var string
@@ -164,7 +162,15 @@ class Site implements AuthorEditorable
      */
     public function setProject(Project $project = null)
     {
+        if ($this->project) {
+            $this->project->removeSite($this);
+        }
+
         $this->project = $project;
+
+        if ($project) {
+            $project->addSite($this);
+        }
 
         return $this;
     }
@@ -292,5 +298,12 @@ class Site implements AuthorEditorable
         return $this->framework;
     }
 
-
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'servers' => $this->getServers()->toArray()
+        ];
+    }
 }

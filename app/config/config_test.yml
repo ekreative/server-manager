@@ -14,3 +14,13 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        memory: true
+        charset:  UTF8
+
+services:
+    projects_cache:
+        class: Doctrine\Common\Cache\ArrayCache

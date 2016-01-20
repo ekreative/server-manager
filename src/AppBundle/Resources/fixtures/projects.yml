@@ -1,0 +1,29 @@
+AppBundle\Entity\Project:
+    project1:
+        __construct: [1]
+        name: <company()>
+
+    project2:
+        __construct: [2]
+        name: <company()>
+
+AppBundle\Entity\Site:
+    site{1..5}:
+        name: <sentence(2)>
+        project: @project*
+        frameworkVersion: <numerify('#.#.#')>
+
+AppBundle\Entity\Server:
+    server{1..10}:
+        ip: <ipv4()>
+        os: <randomElement(['ubuntu', 'centos'])>
+        site: [@site*]
+
+AppBundle\Entity\Login:
+    userLogin{1..10}:
+        serverUser: @server<current()>
+        username: <userName()>
+        password: <password()>
+        sshKey: <password()>
+        hostname: <domainName()>
+        port: <numberBetween(1, 65535)>
