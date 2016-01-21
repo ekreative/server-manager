@@ -188,7 +188,7 @@ class FrameworkController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('framework_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('framework_show', ['id' => $id]));
         }
 
         return [

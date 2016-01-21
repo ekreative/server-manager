@@ -188,7 +188,7 @@ class HostingController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('hosting_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('hosting_show', ['id' => $id]));
         }
 
         return [

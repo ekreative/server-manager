@@ -32,8 +32,6 @@ class SiteController extends Controller
      */
     public function indexAction(Request $request)
     {
-
-
         $em = $this->getDoctrine()->getManager();
         $name = $request->query->get('name');
         $framework = $request->query->get('framework');
@@ -235,7 +233,7 @@ class SiteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('site_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
         }
 
         return [
