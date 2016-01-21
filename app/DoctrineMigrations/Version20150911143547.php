@@ -25,7 +25,7 @@ class Version20150911143547 extends AbstractMigration
                       firstName VARCHAR(255) DEFAULT NULL,
                       lastName VARCHAR(255) DEFAULT NULL,
                       email VARCHAR(255) DEFAULT NULL,
-                      isAdmin TINYINT(1) DEFAULT NULL
+                      isAdmin TINYINT(1),
                       PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
 
     }
