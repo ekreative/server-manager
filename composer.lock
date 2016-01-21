@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8f4ca4c56d81d307357b9e80486fcd27",
-    "content-hash": "737ad1f3c5802302c01de499c7d39635",
+    "hash": "8732ef310f7ff0267c31f457cfefaec5",
+    "content-hash": "61176e651826a34b88fb0a5c8217f078",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -939,16 +939,16 @@
         },
         {
             "name": "ekreative/redmine_login",
-            "version": "3.2.0",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ekreative/redmine-login.git",
-                "reference": "7f895b745d43c8e487f79af263f37061e8643245"
+                "reference": "bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/7f895b745d43c8e487f79af263f37061e8643245",
-                "reference": "7f895b745d43c8e487f79af263f37061e8643245",
+                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e",
+                "reference": "bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e",
                 "shasum": ""
             },
             "require": {
@@ -974,7 +974,7 @@
                 "MIT"
             ],
             "description": "Login to symfony using redmine as user provider",
-            "time": "2016-01-21 09:56:11"
+            "time": "2016-01-21 11:40:01"
         },
         {
             "name": "fzaninotto/faker",
