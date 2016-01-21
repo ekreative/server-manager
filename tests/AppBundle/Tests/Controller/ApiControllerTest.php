@@ -11,6 +11,8 @@ class ApiControllerTest extends WebTestCase
 {
     public function testSites()
     {
+        // Only by creating the client twice do we insure the cache exists and that replacing services works
+        static::createClient();
         $client = static::createClient();
 
         $redmineClient = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
