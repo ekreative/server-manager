@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class SiteRepository extends EntityRepository
 {
@@ -11,9 +12,18 @@ class SiteRepository extends EntityRepository
      * @param int $framework
      * @return array
      */
-    public function search( $name = null, $framework = null)
+    public function search($name = null, $framework = null)
     {
+        return $this->searchQuery($name, $framework)->getResult();
+    }
 
+    /**
+     * @param string $name
+     * @param int $framework
+     * @return Query
+     */
+    public function searchQuery($name = null, $framework = null)
+    {
         $qb = $this->createQueryBuilder('s');
         if ($name) {
             $qb->andWhere('s.name LIKE :name')
@@ -25,6 +35,6 @@ class SiteRepository extends EntityRepository
                 ->andWhere('framework.id = :framework')
                 ->setParameter('framework', $framework);
         }
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery();
     }
 }
