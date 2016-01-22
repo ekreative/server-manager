@@ -10,16 +10,6 @@ class SiteRepository extends EntityRepository
     /**
      * @param string $name
      * @param int $framework
-     * @return array
-     */
-    public function search($name = null, $framework = null)
-    {
-        return $this->searchQuery($name, $framework)->getResult();
-    }
-
-    /**
-     * @param string $name
-     * @param int $framework
      * @return Query
      */
     public function searchQuery($name = null, $framework = null)
