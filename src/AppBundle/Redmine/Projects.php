@@ -24,7 +24,7 @@ class Projects
 
     private $cachePrefix;
 
-    public function __construct(ClientProvider $clientProvider, TokenStorageInterface $tokenStorage, Cache $cache)
+    public function __construct(ClientProvider $clientProvider, TokenStorageInterface $tokenStorage, Cache $cache = null)
     {
         if ($tokenStorage->getToken()) {
             /** @var RedmineUser $user */
@@ -54,7 +54,8 @@ class Projects
     public function getAllProjects()
     {
         $key = "{$this->cachePrefix}-all-projects";
-        if (($projects = $this->cache->fetch($key))) {
+
+        if ($this->cache && ($projects = $this->cache->fetch($key))) {
             return $projects;
         }
 
@@ -88,7 +89,7 @@ class Projects
             return strcasecmp($projectA['name'], $projectB['name']);
         });
 
-        $this->cache->save($key, $projects);
+        $this->cache && $this->cache->save($key, $projects);
         return $projects;
     }
 }

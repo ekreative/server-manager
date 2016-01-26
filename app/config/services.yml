@@ -32,13 +32,13 @@ services:
         arguments:
             - @ekreative_redmine_login.client_provider
             - @security.token_storage
-            - @projects_cache
+#            - @projects_cache
 
     projects_cache:
         class: Doctrine\Common\Cache\RedisCache
         calls:
             - [setRedis, [@redis]]
-            - [ setNamespace, [ 'sm:' ]]
+            - [ setNamespace, [ 'sm:p:' ]]
 
     redis:
         class: Redis
