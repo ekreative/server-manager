@@ -26,6 +26,13 @@
             <th class="text-center">Actions</th>
         </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <td colspan="100">
+                {{ knp_pagination_render(entities) }}
+            </td>
+        </tr>
+        </tfoot>
         <tbody>
         {% for entity in entities %}
 

@@ -37,13 +37,13 @@ class SiteController extends Controller
         $framework = $request->query->get('framework');
 
         if ($name || $framework) {
-            $entities = $em->getRepository('AppBundle:Site')->search($name, $framework);
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework);
         } else {
-            $entities = $em->getRepository('AppBundle:Site')->findAll();
+            $query = $em->getRepository('AppBundle:Site')->createQueryBuilder('s')->getQuery();
         }
 
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 10);
         $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
-
 
         return [
             'entities' => $entities,
@@ -61,7 +61,7 @@ class SiteController extends Controller
     private function createSearchForm(array $data = [])
     {
         if ($data['framework']) {
-            $data['framework'] =  $this->getDoctrine()->getManager()->getRepository('AppBundle:Framework')->find($data['framework']);
+            $data['framework'] = $this->getDoctrine()->getManager()->getRepository('AppBundle:Framework')->find($data['framework']);
         }
         return $this->get('form.factory')->createNamedBuilder(null, 'form', $data, [
             'method' => Request::METHOD_GET,
