@@ -31,8 +31,15 @@ $('input[typeahead]').each(function(i, input) {
         source: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: $(input).attr('typeahead')
-        })
+            prefetch: {
+                url: $(input).attr('typeahead'),
+                cache: false
+            }
+        }),
+        remote: {
+            cache: false,
+            ttl: 0
+        }
     })
 });
 
@@ -76,4 +83,4 @@ function refreshTogles(elem) {
         });
     }
 }
-refreshTogles();
+refreshTogles(false);
