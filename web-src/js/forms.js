@@ -18,8 +18,8 @@ $('.form-collection').each(function(i, formCollection) {
     $formCollection.find('.form-collection-add').on('click', function() {
         var prototype = $(this).data('prototype');
         prototype = prototype.replace(/__name__/g, idx++);
-        $elements.append($(prototype));
-        refreshTogles($(this));
+        $(prototype).appendTo($(this).closest('.form-collection').find('.form-collection-elements'));
+        refreshTogles($(this).closest('.form-collection').find('.form-collection-element:last-child'));
     });
     $elements.on('click', '.form-collection-delete', function() {
         $(this).parents('.form-collection-element').remove();
@@ -47,8 +47,13 @@ function loginTypeToggle($input) {
     var val = $input.val(),
         $root = $input.closest('.form-group').parent();
 
-    $root.find(`> .form-group > div > [data-login-type]:not([data-login-type~=${val}])`).closest('.form-group').addClass('hide');
-    $root.find(`> .form-group > div > [data-login-type~=${val}]`).closest('.form-group').removeClass('hide');
+    $root.find('> .form-group > div > [data-login-type]:not([data-login-type~="'+val+'"])').each(function() {
+        $(this).closest('.form-group').addClass('hide');
+    });
+
+    $root.find('> .form-group > div > [data-login-type~="'+val+'"]').each(function() {
+        $(this).closest('.form-group').removeClass('hide');
+    });
 
 }
 
@@ -74,7 +79,7 @@ if ($("#appbundle_site_framework").size()){
 
 function refreshTogles(elem) {
     if (elem) {
-        elem.parents('.form-collection').find('[data-login-type-toggle] [checked]').each(function(i, input) {
+        elem.find('[data-login-type-toggle] [checked]').each(function(i, input) {
             loginTypeToggle($(input));
         });
     } else {
