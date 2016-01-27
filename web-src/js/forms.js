@@ -83,4 +83,4 @@ function refreshTogles(elem) {
         });
     }
 }
-refreshTogles();
+refreshTogles(false);

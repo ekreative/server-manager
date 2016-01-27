@@ -14,7 +14,7 @@ class DomainController extends Controller
     public function showAction(Domain $domain)
     {
         return [
-            'domain' => $domain
+            'entity' => $domain
         ];
     }
 }
