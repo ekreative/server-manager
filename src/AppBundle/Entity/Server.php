@@ -47,6 +47,15 @@ class Server implements AuthorEditorable
     private $os;
 
     /**
+     * @var Hosting
+     *
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="Hosting", inversedBy="servers")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $hosting;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean")
@@ -303,5 +312,28 @@ class Server implements AuthorEditorable
     public function getDomains()
     {
         return $this->domains;
+    }
+    /**
+     * Set hosting
+     *
+     * @param \AppBundle\Entity\Hosting $hosting
+     *
+     * @return Site
+     */
+    public function setHosting(\AppBundle\Entity\Hosting $hosting = null)
+    {
+        $this->hosting = $hosting;
+
+        return $this;
+    }
+
+    /**
+     * Get hosting
+     *
+     * @return \AppBundle\Entity\Hosting
+     */
+    public function getHosting()
+    {
+        return $this->hosting;
     }
 }
