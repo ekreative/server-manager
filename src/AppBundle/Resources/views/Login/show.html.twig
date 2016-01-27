@@ -1,24 +1,35 @@
-<table class="table inner">
-    <tbody>
-    <tr>
-        <th>Username</th>
-        <td>{{ entity.username }}</td>
-    </tr>
-    <tr>
-        <th>Password</th>
-        <td>{{ entity.password }}</td>
-    </tr>
-    <tr>
-        <th>SSH Key</th>
-        <td>{{ entity.sshKey }}</td>
-    </tr>
-    <tr>
-        <th>Host</th>
-        <td>{{ entity.hostname }}{{ entity.port!=''?':'~entity.port:'' }}</td>
-    </tr>
-    <tr>
-        <th>Url</th>
-        <td>{{ entity.url }}</td>
-    </tr>
-    </tbody>
-</table>
+{% if (entity.loginType != 'none') %}
+    <table class="table inner">
+        <tbody>
+            <tr>
+                <th>Username</th>
+                <td>{{ entity.username }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ entity.password }}</td>
+            </tr>
+
+            {% if entity.loginType == 'ssh' %}
+                <tr>
+                    <th>SSH Key</th>
+                    <td>{{ entity.sshKey }}</td>
+                </tr>
+            {% endif %}
+
+            {% if entity.loginType != 'site' %}
+                <tr>
+                    <th>Host</th>
+                    <td>{{ entity.hostname }}{{ entity.port!=''?':'~entity.port:'' }}</td>
+                </tr>
+            {% endif %}
+
+            {% if entity.loginType == 'site' %}
+                <tr>
+                    <th>Url</th>
+                    <td>{{ entity.url }}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endif %}
