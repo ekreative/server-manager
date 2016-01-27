@@ -22,7 +22,7 @@ security:
 
         secured_area:
             pattern: ^/
-            anonymous:
+            anonymous: true
             simple_form:
                 authenticator: ekreative_redmine_login.authenticator
                 check_path:    login_check
