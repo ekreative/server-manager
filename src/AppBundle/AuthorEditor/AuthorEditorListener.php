@@ -20,18 +20,20 @@ class AuthorEditorListener
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     private function getUser()
     {
-        return $this->tokenStorage->getToken()->getUser();
+        if (($token  = $this->tokenStorage->getToken())) {
+            return $token->getUser();
+        }
+        return null;
     }
 
     public function preUpdate(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof AuthorEditorable) {
-            $user = $this->getUser();
+        if ($entity instanceof AuthorEditorable && ($user = $this->getUser())) {
             $entity->setEditor($user);
         }
     }
@@ -42,8 +44,7 @@ class AuthorEditorListener
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof AuthorEditorable) {
-            $user = $this->getUser();
+        if ($entity instanceof AuthorEditorable && ($user = $this->getUser())) {
             $entity->setAuthor($user);
             $entity->setEditor($user);
         }
