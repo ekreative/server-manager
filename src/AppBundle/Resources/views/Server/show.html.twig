@@ -1,20 +1,52 @@
 <table class="table inner">
     <tbody>
-    <tr>
-        <th>Live</th>
-        <td>{{ entity.live?'<b>Yes</b>':'No' }}</td>
-    </tr>
-    <tr>
-        <th>IP</th>
-        <td>{{ entity.ip }}</td>
-    </tr>
-    <tr>
-        <th>OS</th>
-        <td>{{ entity.os }}</td>
-    </tr>
-    <tr>
-        <th>Automatic Updates</th>
-        <td>{{ entity.autoUpdates }}</td>
-    </tr>
+        <tr>
+            <th>Live</th>
+            <td>{{ entity.live?'<b>Yes</b>':'No' }}</td>
+        </tr>
+        <tr>
+            <th>IP</th>
+            <td>{{ entity.ip }}</td>
+        </tr>
+        <tr>
+            <th>OS</th>
+            <td>{{ entity.os }}</td>
+        </tr>
+        <tr>
+            <th>Automatic Updates</th>
+            <td>{{ entity.autoUpdates }}</td>
+        </tr>
+
+        <tr>
+            <th>Hosting</th>
+            <td>{{ entity.hosting }}</td>
+        </tr>
+
+        <tr>
+            <th>Hosting Login</th>
+            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.hostingLogin})) }}</td>
+        </tr>
+
+        <tr>
+            <th>Root Login</th>
+            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.rootLogin})) }}</td>
+        </tr>
+
+        <tr>
+            <th>User Login</th>
+            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.userLogin})) }}</td>
+        </tr>
+
+        {% if (entity.domains|length) %}
+            <tr>
+                <th>Domains</th>
+                <td>
+                    {% for domain in entity.domains %}
+                        {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+
     </tbody>
 </table>

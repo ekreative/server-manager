@@ -15,11 +15,20 @@ class ProjectController extends Controller
      */
     public function typeaheadAction(Request $request)
     {
+        $siteNames = [];
+        $sites = $this->getDoctrine()->getRepository('AppBundle:Site')->findAll();
+        foreach ($sites as $site) {
+            if ($site->getProject()) {
+                $siteNames[] = $site->getProject()->getName();
+            }
+        }
+
         $q = $request->query->get('q', '');
-        return new JsonResponse(array_map(function ($project) {
+
+        return new JsonResponse(array_values(array_map(function ($project) {
             return $project['name'];
-        }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q) {
-            return empty($q) || stripos($project['name'], $q) !== false;
-        })));
+        }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
+            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
+        }))));
     }
 }
