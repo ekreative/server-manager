@@ -20,42 +20,48 @@
 {% block body %}
     <table class="table inner">
         <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td>{{ entity.name }}</td>
-        </tr>
-        <tr>
-            <th>Framework Version</th>
-            <td>{{ entity.frameworkVersion }}</td>
-        </tr>
-        <tr>
-            <th>Admin Login</th>
-            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.adminLogin})) }}</td>
-        </tr>
-        <tr>
-            <th>Database Login</th>
-            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.databaseLogin})) }}</td>
-        </tr>
-        <tr>
-            <th>Servers</th>
-            <td>
-                {% for server in entity.servers %}
-                    {{ render(controller('AppBundle:Server:show', {'server': server})) }}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>Domains</th>
-            <td>
-                {% for domain in entity.domains %}
-                    {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
-                {% endfor %}
-            </td>
-        </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Framework Version</th>
+                <td>{{ entity.frameworkVersion }}</td>
+            </tr>
+            <tr>
+                <th>Admin Login</th>
+                <td>{{ render(controller('AppBundle:Login:show', {'login': entity.adminLogin})) }}</td>
+            </tr>
+            <tr>
+                <th>Database Login</th>
+                <td>{{ render(controller('AppBundle:Login:show', {'login': entity.databaseLogin})) }}</td>
+            </tr>
+
+            {% if (entity.servers|length) %}
+                <tr>
+                    <th>Servers</th>
+                    <td>
+                        {% for server in entity.servers %}
+                            {{ render(controller('AppBundle:Server:show', {'server': server})) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% if (entity.domains|length) %}
+                <tr>
+                    <th>Domains</th>
+                    <td>
+                        {% for domain in entity.domains %}
+                            {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 {% endblock %}
