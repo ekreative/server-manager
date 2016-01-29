@@ -13,13 +13,6 @@ security:
             pattern: ^/(login$|api/doc)
             security: false
 
-        api_area:
-            pattern: ^/api
-            anonymous: false
-            stateless: true
-            simple_preauth:
-                authenticator: ekreative_redmine_login.api_authenticator
-
         secured_area:
             pattern: ^/
             anonymous: true
@@ -30,6 +23,8 @@ security:
                 username_parameter: login[username]
                 password_parameter: login[password]
                 remember_me:    true
+            simple_preauth:
+                authenticator: ekreative_redmine_login.api_authenticator
             logout:
                 path: /logout
             remember_me:

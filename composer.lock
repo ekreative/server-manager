@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fc737af0f8c5c13c43b9fca1c1c1669c",
-    "content-hash": "041c1e55862cf56a35acdcbea6b60c5f",
+    "hash": "02f9768d287ee027675b0d6e8fe3ea33",
+    "content-hash": "9a5f55c60a252415c06fd372f8b281f2",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -941,16 +941,16 @@
         },
         {
             "name": "ekreative/redmine_login",
-            "version": "3.4.1",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ekreative/redmine-login.git",
-                "reference": "bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e"
+                "reference": "7650daa47aa7d209fef3220d95565fa5aae05a8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e",
-                "reference": "bfe0a0bf1d6c3c9555a09ac8a55d079df76e220e",
+                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/7650daa47aa7d209fef3220d95565fa5aae05a8b",
+                "reference": "7650daa47aa7d209fef3220d95565fa5aae05a8b",
                 "shasum": ""
             },
             "require": {
@@ -976,7 +976,7 @@
                 "MIT"
             ],
             "description": "Login to symfony using redmine as user provider",
-            "time": "2016-01-21 11:40:01"
+            "time": "2016-01-29 09:28:36"
         },
         {
             "name": "fzaninotto/faker",
@@ -1032,16 +1032,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.10",
+            "version": "v2.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "7e7fc55fa3fad79031727fbc7d8e418b641be875"
+                "reference": "2527d8f93779458e097447b5f92132bc65e672f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/7e7fc55fa3fad79031727fbc7d8e418b641be875",
-                "reference": "7e7fc55fa3fad79031727fbc7d8e418b641be875",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/2527d8f93779458e097447b5f92132bc65e672f4",
+                "reference": "2527d8f93779458e097447b5f92132bc65e672f4",
                 "shasum": ""
             },
             "require": {
@@ -1107,7 +1107,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-12-18 20:34:21"
+            "time": "2016-01-28 10:00:33"
         },
         {
             "name": "guzzlehttp/guzzle",
