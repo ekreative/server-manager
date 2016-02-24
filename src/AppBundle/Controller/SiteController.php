@@ -42,7 +42,7 @@ class SiteController extends Controller
             $query = $em->getRepository('AppBundle:Site')->createQueryBuilder('s')->getQuery();
         }
 
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 10);
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
         $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
 
         return [

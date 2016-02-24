@@ -33,7 +33,7 @@ class HostingController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->getRepository('AppBundle:Hosting')->createQueryBuilder('h')->getQuery();
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 1);
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [
             'entities' => $entities,
