@@ -18,7 +18,7 @@ class Version20160121124028 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user CHANGE is_admin admin TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD admin TINYINT(1) NOT NULL');
     }
 
     /**
@@ -29,6 +29,6 @@ class Version20160121124028 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user CHANGE admin is_admin TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE user DROP admin TINYINT(1) NOT NULL');
     }
 }
