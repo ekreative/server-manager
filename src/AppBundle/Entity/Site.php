@@ -100,6 +100,16 @@ class Site implements AuthorEditorable, \JsonSerializable
      */
     private $framework;
 
+    /**
+     *
+     * '0' => sites what are placed on our hosting
+     * '1' => sites what are placed on external hosting
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     *
+     **/
+    private $responsibility;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
@@ -296,6 +306,22 @@ class Site implements AuthorEditorable, \JsonSerializable
     public function getFramework()
     {
         return $this->framework;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponsibility()
+    {
+        return $this->responsibility;
+    }
+
+    /**
+     * @param mixed $responsibility
+     */
+    public function setResponsibility($responsibility)
+    {
+        $this->responsibility = $responsibility;
     }
 
     public function jsonSerialize()

@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Framework;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -38,6 +39,16 @@ class SiteType extends AbstractType
                     'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
                 ]
             ])
+            ->add('responsibility', ChoiceType::class, [
+                'label' => 'Responsibility',
+                'required' => false,
+                'choices' => [
+                    '0' => 'our',
+                    '1' => 'external',
+                ],
+                'empty_value' => null,
+            ])
+
             ->add('adminLogin', new LoginType(), [
                 'attr' => [
                     'help-block' => 'Site admin login details'

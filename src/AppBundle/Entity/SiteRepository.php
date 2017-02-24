@@ -10,9 +10,10 @@ class SiteRepository extends EntityRepository
     /**
      * @param string $name
      * @param int $framework
+     * @param boolean $responsibility
      * @return Query
      */
-    public function searchQuery($name = null, $framework = null)
+    public function searchQuery($name = null, $framework = null, $responsibility = null)
     {
         $qb = $this->createQueryBuilder('s');
         if ($name) {
@@ -25,6 +26,13 @@ class SiteRepository extends EntityRepository
                 ->andWhere('framework.id = :framework')
                 ->setParameter('framework', $framework);
         }
+
+        if ($responsibility == 0) {
+            $qb
+                ->andWhere('s.responsibility = :responsibility')
+                ->setParameter('responsibility', $responsibility);
+        }
+
         return $qb->getQuery();
     }
 }

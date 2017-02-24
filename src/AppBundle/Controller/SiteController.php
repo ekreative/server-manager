@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,14 +37,20 @@ class SiteController extends Controller
         $name = $request->query->get('name');
         $framework = $request->query->get('framework');
 
-        if ($name || $framework) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework);
+        if ($request->query->get('responsibility') == null) {
+            $responsibility = 0;
         } else {
-            $query = $em->getRepository('AppBundle:Site')->createQueryBuilder('s')->getQuery();
+            $responsibility = $request->query->get('responsibility');
         }
 
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
-        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
+        if ($name || $framework || $responsibility) {
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $responsibility);
+        } else {
+            $query = $em->getRepository('AppBundle:Site')->findBy(['responsibility' => $responsibility]);
+        }
+
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 12);
+        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'responsibility' => $responsibility]);
 
         return [
             'entities' => $entities,
@@ -76,9 +83,17 @@ class SiteController extends Controller
                 'required' => false,
                 'empty_value' => '-Select-',
             ])
+            ->add('responsibility', ChoiceType::class, [
+                'label' => 'Responsibility',
+                'required' => false,
+                'choices' => [
+                    '0' => 'our',
+                    '1' => 'all',
+                ],
+                'empty_value' => null,
+            ])
             ->add('submit', 'submit')
             ->getForm();
-
     }
 
     /**
