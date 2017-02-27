@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManager;
 use Ekreative\RedmineLoginBundle\Security\RedmineUserFactoryInterface;
 use Symfony\Bridge\Doctrine\Security\User\EntityUserProvider;
 
+use Redmine\Client;
+
 class RedmineUserFactory extends EntityUserProvider implements RedmineUserFactoryInterface
 {
     /**
@@ -18,10 +20,23 @@ class RedmineUserFactory extends EntityUserProvider implements RedmineUserFactor
      */
     private $entityManager;
 
-    public function __construct(Registry $registry)
+    /**
+     * @var Client
+     */
+    private $redMineClient;
+
+    /**
+     * @var string
+     */
+    private $groupServerManagers;
+
+
+    public function __construct(Registry $registry, Client $redMineClient, $groupServerManagers)
     {
         parent::__construct($registry, User::class);
         $this->entityManager = $registry->getManager();
+        $this->redMineClient = $redMineClient;
+        $this->groupServerManagers = $groupServerManagers;
     }
 
     /**
@@ -32,6 +47,18 @@ class RedmineUserFactory extends EntityUserProvider implements RedmineUserFactor
     public function loadUserByData(array $data, $isAdmin)
     {
         $user = $this->entityManager->getRepository('AppBundle:User')->find($data['id']);
+
+        // redmine.ekreative.com/users/{user Id}.json?include=groups  <--  sample request for response user {user Id} groups from RedMine
+        $uri = '/users/' . $data['id'] . '.json?include=groups';
+        $arrayGroups = $this->redMineClient->get($uri)['user']['groups'];
+
+        if ($arrayGroups){
+            foreach ($arrayGroups as $group) {
+                if ($group['name'] == $this->groupServerManagers) {
+                    $isAdmin = true;
+                }
+            }
+        }
 
         if ($user) {
             $user->updateWithData($data);
