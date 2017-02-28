@@ -37,20 +37,20 @@ class SiteController extends Controller
         $name = $request->query->get('name');
         $framework = $request->query->get('framework');
 
-        if ($request->query->get('responsibility') == null) {
-            $responsibility = 0;
+        if ($request->query->get('status') == null) {
+            $status = Site::STATUS_SUPPORTED;
         } else {
-            $responsibility = $request->query->get('responsibility');
+            $status = $request->query->get('status');
         }
 
-        if ($name || $framework || $responsibility) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $responsibility);
+        if ($name || $framework || $status) {
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status);
         } else {
-            $query = $em->getRepository('AppBundle:Site')->findBy(['responsibility' => $responsibility]);
+            $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
         }
 
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 12);
-        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'responsibility' => $responsibility]);
+        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'status' => $status]);
 
         return [
             'entities' => $entities,
@@ -83,12 +83,12 @@ class SiteController extends Controller
                 'required' => false,
                 'empty_value' => '-Select-',
             ])
-            ->add('responsibility', ChoiceType::class, [
-                'label' => 'Responsibility',
+            ->add('status', ChoiceType::class, [
+                'label' => 'Status',
                 'required' => false,
                 'choices' => [
-                    '0' => 'our',
-                    '1' => 'all',
+                    'Supported' => 'Supported',
+                    'All' => 'All',
                 ],
                 'empty_value' => null,
             ])
