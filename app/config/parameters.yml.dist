@@ -19,4 +19,6 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     redmine: 'https://redmine.org'
+    api_key_redmine: ThisApiKeyIsNotSoSecretChangeIt
+    group_server_managers: 'ServerManager'
     redis: 'localhost'

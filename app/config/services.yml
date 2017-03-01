@@ -3,7 +3,9 @@ services:
     ekreative_redmine_login.user_factory:
         class: AppBundle\Redmine\RedmineUserFactory
         arguments:
-            - @doctrine
+            - "@doctrine"
+            - "@redmine_client"
+            - "%group_server_managers%"
 
     site_author.listener:
         class: AppBundle\AuthorEditor\AuthorEditorListener
@@ -44,3 +46,9 @@ services:
         class: Redis
         calls:
             - [connect, [%redis%, 6379]]
+
+    redmine_client:
+        class: Redmine\Client
+        arguments:
+          - "%redmine%"
+          - "%api_key_redmine%"

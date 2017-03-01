@@ -71,7 +71,7 @@ swiftmailer:
     spool:     { type: memory }
 
 ekreative_redmine_login:
-    redmine: %redmine%
+    redmine: "%redmine%"
 
 stof_doctrine_extensions:
     orm:

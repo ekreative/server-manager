@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,14 +37,20 @@ class SiteController extends Controller
         $name = $request->query->get('name');
         $framework = $request->query->get('framework');
 
-        if ($name || $framework) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework);
+        if ($request->query->get('status') == null) {
+            $status = Site::STATUS_SUPPORTED;
         } else {
-            $query = $em->getRepository('AppBundle:Site')->createQueryBuilder('s')->getQuery();
+            $status = $request->query->get('status');
         }
 
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
-        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework]);
+        if ($name || $framework || $status) {
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status);
+        } else {
+            $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
+        }
+
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 12);
+        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'status' => $status]);
 
         return [
             'entities' => $entities,
@@ -76,9 +83,17 @@ class SiteController extends Controller
                 'required' => false,
                 'empty_value' => '-Select-',
             ])
+            ->add('status', ChoiceType::class, [
+                'label' => 'Status',
+                'required' => false,
+                'choices' => [
+                    'Supported' => 'Supported',
+                    'All' => 'All',
+                ],
+                'empty_value' => null,
+            ])
             ->add('submit', 'submit')
             ->getForm();
-
     }
 
     /**

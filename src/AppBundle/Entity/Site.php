@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Site implements AuthorEditorable, \JsonSerializable
 {
+    const STATUS_SUPPORTED = 'Supported';
+    const STATUS_UNSUPPORTED = 'UnSupported';
+
     use AuthorEditorableEntity;
     use TimestampableEntity;
 
@@ -99,6 +102,16 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $framework;
+
+    /**
+     *
+     * '0' => sites what are placed on our hosting
+     * '1' => sites what are placed on external hosting
+     * @var string
+     * @ORM\Column(type="string", length=60)
+     *
+     **/
+    private $status;
 
     public function __construct()
     {
@@ -298,6 +311,23 @@ class Site implements AuthorEditorable, \JsonSerializable
         return $this->framework;
     }
 
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+
     public function jsonSerialize()
     {
         return [
@@ -306,4 +336,5 @@ class Site implements AuthorEditorable, \JsonSerializable
             'servers' => $this->getServers()->toArray()
         ];
     }
+
 }
