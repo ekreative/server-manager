@@ -52,3 +52,11 @@ services:
         arguments:
           - "%redmine%"
           - "%api_key_redmine%"
+
+    app.check_version.command:
+        class: AppBundle\Command\CheckVersionCommand
+        arguments:
+            - @doctrine
+            - @logger
+        tags:
+            - {name: console.command}
