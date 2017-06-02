@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <th>Framework Version</th>
-                <td>{{ entity.frameworkVersion }}</td>
+                <td>{{ entity.frameworkVersion }} {% if entity.healthChecks.last %} ( Last sync: {{ entity.healthChecks.last.lastSyncAt|date }} ) {% endif %}</td>
             </tr>
             <tr>
                 <th>Admin Login</th>
@@ -58,6 +58,17 @@
                     <td>
                         {% for domain in entity.domains %}
                             {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% if (entity.healthChecks|length) %}
+                <tr>
+                    <th>Health Checks</th>
+                    <td>
+                        {% for healthCheck in entity.healthChecks%}
+                            {{ render(controller('AppBundle:HealthCheck:show', {'healthCheck': healthCheck})) }}
                         {% endfor %}
                     </td>
                 </tr>
