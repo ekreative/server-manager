@@ -40,6 +40,13 @@ class HealthCheck
     private $url;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_sync_at", type="datetime", nullable=true)
+     */
+    private $lastSyncAt;
+
+    /**
      * @return int
      */
     public function getId()
@@ -83,6 +90,26 @@ class HealthCheck
     public function setUrl($url)
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastSyncAt()
+    {
+        return $this->lastSyncAt;
+    }
+
+    /**
+     * @param \DateTime $lastSyncAt
+     *
+     * @return $this
+     */
+    public function setLastSyncAt(\DateTime $lastSyncAt)
+    {
+        $this->lastSyncAt = $lastSyncAt;
 
         return $this;
     }
