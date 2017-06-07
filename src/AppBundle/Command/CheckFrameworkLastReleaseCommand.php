@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Entity\Framework;
+use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +33,7 @@ class CheckFrameworkLastReleaseCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $frameworks = $this->doctrine->getRepository(Framework::class)->findAll();
+        $client = new Client();
 
         /** @var Framework $framework */
         foreach ($frameworks as $framework) {
@@ -45,6 +47,29 @@ class CheckFrameworkLastReleaseCommand extends Command
                     $xmlContent = file_get_contents('https://updates.drupal.org/release-history/drupal/8.x');
                     $content = new \SimpleXMLElement($xmlContent);
                     $framework->setCurrentVersion($content->releases->release->version);
+                    break;
+                case Framework::SYMFONY:
+                    $versions = json_decode($client
+                        ->get('https://packagist.org/p/symfony/symfony.json')
+                        ->getBody()
+                        ->getContents(), true);
+                    end($versions['packages']['symfony/symfony']);
+                    $lastVersion = key($versions['packages']['symfony/symfony']);
+                    $framework->setCurrentVersion($lastVersion);
+                    break;
+                case Framework::WORDPRESS:
+                    $versions = json_decode($client
+                        ->get('https://api.wordpress.org/core/version-check/1.7/')
+                        ->getBody()
+                        ->getContents(), true);
+                    $lastVersion = $versions['offers'][0]['current'];
+                    $framework->setCurrentVersion($lastVersion);
+                    break;
+                case Framework::JOOMLA:
+                    $xmlContent = file_get_contents('http://update.joomla.org/core/list.xml');
+                    $content = new \SimpleXMLElement($xmlContent);
+                    $lastVersion = $content->extension[$content->count() -1]['version'];
+                    $framework->setCurrentVersion($lastVersion);
                     break;
             }
         }
