@@ -52,3 +52,11 @@ services:
         arguments:
           - "%redmine%"
           - "%api_key_redmine%"
+
+    app.command.update_joomla_versions:
+        class: AppBundle\Command\UpdateJoomlaCurrentVersion
+        arguments:
+            - "@doctrine"
+            - "@logger"
+        tags:
+            - { name: console.command }
