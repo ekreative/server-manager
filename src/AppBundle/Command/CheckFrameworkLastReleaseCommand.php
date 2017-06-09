@@ -39,37 +39,71 @@ class CheckFrameworkLastReleaseCommand extends Command
         foreach ($frameworks as $framework) {
             switch ($framework->getKey()) {
                 case Framework::DRUPAL_7:
-                    $xmlContent = file_get_contents('https://updates.drupal.org/release-history/drupal/7.x');
-                    $content = new \SimpleXMLElement($xmlContent);
-                    $framework->setCurrentVersion($content->releases->release->version);
+                    try {
+                        $versions = $client
+                            ->get('https://updates.drupal.org/release-history/drupal/7.x')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $framework->setCurrentVersion($content->releases->release->version);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
                 case Framework::DRUPAL_8:
-                    $xmlContent = file_get_contents('https://updates.drupal.org/release-history/drupal/8.x');
-                    $content = new \SimpleXMLElement($xmlContent);
-                    $framework->setCurrentVersion($content->releases->release->version);
+                    try {
+                        $versions = $client
+                            ->get('https://updates.drupal.org/release-history/drupal/8.x')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $framework->setCurrentVersion($content->releases->release->version);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
                 case Framework::SYMFONY:
-                    $versions = json_decode($client
-                        ->get('https://packagist.org/p/symfony/symfony.json')
-                        ->getBody()
-                        ->getContents(), true);
-                    end($versions['packages']['symfony/symfony']);
-                    $lastVersion = key($versions['packages']['symfony/symfony']);
-                    $framework->setCurrentVersion($lastVersion);
+                    try {
+                        $versions = json_decode($client
+                            ->get('https://packagist.org/p/symfony/symfony.json')
+                            ->getBody()
+                            ->getContents(), true);
+                        end($versions['packages']['symfony/symfony']);
+                        $lastVersion = key($versions['packages']['symfony/symfony']);
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
                 case Framework::WORDPRESS:
-                    $versions = json_decode($client
-                        ->get('https://api.wordpress.org/core/version-check/1.7/')
-                        ->getBody()
-                        ->getContents(), true);
-                    $lastVersion = $versions['offers'][0]['current'];
-                    $framework->setCurrentVersion($lastVersion);
+                    try {
+                        $versions = json_decode($client
+                            ->get('https://api.wordpress.org/core/version-check/1.7/')
+                            ->getBody()
+                            ->getContents(), true);
+                        $lastVersion = $versions['offers'][0]['current'];
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
                 case Framework::JOOMLA:
-                    $xmlContent = file_get_contents('http://update.joomla.org/core/list.xml');
-                    $content = new \SimpleXMLElement($xmlContent);
-                    $lastVersion = $content->extension[$content->count() -1]['version'];
-                    $framework->setCurrentVersion($lastVersion);
+                    try {
+                        $versions = $client
+                            ->get('http://update.joomla.org/core/list.xml')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $lastVersion = $content->extension[$content->count() -1]['version'];
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
             }
         }
