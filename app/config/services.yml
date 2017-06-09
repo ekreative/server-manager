@@ -53,6 +53,22 @@ services:
           - "%redmine%"
           - "%api_key_redmine%"
 
+    app.check_version.command:
+        class: AppBundle\Command\CheckFrameworkVersionCommand
+        arguments:
+            - @doctrine
+            - @logger
+        tags:
+            - {name: console.command}
+
+    app.check_last_release.command:
+        class: AppBundle\Command\CheckFrameworkLastReleaseCommand
+        arguments:
+            - @doctrine
+            - @logger
+        tags:
+            - {name: console.command}
+
     app.command.update_joomla_versions:
         class: AppBundle\Command\UpdateJoomlaCurrentVersion
         arguments:

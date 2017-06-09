@@ -36,6 +36,7 @@ class SiteType extends AbstractType
                 },
             ])
             ->add('frameworkVersion', null, [
+                'read_only' => true,
                 'attr' => [
                     'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
                 ]
@@ -77,7 +78,17 @@ class SiteType extends AbstractType
                 'attr' => [
                     'help-block' => 'Domain names credentials associated with this site'
                 ]
-            ]);
+            ])
+            ->add('healthChecks', 'collection', [
+                'allow_add' => true,
+                'allow_delete' => true,
+                'type' => new HealthCheckType(),
+                'by_reference' => false,
+                'attr' => [
+                    'help-block' => 'Health checks associated with this site'
+                ]
+            ])
+        ;
     }
 
     /**

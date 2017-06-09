@@ -95,6 +95,14 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $domains;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="HealthCheck", mappedBy="site", cascade={"persist", "remove"})
+     * @Assert\Valid()
+     */
+    private $healthChecks;
+
+    /**
      * @var Framework
      *
      * @Assert\NotBlank()
@@ -117,6 +125,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     {
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
+        $this->healthChecks = new ArrayCollection();
         $this->setAdminLogin(new Login(Login::TYPE_SITE));
         $this->setDatabaseLogin(new Login(Login::TYPE_DB));
     }
@@ -290,6 +299,35 @@ class Site implements AuthorEditorable, \JsonSerializable
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * @param HealthCheck $healthCheck
+     *
+     * @return $this
+     */
+    public function addHealthCheck(HealthCheck $healthCheck)
+    {
+        $this->healthChecks[] = $healthCheck;
+        $healthCheck->setSite($this);
+
+        return $this;
+    }
+
+    /**
+     * @param HealthCheck $healthCheck
+     */
+    public function removeHealthCheck(HealthCheck $healthCheck)
+    {
+        $this->healthChecks->removeElement($healthCheck);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getHealthChecks()
+    {
+        return $this->healthChecks;
     }
 
     /**
