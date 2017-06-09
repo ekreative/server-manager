@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Entity\Framework;
+use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -32,19 +33,77 @@ class CheckFrameworkLastReleaseCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $frameworks = $this->doctrine->getRepository(Framework::class)->findAll();
+        $client = new Client();
 
         /** @var Framework $framework */
         foreach ($frameworks as $framework) {
             switch ($framework->getKey()) {
                 case Framework::DRUPAL_7:
-                    $xmlContent = file_get_contents('https://updates.drupal.org/release-history/drupal/7.x');
-                    $content = new \SimpleXMLElement($xmlContent);
-                    $framework->setCurrentVersion($content->releases->release->version);
+                    try {
+                        $versions = $client
+                            ->get('https://updates.drupal.org/release-history/drupal/7.x')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $framework->setCurrentVersion($content->releases->release->version);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
                 case Framework::DRUPAL_8:
-                    $xmlContent = file_get_contents('https://updates.drupal.org/release-history/drupal/8.x');
-                    $content = new \SimpleXMLElement($xmlContent);
-                    $framework->setCurrentVersion($content->releases->release->version);
+                    try {
+                        $versions = $client
+                            ->get('https://updates.drupal.org/release-history/drupal/8.x')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $framework->setCurrentVersion($content->releases->release->version);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
+                    break;
+                case Framework::SYMFONY:
+                    try {
+                        $versions = json_decode($client
+                            ->get('https://packagist.org/p/symfony/symfony.json')
+                            ->getBody()
+                            ->getContents(), true);
+                        end($versions['packages']['symfony/symfony']);
+                        $lastVersion = key($versions['packages']['symfony/symfony']);
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
+                    break;
+                case Framework::WORDPRESS:
+                    try {
+                        $versions = json_decode($client
+                            ->get('https://api.wordpress.org/core/version-check/1.7/')
+                            ->getBody()
+                            ->getContents(), true);
+                        $lastVersion = $versions['offers'][0]['current'];
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
+                    break;
+                case Framework::JOOMLA:
+                    try {
+                        $versions = $client
+                            ->get('http://update.joomla.org/core/list.xml')
+                            ->getBody()
+                            ->getContents();
+                        $content = new \SimpleXMLElement($versions);
+                        $lastVersion = $content->extension[$content->count() -1]['version'];
+                        $framework->setCurrentVersion($lastVersion);
+                        $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
+                    }
                     break;
             }
         }
