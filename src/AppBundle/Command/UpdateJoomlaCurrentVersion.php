@@ -55,16 +55,14 @@ class UpdateJoomlaCurrentVersion extends Command
                         ->getBody()
                         ->getContents();
                     $content = new \SimpleXMLElement($xmlContent);
+                    if ($content) {
+                        $site->setFrameworkVersion($content->version);
+                        $this->logger->info('Framework version is updated.', [$site->getName()]);
+                    }
                     $this->logger->info('Framework version is updated.', [$site->getName() => $content->version]);
                 } catch (\Exception $e) {
                     $this->logger->critical('failed to update framework version', ['site name' => $site->getName()]);
                 }
-
-                if (isset($content)) {
-                    $site->setFrameworkVersion($content->version);
-                    $this->logger->info('Framework version is updated.', [$site->getName()]);
-                }
-
             }
 
             if (($i % $batchSize) === 0) {

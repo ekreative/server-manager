@@ -40,8 +40,8 @@ class SiteRepository extends EntityRepository
     {
         return $this->createQueryBuilder('s')
             ->join('s.framework', 'framework')
-            ->andWhere('framework.name = :joomla')
-            ->setParameter('joomla', 'Joomla')
+            ->andWhere('framework.key = :joomla')
+            ->setParameter('joomla', Framework::JOOMLA)
             ->getQuery()
             ->iterate();
     }
