@@ -35,15 +35,4 @@ class SiteRepository extends EntityRepository
 
         return $qb->getQuery();
     }
-
-    public function iterateJoomlaSites()
-    {
-        return $this->createQueryBuilder('s')
-            ->join('s.framework', 'framework')
-            ->andWhere('framework.name = :joomla')
-            ->setParameter('joomla', 'Joomla')
-            ->getQuery()
-            ->iterate();
-    }
-
 }
