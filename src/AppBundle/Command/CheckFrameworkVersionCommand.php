@@ -72,22 +72,14 @@ class CheckFrameworkVersionCommand extends Command
      */
     protected function checkVersion($url, Framework $framework)
     {
-        $urlParts = parse_url($url);
-        $client = new Client([
-            'base_uri' => sprintf('%s://%s', $urlParts['scheme'], $urlParts['host'])
-        ]);
+        $client = new Client();
+
+        $response = $client->get( $url);
 
         if (Framework::JOOMLA === $framework->getKey()) {
-            $xmlContent = $client
-                ->request('GET', '/language/en-GB/en-GB.xml')
-                ->getBody()
-                ->getContents();
-            $content = new \SimpleXMLElement($xmlContent);
-
-            return $content->version;
+            $result = new \SimpleXMLElement($response->getBody());
+            return $result->version;
         }
-
-        $response = $client->request('GET', isset($urlParts['path']) ? $urlParts['path'] : '/');
 
         if ('application/json' === $response->getHeader('Content-Type')[0]) {
             $result = json_decode($response->getBody(), true);
