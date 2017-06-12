@@ -43,9 +43,9 @@ class CheckFrameworkVersionCommand extends Command
 
         /** @var HealthCheck $healthCheck */
         foreach ($healthChecks as $healthCheck) {
-            $res = $this->checkVersion($healthCheck->getUrl());
-            if ($res) {
-                $healthCheck->getSite()->setFrameworkVersion($res['version']);
+            $version = $this->checkVersion($healthCheck->getUrl());
+            if ($version) {
+                $healthCheck->getSite()->setFrameworkVersion($version);
                 $healthCheck->setLastSyncAt(new \DateTime());
             }
         }
@@ -68,11 +68,8 @@ class CheckFrameworkVersionCommand extends Command
 
             if ('application/json' === $response->getHeader('Content-Type')[0]) {
                 $result = json_decode($response->getBody(), true);
-                if (array_key_exists('version', $result) && array_key_exists('framework', $result)) {
-                    return [
-                        'framework' => $result['framework'],
-                        'version' => $result['version'],
-                    ];
+                if (array_key_exists('version', $result)) {
+                    return $result['version'];
                 }
             }
 
