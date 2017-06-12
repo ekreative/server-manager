@@ -44,7 +44,7 @@ class CheckFrameworkVersionCommand extends Command
         /** @var HealthCheck $healthCheck */
         foreach ($healthChecks as $healthCheck) {
             try {
-                $version = $this->checkVersion($healthCheck->getUrl());
+                $version = $this->checkVersion($healthCheck->getUrl(), $healthCheck->getSite()->getFramework());
                 $healthCheck->getSite()->setFrameworkVersion($version);
                 $healthCheck->setLastSyncAt(new \DateTime());
 
@@ -64,11 +64,13 @@ class CheckFrameworkVersionCommand extends Command
      * Returns version of a framework
      *
      * @param  string $url
+     * @param \AppBundle\Entity\Framework $framework
+     *
      * @return string
      *
      * @throws \ErrorException
      */
-    protected function checkVersion($url)
+    protected function checkVersion($url, Framework $framework)
     {
         $urlParts = parse_url($url);
         $client = new Client([
@@ -84,13 +86,9 @@ class CheckFrameworkVersionCommand extends Command
             } else {
                 throw new \ErrorException('Missing parameters. Response: ' . $response->getBody());
             }
-        } elseif ('text/xml' === $response->getHeader('Content-Type')[0]) {
-            $xmlContent = $client
-                ->request('GET', '/language/en-GB/en-GB.xml')
-                ->getBody()
-                ->getContents();
-            $content = new \SimpleXMLElement($xmlContent);
-            return $content->version;
+        } elseif (Framework::JOOMLA === $framework->getKey()) {
+            $result = new \SimpleXMLElement($response->getBody());
+            return $result->version;
         } else {
             throw new \ErrorException('Invalid Content-Type. Expected: "application/json", "' . $response->getHeader('Content-Type')[0] . '" is given.');
         }
