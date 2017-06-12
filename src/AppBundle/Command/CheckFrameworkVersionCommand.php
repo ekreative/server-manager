@@ -74,7 +74,7 @@ class CheckFrameworkVersionCommand extends Command
     {
         $client = new Client();
 
-        $response = $client->get('GET', $url);
+        $response = $client->get( $url);
 
         if (Framework::JOOMLA === $framework->getKey()) {
             $result = new \SimpleXMLElement($response->getBody());
