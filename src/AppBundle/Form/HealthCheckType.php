@@ -13,7 +13,8 @@ class HealthCheckType extends AbstractType
     {
         $builder->add('url', 'url', [
             'attr' => [
-                'placeholder' => 'http://domain.com/healthcheck'
+                'placeholder' => 'http://domain.com/healthcheck',
+                'help-block' => 'Healthcheck url (must be http://domain.com/healthcheck ot http://domain.com/language/en-GB/en-GB.xml for Joomla sites.)'
             ]
         ]);
     }
