@@ -2,9 +2,9 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Framework;
 use AppBundle\Entity\HealthCheck;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -43,11 +43,17 @@ class CheckFrameworkVersionCommand extends Command
 
         /** @var HealthCheck $healthCheck */
         foreach ($healthChecks as $healthCheck) {
-            $version = $this->checkVersion($healthCheck->getUrl());
-            if ($version) {
+            try {
+                $version = $this->checkVersion($healthCheck->getUrl(), $healthCheck->getSite()->getFramework());
                 $healthCheck->getSite()->setFrameworkVersion($version);
                 $healthCheck->setLastSyncAt(new \DateTime());
+
+            } catch (\Exception $e) {
+                $this->logger->error('Check version error.', [
+                    'message' => $e->getMessage()
+                ]);
             }
+
         }
 
         $this->doctrine->getEntityManager()->flush();
@@ -55,37 +61,44 @@ class CheckFrameworkVersionCommand extends Command
     }
 
     /**
-     * @param $url
+     * Returns version of a framework
      *
-     * @return bool|mixed
+     * @param  string $url
+     * @param \AppBundle\Entity\Framework $framework
+     *
+     * @return string
+     *
+     * @throws \ErrorException
      */
-    protected function checkVersion($url)
+    protected function checkVersion($url, Framework $framework)
     {
         $urlParts = parse_url($url);
-        try {
-            $client = new Client(['base_uri' => sprintf('%s://%s', $urlParts['scheme'], $urlParts['host'])]);
-            $response  = $client->request('GET', isset($urlParts['path']) ? $urlParts['path'] : '/');
+        $client = new Client([
+            'base_uri' => sprintf('%s://%s', $urlParts['scheme'], $urlParts['host'])
+        ]);
 
-            if ('application/json' === $response->getHeader('Content-Type')[0]) {
-                $result = json_decode($response->getBody(), true);
-                if (array_key_exists('version', $result)) {
-                    return $result['version'];
-                }
-            }
+        if (Framework::JOOMLA === $framework->getKey()) {
+            $xmlContent = $client
+                ->request('GET', '/language/en-GB/en-GB.xml')
+                ->getBody()
+                ->getContents();
+            $content = new \SimpleXMLElement($xmlContent);
 
-            $this->logger->error('Check version error', [
-                'url' => $url,
-                'response' => $response->getBody(),
-            ]);
-        } catch (RequestException $e) {
-            $this->logger->error('Check version error', [
-                'url' => $url,
-                'request' => \GuzzleHttp\Psr7\str($e->getRequest()),
-                'response' => \GuzzleHttp\Psr7\str($e->getResponse()),
-            ]);
+            return $content->version;
         }
 
-        return false;
+        $response = $client->request('GET', isset($urlParts['path']) ? $urlParts['path'] : '/');
+
+        if ('application/json' === $response->getHeader('Content-Type')[0]) {
+            $result = json_decode($response->getBody(), true);
+            if (array_key_exists('version', $result) && array_key_exists('framework', $result)) {
+                return $result['version'];
+            } else {
+                throw new \ErrorException('Missing parameters. Response: ' . $response->getBody());
+            }
+        } else {
+            throw new \ErrorException('Invalid Content-Type. Expected: "application/json", "' . $response->getHeader('Content-Type')[0] . '" is given.');
+        }
     }
 
 }
