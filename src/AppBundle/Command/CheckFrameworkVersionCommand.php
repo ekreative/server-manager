@@ -88,7 +88,11 @@ class CheckFrameworkVersionCommand extends Command
             }
         } elseif (Framework::JOOMLA === $framework->getKey()) {
             $result = new \SimpleXMLElement($response->getBody());
-            return $result->version;
+            if ($result->version) {
+                return $result->version;
+            } else {
+                throw new \ErrorException('Missing parameters. Response: ' . $response->getBody());
+            }
         } else {
             throw new \ErrorException('Invalid Content-Type. Expected: "application/json", "' . $response->getHeader('Content-Type')[0] . '" is given.');
         }
