@@ -16,7 +16,6 @@
     },
     "require": {
         "php": ">=5.5",
-        "ext-apc": "*",
         "ext-redis": "*",
         "symfony/symfony": "^2.7",
         "doctrine/orm": "^2.4.8",
@@ -33,7 +32,8 @@
         "stof/doctrine-extensions-bundle": "^1.2",
         "h4cc/alice-fixtures-bundle": "^0.5.1",
         "knplabs/knp-paginator-bundle": "^2.5",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "ext-apcu": "*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
