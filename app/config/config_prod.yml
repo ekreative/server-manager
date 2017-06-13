@@ -31,11 +31,17 @@ monolog:
             type:  console
 
 services:
+    redis:
+        class: Redis
+        calls:
+            - [connect, [%redis%, 6379]]
+
     result_cache:
         class: Doctrine\Common\Cache\RedisCache
         calls:
             - [ setRedis, [ @redis ]]
             - [ setNamespace, [ 'sm:r:' ]]
+        lazy: true
 
     session_handler:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
@@ -44,3 +50,11 @@ services:
             - 86400
             -
                 key_prefix: 'sm:s:'
+        lazy: true
+
+    projects_cache:
+        class: Doctrine\Common\Cache\RedisCache
+        calls:
+            - [setRedis, [@redis]]
+            - [ setNamespace, [ 'sm:p:' ]]
+        lazy: true

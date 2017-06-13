@@ -37,15 +37,7 @@ services:
 #            - @projects_cache
 
     projects_cache:
-        class: Doctrine\Common\Cache\RedisCache
-        calls:
-            - [setRedis, [@redis]]
-            - [ setNamespace, [ 'sm:p:' ]]
-
-    redis:
-        class: Redis
-        calls:
-            - [connect, [%redis%, 6379]]
+        class: Doctrine\Common\Cache\ArrayCache
 
     redmine_client:
         class: GuzzleHttp\Client
