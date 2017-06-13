@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckFrameworkLastReleaseCommand extends Command
 {
@@ -34,7 +35,7 @@ class CheckFrameworkLastReleaseCommand extends Command
     {
         $frameworks = $this->doctrine->getRepository(Framework::class)->findAll();
         $client = new Client();
-
+        $io = new SymfonyStyle($input, $output);
         /** @var Framework $framework */
         foreach ($frameworks as $framework) {
             switch ($framework->getKey()) {
@@ -47,6 +48,7 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $content = new \SimpleXMLElement($versions);
                         $framework->setCurrentVersion($content->releases->release->version);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                        $io->success(Framework::DRUPAL_7 .' version updated.');
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }
@@ -60,6 +62,8 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $content = new \SimpleXMLElement($versions);
                         $framework->setCurrentVersion($content->releases->release->version);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                        $io->success(Framework::DRUPAL_8 .' version updated.');
+
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }
@@ -74,6 +78,7 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $lastVersion = key($versions['packages']['symfony/symfony']);
                         $framework->setCurrentVersion($lastVersion);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                        $io->success(Framework::SYMFONY .' version updated.');
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }
@@ -87,6 +92,7 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $lastVersion = $versions['offers'][0]['current'];
                         $framework->setCurrentVersion($lastVersion);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                        $io->success(Framework::WORDPRESS .' version updated.');
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }
@@ -101,6 +107,7 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $lastVersion = $content->extension[$content->count() -1]['version'];
                         $framework->setCurrentVersion($lastVersion);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
+                        $io->success(Framework::JOOMLA .' version updated.');
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }

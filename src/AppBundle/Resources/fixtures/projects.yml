@@ -12,6 +12,7 @@ AppBundle\Entity\Site:
         name: <sentence(2)>
         project: @project*
         frameworkVersion: <numerify('#.#.#')>
+        status: '50%? Supported : UnSupported'
 
 AppBundle\Entity\Server:
     server{1..10}:
