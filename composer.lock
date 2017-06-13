@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe273fd53ff9079ae4e3d0840bb6395d",
+    "content-hash": "463fc47b18d7394b2d0f4730dfeabe30",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1542,53 +1542,6 @@
                 "symfony"
             ],
             "time": "2014-02-24T21:06:17+00:00"
-        },
-        {
-            "name": "kbsali/redmine-api",
-            "version": "v1.5.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kbsali/php-redmine-api.git",
-                "reference": "dbe2d34b8b5fc0e028d3b13561563b8903abb837"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kbsali/php-redmine-api/zipball/dbe2d34b8b5fc0e028d3b13561563b8903abb837",
-                "reference": "dbe2d34b8b5fc0e028d3b13561563b8903abb837",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.0",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Redmine": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kevin Saliou",
-                    "email": "kevin@saliou.name",
-                    "homepage": "http://kevin.saliou.name"
-                }
-            ],
-            "description": "Redmine API client",
-            "homepage": "https://github.com/kbsali/php-redmine-api",
-            "keywords": [
-                "api",
-                "redmine"
-            ],
-            "time": "2017-02-06T21:16:00+00:00"
         },
         {
             "name": "knplabs/knp-components",

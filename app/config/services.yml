@@ -48,10 +48,12 @@ services:
             - [connect, [%redis%, 6379]]
 
     redmine_client:
-        class: Redmine\Client
+        class: GuzzleHttp\Client
         arguments:
-          - "%redmine%"
-          - "%api_key_redmine%"
+            -
+                base_uri: "%redmine%"
+                headers:
+                    'X-Redmine-API-Key': "%api_key_redmine%"
 
     app.check_version.command:
         class: AppBundle\Command\CheckFrameworkVersionCommand
