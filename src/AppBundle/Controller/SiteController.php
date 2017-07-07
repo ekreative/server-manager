@@ -44,14 +44,13 @@ class SiteController extends Controller
             $status = $request->query->get('status');
         }
 
-        // get all projects current user from RedMine
-        $redmineClientService = $this->container->get('redmine_client');
-        $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
-        $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(),true);
-        $listMemberships = array_shift($result)['memberships'];
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_REDMINE_ADMIN')) {
-            $arrayIdProjects = [];
-        } else {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_REDMINE_ADMIN')) {
+            // get all projects current user from RedMine
+            $redmineClientService = $this->container->get('redmine_client');
+            $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
+            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(),true);
+            $listMemberships = array_shift($result)['memberships'];
+
             if (!empty($listMemberships)) {
                 $arrayIdProjects = [];
                 foreach ($listMemberships as $membership) {
@@ -61,7 +60,7 @@ class SiteController extends Controller
         }
 
         if ($name || $framework || $status) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status, $arrayIdProjects);
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status, empty($arrayIdProjects)? [] :$arrayIdProjects);
         } else {
             $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
         }
