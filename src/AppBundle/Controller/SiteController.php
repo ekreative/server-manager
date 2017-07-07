@@ -49,8 +49,7 @@ class SiteController extends Controller
         $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
         $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(),true);
         $listMemberships = array_shift($result)['memberships'];
-
-        if (in_array('ROLE_REDMINE_ADMIN', $this->getUser()->getRoles())) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_REDMINE_ADMIN')) {
             $arrayIdProjects = [];
         } else {
             if (!empty($listMemberships)) {
@@ -67,10 +66,8 @@ class SiteController extends Controller
             $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
         }
 
-
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
         $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'status' => $status]);
-
         return [
             'entities' => $entities,
             'form' => $form->createView(),
