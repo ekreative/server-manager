@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * Site controller.
@@ -44,14 +45,15 @@ class SiteController extends Controller
         }
 
         // get all projects current user from RedMine
-        $redMineClientService = $this->container->get('redmine_client');
+        $redmineClientService = $this->container->get('redmine_client');
         $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
-        $listMemberships = $redMineClientService->get($uri)['user']['memberships'];
+        $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(),true);
+        $listMemberships = array_shift($result)['memberships'];
 
         if (in_array('ROLE_REDMINE_ADMIN', $this->getUser()->getRoles())) {
             $arrayIdProjects = [];
         } else {
-            if ($listMemberships) {
+            if (!empty($listMemberships)) {
                 $arrayIdProjects = [];
                 foreach ($listMemberships as $membership) {
                     $arrayIdProjects[] = $membership['project']['id'];
