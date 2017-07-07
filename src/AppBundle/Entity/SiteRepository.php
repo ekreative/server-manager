@@ -13,7 +13,7 @@ class SiteRepository extends EntityRepository
      * @param string $status
      * @return Query
      */
-    public function searchQuery($name = null, $framework = null, $status = null)
+    public function searchQuery($name = null, $framework = null, $status = null, $projects = [])
     {
         $qb = $this->createQueryBuilder('s');
         if ($name) {
@@ -25,6 +25,11 @@ class SiteRepository extends EntityRepository
                 ->join('s.framework', 'framework')
                 ->andWhere('framework.id = :framework')
                 ->setParameter('framework', $framework);
+        }
+
+        if (count($projects) != 0) {
+            $qb->andWhere('s.project IN (:projects)')
+                ->setParameter('projects', $projects);
         }
 
         if ($status == Site::STATUS_SUPPORTED) {

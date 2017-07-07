@@ -43,13 +43,30 @@ class SiteController extends Controller
             $status = $request->query->get('status');
         }
 
+        // get all projects current user from RedMine
+        $redMineClientService = $this->container->get('redmine_client');
+        $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
+        $listMemberships = $redMineClientService->get($uri)['user']['memberships'];
+
+        if (in_array('ROLE_REDMINE_ADMIN', $this->getUser()->getRoles())) {
+            $arrayIdProjects = [];
+        } else {
+            if ($listMemberships) {
+                $arrayIdProjects = [];
+                foreach ($listMemberships as $membership) {
+                    $arrayIdProjects[] = $membership['project']['id'];
+                }
+            }
+        }
+
         if ($name || $framework || $status) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status);
+            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status, $arrayIdProjects);
         } else {
             $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
         }
 
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 12);
+
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
         $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'status' => $status]);
 
         return [
