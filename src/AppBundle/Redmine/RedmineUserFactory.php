@@ -53,7 +53,7 @@ class RedmineUserFactory extends EntityUserProvider implements RedmineUserFactor
             $groupsResponse = $this->redmineClient->get("/users/{$data['id']}.json?include=groups");
             $groupsData = json_decode($groupsResponse->getBody(), true);
 
-            if ($groupsData && isset($groupsData['user']) && isset($groupsData['user']['groups']) && ($arrayGroups = ['user']['groups'])) {
+            if ($groupsData && isset($groupsData['user']) && isset($groupsData['user']['groups']) && ($arrayGroups = $groupsData['user']['groups'])) {
                 foreach ($arrayGroups as $group) {
                     if ($group['name'] == $this->groupServerManagers) {
                         $isAdmin = true;
