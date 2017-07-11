@@ -18,6 +18,10 @@ class SitesFilter
     private $status;
 
     /**
+     * @var array
+     */
+    private $projects = [];
+    /**
      * @return string
      */
     public function getName()
@@ -63,5 +67,21 @@ class SitesFilter
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProjects()
+    {
+        return $this->projects;
+    }
+
+    /**
+     * @param int $project
+     */
+    public function addProject($project)
+    {
+        $this->projects[] = $project;
     }
 }

@@ -38,6 +38,7 @@ class SiteController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $filter = new SitesFilter();
 
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_REDMINE_ADMIN')) {
             // get all projects current user from RedMine
@@ -45,16 +46,13 @@ class SiteController extends Controller
             $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
             $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
             $listMemberships = array_shift($result)['memberships'];
-
             if (!empty($listMemberships)) {
-                $arrayIdProjects = [];
                 foreach ($listMemberships as $membership) {
-                    $arrayIdProjects[] = $membership['project']['id'];
+                    $filter->addProject($membership['project']['id']);
                 }
             }
         }
 
-        $filter = new SitesFilter();
         $form = $this->createForm(SitesFilterType::class, $filter)
             ->add('Search', SubmitType::class);
         $form->handleRequest($request);

@@ -15,24 +15,27 @@ class SiteRepository extends EntityRepository
     public function searchQuery(SitesFilter $filter)
     {
         $qb = $this->createQueryBuilder('s')
-            ->leftJoin('s.project', 'p')
+            ->join('s.project', 'p')
             ->addSelect('p')
-            ->leftJoin('s.framework', 'f');
+            ->join('s.framework', 'f');
 
         if ($filter->getFramework() && $filter->getFramework() != 'All') {
-            $qb->andWhere('s.framework = ?1')
-                ->setParameter('1', $filter->getFramework())
-            ;
+            $qb->andWhere('s.framework = :framework')
+                ->setParameter('framework', $filter->getFramework());
         }
 
         if ($filter->getStatus() && $filter->getStatus() != 'All') {
             $qb->andWhere('s.status = :status')
-                ->setParameter('status', $filter->getStatus())
-            ;
+                ->setParameter('status', $filter->getStatus());
         }
         if ($filter->getName()) {
             $qb->andWhere('s.name LIKE :name')
                 ->setParameter('name', "%" . addcslashes($filter->getName(), '%_') . "%");
+        }
+
+        if (!empty($filter->getProjects())) {
+            $qb->andWhere('p.id IN (:projects)')
+                ->setParameter('projects', $filter->getProjects());
         }
 
         return $qb->getQuery();
