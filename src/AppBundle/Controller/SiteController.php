@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Form\ModelTransformer\SitesFilter;
+use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,7 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * Site controller.
@@ -34,66 +38,31 @@ class SiteController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $name = $request->query->get('name');
-        $framework = $request->query->get('framework');
+        $filter = new SitesFilter();
 
-        if ($request->query->get('status') == null) {
-            $status = Site::STATUS_SUPPORTED;
-        } else {
-            $status = $request->query->get('status');
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_REDMINE_ADMIN')) {
+            // get all projects current user from RedMine
+            $redmineClientService = $this->container->get('redmine_client');
+            $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
+            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+            $listMemberships = array_shift($result)['memberships'];
+            if (!empty($listMemberships)) {
+                foreach ($listMemberships as $membership) {
+                    $filter->addProject($membership['project']['id']);
+                }
+            }
         }
 
-        if ($name || $framework || $status) {
-            $query = $em->getRepository('AppBundle:Site')->searchQuery($name, $framework, $status);
-        } else {
-            $query = $em->getRepository('AppBundle:Site')->findBy(['status' => $status]);
-        }
-
-        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 12);
-        $form = $this->createSearchForm(['name' => $name, 'framework' => $framework, 'status' => $status]);
+        $form = $this->createForm(SitesFilterType::class, $filter)
+            ->add('Search', SubmitType::class);
+        $form->handleRequest($request);
+        $query = $em->getRepository('AppBundle:Site')->searchQuery($filter);
+        $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [
             'entities' => $entities,
             'form' => $form->createView(),
         ];
-    }
-
-    /**
-     * Creates a form to search a Site entity.
-     *
-     * @param array $data Data from request
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createSearchForm(array $data = [])
-    {
-        if ($data['framework']) {
-            $data['framework'] = $this->getDoctrine()->getManager()->getRepository('AppBundle:Framework')->find($data['framework']);
-        }
-        return $this->get('form.factory')->createNamedBuilder(null, 'form', $data, [
-            'method' => Request::METHOD_GET,
-            'csrf_protection' => false
-        ])
-            ->add('name', null, [
-                'attr' => ['placeholder' => 'Name'],
-                'required' => false,
-            ])
-            ->add('framework', 'entity', [
-                'class' => 'AppBundle\Entity\Framework',
-                'required' => false,
-                'empty_value' => '-Select-',
-            ])
-            ->add('status', ChoiceType::class, [
-                'label' => 'Status',
-                'required' => false,
-                'choices' => [
-                    'Supported' => 'Supported',
-                    'All' => 'All',
-                ],
-                'empty_value' => null,
-            ])
-            ->add('submit', 'submit')
-            ->getForm();
     }
 
     /**

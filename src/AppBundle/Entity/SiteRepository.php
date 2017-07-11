@@ -2,35 +2,40 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Form\ModelTransformer\SitesFilter;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
 class SiteRepository extends EntityRepository
 {
     /**
-     * @param string $name
-     * @param int $framework
-     * @param string $status
+     * @param SitesFilter $filter
      * @return Query
      */
-    public function searchQuery($name = null, $framework = null, $status = null)
+    public function searchQuery(SitesFilter $filter)
     {
-        $qb = $this->createQueryBuilder('s');
-        if ($name) {
-            $qb->andWhere('s.name LIKE :name')
-                ->setParameter('name', "%" . addcslashes($name, '%_') . "%");
-        }
-        if ($framework) {
-            $qb
-                ->join('s.framework', 'framework')
-                ->andWhere('framework.id = :framework')
-                ->setParameter('framework', $framework);
+        $qb = $this->createQueryBuilder('s')
+            ->join('s.project', 'p')
+            ->addSelect('p')
+            ->join('s.framework', 'f');
+
+        if ($filter->getFramework() && $filter->getFramework() != 'All') {
+            $qb->andWhere('s.framework = :framework')
+                ->setParameter('framework', $filter->getFramework());
         }
 
-        if ($status == Site::STATUS_SUPPORTED) {
-            $qb
-                ->andWhere('s.status = :status')
-                ->setParameter('status', $status);
+        if ($filter->getStatus() && $filter->getStatus() != 'All') {
+            $qb->andWhere('s.status = :status')
+                ->setParameter('status', $filter->getStatus());
+        }
+        if ($filter->getName()) {
+            $qb->andWhere('s.name LIKE :name')
+                ->setParameter('name', "%" . addcslashes($filter->getName(), '%_') . "%");
+        }
+
+        if (!empty($filter->getProjects())) {
+            $qb->andWhere('p.id IN (:projects)')
+                ->setParameter('projects', $filter->getProjects());
         }
 
         return $qb->getQuery();
