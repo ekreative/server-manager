@@ -3,8 +3,10 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Framework;
+use AppBundle\Form\ModelTransformer\SitesFilter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +19,7 @@ class SitesFilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, [
+            ->add('name', TextType::class, [
                 'attr' => ['placeholder' => 'Name'],
                 'required' => false,
             ])
@@ -48,7 +50,7 @@ class SitesFilterType extends AbstractType
     {
         $resolver->setDefaults([
             'method' => "GET",
-            'data_class' => 'AppBundle\Form\ModelTransformer\SitesFilter'
+            'data_class' => SitesFilter::class
         ]);
     }
 }
