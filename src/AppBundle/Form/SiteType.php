@@ -6,7 +6,11 @@ use AppBundle\Entity\Framework;
 use AppBundle\Entity\Site;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SiteType extends AbstractType
@@ -17,12 +21,19 @@ class SiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
         $builder
             ->add('project', 'project', [
                 'required'=>true
             ])
+           ->add('client', 'client', [
+               'required' => false,
+               'mapped' => false,
+           ])
+            ->add('newClient', new ClientType(), array(
+                'required' => false,
+                'mapped' => false,
+                'property_path' => 'client',
+            ))
             ->add('name', null, [
                 'attr' => [
                     'help-block' => 'A name for the site'
@@ -30,7 +41,7 @@ class SiteType extends AbstractType
             ])
             ->add('framework', null, [
                 'required' => true,
-                'choice_attr' => function($framework, $key, $index) {
+                'choice_attr' => function ($framework, $key, $index) {
                     /** @var Framework $framework */
                     return ['data-framework-version' => $framework->getCurrentVersion()];
                 },

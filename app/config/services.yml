@@ -39,6 +39,21 @@ services:
     projects_cache:
         class: Doctrine\Common\Cache\ArrayCache
 
+##Client
+
+    client_type:
+        class: AppBundle\Form\ClientTypeaheadType
+        arguments:
+            - @router
+            - @client_transformer
+        tags:
+            - { name: form.type, alias: client }
+
+    client_transformer:
+            class: AppBundle\Form\ModelTransformer\ClientModelTransformer
+            arguments:
+                - @doctrine.orm.entity_manager
+
     redmine_client:
         class: GuzzleHttp\Client
         arguments:

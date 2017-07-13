@@ -4,11 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Client;
 use AppBundle\Form\ClientType;
-use AppBundle\Form\FrameworkType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -74,6 +74,24 @@ class ClientController extends Controller
             'entity' => $entity,
             'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * @Route("/typeahead", name="client_typeahead")
+     */
+    public function typeaheadAction(Request $request)
+    {
+        $qb = $this->getDoctrine()->getRepository(Client::class)->createQueryBuilder('c');
+
+        $q = $request->query->get('q');
+
+        if ($q) {
+            $qb->andWhere('LOWERCASE(c.fullName) LIKE :q')->setParameter('q', strtolower($q).'%');
+        }
+
+        return new JsonResponse(array_map(function (Client $client) {
+            return $client->getFullName();
+        }, $qb->getQuery()->getResult()));
     }
 
     /**

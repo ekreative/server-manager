@@ -63,7 +63,7 @@ class Client implements AuthorEditorable
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Project", mappedBy="client", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Project", mappedBy="client")
      * @Assert\Valid()
      */
     private $projects;

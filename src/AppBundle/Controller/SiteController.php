@@ -71,6 +71,9 @@ class SiteController extends Controller
      * @Route("/", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
+     *
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
@@ -79,11 +82,18 @@ class SiteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
 
-            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+            dump($form->getData());
+//            dump($form['newClient']->getData());
+//            dump($entity);die;
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($entity);
+//
+//
+//
+//            $em->flush();
+
+//            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
         }
 
         return [

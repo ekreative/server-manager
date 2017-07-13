@@ -49,7 +49,7 @@ class Project implements AuthorEditorable
      *
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="projects")
      * @Assert\NotBlank(message="Enter a current name of Client")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $client;
 
