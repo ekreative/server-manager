@@ -59,6 +59,13 @@ class SiteType extends AbstractType
                 'help-block' => 'A name for the site'
             ]
         ])
+        ->add('sla', ChoiceType::class, [
+            'choices' => [
+                0 => 'Standart',
+                1 => 'Advanced',
+            ],
+            'label' => 'SLA plan'
+        ])
         ->add('framework', null, [
             'required' => true,
             'choice_attr' => function ($framework, $key, $index) {

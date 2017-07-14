@@ -42,6 +42,25 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $name;
 
     /**
+     * SLA plan status
+     * 0 - standart
+     * 1 - advanced
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()
+     */
+    private $sla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
      * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
@@ -110,6 +129,12 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $framework;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $endDate;
 
     /**
      *
@@ -375,4 +400,76 @@ class Site implements AuthorEditorable, \JsonSerializable
         ];
     }
 
+
+    /**
+     * Set sla
+     *
+     * @param boolean $sla
+     *
+     * @return Site
+     */
+    public function setSla($sla)
+    {
+        $this->sla = $sla;
+
+        return $this;
+    }
+
+    /**
+     * Get sla
+     *
+     * @return boolean
+     */
+    public function getSla()
+    {
+        return $this->sla;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Site
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Set endDate
+     *
+     * @param \DateTime $endDate
+     *
+     * @return Site
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return \DateTime
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
 }

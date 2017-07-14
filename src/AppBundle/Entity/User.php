@@ -19,4 +19,14 @@ class User extends RedmineUser
     {
         return $this->username;
     }
+
+    /**
+     * Get admin
+     *
+     * @return boolean
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
 }
