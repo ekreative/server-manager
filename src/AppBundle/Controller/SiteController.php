@@ -83,22 +83,18 @@ class SiteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
-            dump($form->get('client')->getData());
-            if ($form->get('client')->getData() == 'new') {
-                dump($form->get('newClient')->getData());
+            $em = $this->getDoctrine()->getManager();
+            if ($form->get('client')->getData() == '') {
+                $client = $form->get('newClient')->getData();
+                $em->persist($client);
+            } else {
+                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
             }
-//            dump($form->getData()); die();
-//            dump($form['newClient']->getData());
-//            dump($entity);die;
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($entity);
-//
-//
-//
-//            $em->flush();
+            $entity->getProject()->setClient($client);
+            $em->persist($entity);
+            $em->flush();
 
-//            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
         }
 
         return [
