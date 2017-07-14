@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use GuzzleHttp\Promise;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,7 +27,8 @@ class ProjectController extends Controller
         return new JsonResponse(array_values(array_map(function ($project) {
             return $project['name'];
         }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
-            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
+            return (empty($q) || stripos($project['name'], $q) !== false);
+//            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
         }))));
     }
 }

@@ -5,3 +5,26 @@
 {% block body %}
     {{ form(form) }}
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $(".client").chosen({
+            no_results_text: "Oops, nothing found!"
+        });
+
+        var flag = false;
+        $('.client').chosen().change( function () {
+            if (this.value.toLowerCase() == '') {
+                $('.newClient').show();
+                flag = true;
+            } else {
+                if (flag == true){
+                    $('.newClient').hide();
+                    flag = false;
+                }
+
+            }
+        }).change();
+    </script>
+{% endblock %}

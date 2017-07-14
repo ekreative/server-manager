@@ -1,0 +1,57 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block headerPanel %}
+    <div class="pull-right">
+        {#<a href="{{ path('framework_new') }}" class="btn-default btn">#}
+            {#Create a new entry#}
+        {#</a>#}
+    </div>
+{% endblock headerPanel %}
+
+{% block body %}
+    <table class="table table-stripped va">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Full Name</th>
+            <th>E-mail</th>
+            <th>Skype</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="100">
+                {{ knp_pagination_render(entities) }}
+            </td>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.fullName }}</td>
+                <td>{{ entity.email }}</td>
+                <td>{{ entity.skype }}</td>
+                <td>{{ entity.phone }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{{ path('client_show', { 'client': entity.id }) }}" class="btn-default btn">show</a>
+
+                        <a href="{{ path('client_edit', { 'client': entity.id }) }}" class="btn-default btn">edit</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('client_new') }}" class="btn-default btn">
+        Create a new entry
+    </a>
+
+{% endblock %}

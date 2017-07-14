@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Entity\Client;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
@@ -71,6 +72,9 @@ class SiteController extends Controller
      * @Route("/", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
+     *
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
@@ -80,6 +84,13 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            if ($form->get('client')->getData() == '') {
+                $client = $form->get('newClient')->getData();
+                $em->persist($client);
+            } else {
+                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
+            }
+            $entity->getProject()->setClient($client);
             $em->persist($entity);
             $em->flush();
 
@@ -101,9 +112,16 @@ class SiteController extends Controller
      */
     private function createCreateForm(Site $entity)
     {
+        $clients = $this->getDoctrine()
+            ->getRepository(Client::class)
+            ->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult();
+
         $form = $this->createForm(new SiteType(), $entity, [
             'action' => $this->generateUrl('site_create'),
             'method' => 'POST',
+            'clients' => $clients
         ]);
 
         $form->add('submit', 'submit', ['label' => 'Create']);
