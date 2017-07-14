@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Entity\Client;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
@@ -83,7 +84,11 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
 
-            dump($form->getData());
+            dump($form->get('client')->getData());
+            if ($form->get('client')->getData() == 'new') {
+                dump($form->get('newClient')->getData());
+            }
+//            dump($form->getData()); die();
 //            dump($form['newClient']->getData());
 //            dump($entity);die;
 //            $em = $this->getDoctrine()->getManager();
@@ -111,9 +116,16 @@ class SiteController extends Controller
      */
     private function createCreateForm(Site $entity)
     {
+        $clients = $this->getDoctrine()
+            ->getRepository(Client::class)
+            ->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult();
+
         $form = $this->createForm(new SiteType(), $entity, [
             'action' => $this->generateUrl('site_create'),
             'method' => 'POST',
+            'clients' => $clients
         ]);
 
         $form->add('submit', 'submit', ['label' => 'Create']);

@@ -90,7 +90,7 @@ class ClientController extends Controller
         }
 
         return new JsonResponse(array_map(function (Client $client) {
-            return $client->getFullName();
+            return ['id' => $client->getId(), 'fullName' => $client->getFullName()];
         }, $qb->getQuery()->getResult()));
     }
 

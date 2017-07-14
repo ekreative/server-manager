@@ -25,7 +25,7 @@ class ClientModelTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value) {
-            return $value->getFullName();
+            return $value->getId();
         }
         return null;
     }
