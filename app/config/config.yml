@@ -31,6 +31,7 @@ framework:
         cookie_lifetime: 604800
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 # Twig Configuration
 twig:
