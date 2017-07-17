@@ -7,17 +7,19 @@
         "psr-4": {
             "AppBundle\\": "src/AppBundle/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
-        }
+        },
+        "files": ["app/AppKernel.php"]
     },
     "autoload-dev": {
         "psr-4": {
             "AppBundle\\Tests\\": "tests/AppBundle/Tests/"
-        }
+        },
+        "files": ["app/AppKernel.php"]
     },
     "require": {
         "php": ">=5.5",
         "ext-redis": "*",
-        "symfony/symfony": "^2.7",
+        "symfony/symfony": "^2.8",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -65,12 +67,14 @@
     "config": {
         "platform": {
             "php": "5.6"
-        },
-        "bin-dir": "bin"
+        }
     },
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
+        "symfony-var-dir": "var",
+        "symfony-bin-dir": "bin",
+        "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
