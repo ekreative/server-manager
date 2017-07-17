@@ -90,6 +90,12 @@ class SiteController extends Controller
             } else {
                 $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
             }
+
+//            $redmineClientService = $this->container->get('redmine_client');
+//            $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
+//            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+//            dump($result);die;
+
             $entity->getProject()->setClient($client);
             $em->persist($entity);
             $em->flush();

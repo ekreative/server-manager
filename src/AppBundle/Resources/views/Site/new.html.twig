@@ -8,9 +8,44 @@
 
 {% block javascripts %}
     <script>
-
         $(".client").chosen({
             no_results_text: "Oops, nothing found!"
+        });
+
+        $("#appbundle_site_responsibleManager").chosen({
+            no_results_text: "Oops, nothing found!"
+        });
+
+        $("#appbundle_site_developer").chosen({
+            no_results_text: "Oops, nothing found!"
+        });
+
+
+        $('#appbundle_site_project').on('change', function () {
+            var route = "{{ path('project_members') | escape('js') }}";
+            $.ajax({
+                type: 'POST',
+                url: route,
+                data: {'projectName': $('#appbundle_site_project').val()},
+                success: function (data) {
+                    $('#appbundle_site_developer option').hide();
+                    $('#appbundle_site_developer').find('option').filter(function(){
+                        var developer = $(this).text();
+                        data.developers.forEach(function (item, i, developers) {
+                            console.log(item.name);
+                                return developer.indexOf(item.name)!=-1;
+                            });
+                    }).show();
+                    console.log(data);
+
+                },
+                error: function (data) {
+//                    console.log(data);
+                }
+            });
+
+//           $('#appbundle_site_responsibleManager').removeAttr('disabled');
+//           $('#appbundle_site_developer').removeAttr('disabled');
         });
 
         var flag = false;
