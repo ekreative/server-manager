@@ -31,13 +31,14 @@ framework:
         cookie_lifetime: 604800
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    form:
-        resources: ['form.html.twig']
+    form_themes:
+        - 'form.html.twig'
 
 # Doctrine Configuration
 doctrine:

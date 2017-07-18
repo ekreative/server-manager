@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -32,7 +33,7 @@ class FrameworkController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->getRepository('AppBundle:Framework')->createQueryBuilder('h')->getQuery();
+        $query = $em->getRepository(Framework::class)->createQueryBuilder('h')->getQuery();
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [
@@ -76,12 +77,12 @@ class FrameworkController extends Controller
      */
     private function createCreateForm(Framework $entity)
     {
-        $form = $this->createForm(new FrameworkType(), $entity, [
+        $form = $this->createForm(FrameworkType::class, $entity, [
             'action' => $this->generateUrl('framework_create'),
             'method' => 'POST',
         ]);
 
-        $form->add('submit', 'submit', ['label' => 'Create']);
+        $form->add('submit', SubmitType::class, ['label' => 'Create']);
 
         return $form;
     }
@@ -115,7 +116,7 @@ class FrameworkController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Framework')->find($id);
+        $entity = $em->getRepository(Framework::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Framework entity.');
@@ -140,7 +141,7 @@ class FrameworkController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Framework')->find($id);
+        $entity = $em->getRepository(Framework::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Framework entity.');
@@ -158,12 +159,12 @@ class FrameworkController extends Controller
 
     private function createEditForm(Framework $entity)
     {
-        $form = $this->createForm(new FrameworkType(), $entity, [
+        $form = $this->createForm(FrameworkType::class, $entity, [
             'action' => $this->generateUrl('framework_update', ['id' => $entity->getId()]),
             'method' => 'PUT',
         ]);
 
-        $form->add('submit', 'submit', ['label' => 'Update']);
+        $form->add('submit', SubmitType::class, ['label' => 'Update']);
 
         return $form;
     }
@@ -179,7 +180,7 @@ class FrameworkController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Framework')->find($id);
+        $entity = $em->getRepository(Framework::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Framework entity.');
@@ -215,7 +216,7 @@ class FrameworkController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:Framework')->find($id);
+            $entity = $em->getRepository(Framework::class)->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Framework entity.');
@@ -233,7 +234,7 @@ class FrameworkController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('framework_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Delete'])
+            ->add('submit', SubmitType::class, ['label' => 'Delete'])
             ->getForm();
     }
 }

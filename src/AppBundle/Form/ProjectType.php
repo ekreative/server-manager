@@ -45,11 +45,4 @@ class ProjectType extends TextType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'project';
-    }
 }

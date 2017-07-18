@@ -39,14 +39,14 @@ services:
     result_cache:
         class: Doctrine\Common\Cache\RedisCache
         calls:
-            - [ setRedis, [ @redis ]]
+            - [ setRedis, ["@redis" ]]
             - [ setNamespace, [ 'sm:r:' ]]
         lazy: true
 
     session_handler:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
         arguments:
-            - @redis
+            - "@redis"
             - 86400
             -
                 key_prefix: 'sm:s:'
