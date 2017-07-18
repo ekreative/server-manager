@@ -28,7 +28,7 @@ class SiteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('project', 'project', [
+            ->add('project', ChoiceType::class, [
                 'required' => true
             ])
             ->add('name', null, [
@@ -50,7 +50,6 @@ class SiteType extends AbstractType
                 'mapped' => false,
                 'expanded' => false,
                 'multiple' => false,
-                'attr' => ['class' => 'client'],
                 'empty_value' => 'Add New'
             ])
 
@@ -61,24 +60,14 @@ class SiteType extends AbstractType
                 'label' => false,
                 'attr' => ['class' => 'newClient', 'style' => 'display:none'],
             ))
-            ->add('developer', EntityType::class,[
-                'class' => User::class,
-                'choice_label' => function ($user){
-                    /**
-                     * @var User $user
-                     */
-                    return $user->getFirstName().' '.$user->getLastName();
-                },
+            ->add('developerName', ChoiceType::class,[
+                'label' => 'Developer',
+                'required' => false
 //                'disabled' => true
             ])
-            ->add('responsibleManager', EntityType::class,[
-                'class' => User::class,
-                'choice_label' => function ($user){
-                    /**
-                     * @var User $user
-                     */
-                return $user->getFirstName().' '.$user->getLastName();
-                },
+            ->add('managerName', ChoiceType::class,[
+                'label' => 'Responsible Manager',
+                'required' => false
 //                'disabled' => true
             ])
             ->add('sla', ChoiceType::class, [
@@ -149,7 +138,8 @@ class SiteType extends AbstractType
             ])
             ->add('endDate', null)
             ->add('notes', null);
-
+            $builder->get('developerName')->resetViewTransformers();
+            $builder->get('managerName')->resetViewTransformers();
     }
 
     /**

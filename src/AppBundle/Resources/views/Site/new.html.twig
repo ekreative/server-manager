@@ -8,55 +8,97 @@
 
 {% block javascripts %}
     <script>
-        $(".client").chosen({
-            no_results_text: "Oops, nothing found!"
-        });
+        $("#appbundle_site_project").select2({
+            placeholder: 'Project',
+            minimumInputLength: 3,
+            cache: true,
+            ajax: {
+                url:  "{{ path('project_typeahead') }}",
+                dataType: "json",
+                type: "GET",
+                delay: 1000,
+                processResults: function (data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                }
+            }
 
-        $("#appbundle_site_responsibleManager").chosen({
-            no_results_text: "Oops, nothing found!"
-        });
-
-        $("#appbundle_site_developer").chosen({
-            no_results_text: "Oops, nothing found!"
-        });
-
-        $('#appbundle_site_project').on('change', function () {
+        }).on('select2:select', function () {
             var route = "{{ path('project_members') | escape('js') }}";
             $.ajax({
                 type: 'POST',
                 url: route,
-                data: {'projectName': $('#appbundle_site_project').val()},
+                data: {'project': $('#appbundle_site_project').val()},
                 success: function (data) {
-                    $('#appbundle_site_developer option, #appbundle_site_responsibleManager option').hide();
+                    console.log(data);
+
+                    $('#appbundle_site_developerName, #appbundle_site_managerName').empty();
+
+                    $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
 
                     data.developers.forEach(function (item) {
-                        $('#appbundle_site_developer').find('option').filter(function(){
-                            var developer = $(this).text();
-                            return developer.indexOf(item.name)!=-1;
-                        }).show();
+                        $('#appbundle_site_developerName').append('<option>'+item.name+'</option>')
                     });
 
                     data.managers.forEach(function (item) {
-                        $('#appbundle_site_responsibleManager').find('option').filter(function(){
-                            var manager = $(this).text();
-                            return manager.indexOf(item.name)!=-1;
-                        }).show();
+                        $('#appbundle_site_managerName').append('<option>'+item.name+'</option>')
                     });
 
-                    $("#appbundle_site_developer, #appbundle_site_responsibleManager").trigger("chosen:updated");
                 },
                 error: function (data) {
 //                    console.log(data);
                 }
             });
+        });
+
+        $(document).ready(function () {
+
+            $(".client, #appbundle_site_managerName, #appbundle_site_developerName, #appbundle_site_client").select2();
+//            templateResult: formatRepo, // omitted for brevity, see the source of this page
+//            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+        });
+
+
+
+
+
+
+        {#$('#appbundle_site_project').on('change', function () {#}
+            {#var route = "{{ path('project_members') | escape('js') }}";#}
+            {#$.ajax({#}
+                {#type: 'POST',#}
+                {#url: route,#}
+                {#data: {'projectName': $('#appbundle_site_project').val()},#}
+                {#success: function (data) {#}
+                    {#console.log(data);#}
+                    {#data.developers.forEach(function (item) {#}
+                        {#$('#appbundle_site_developerName').append('<option>'+item.name+'</option>')#}
+                    {#});#}
+
+                    {#data.managers.forEach(function (item) {#}
+                        {#$('#appbundle_site_managerName').append('<option>'+item.name+'</option>')#}
+                    {#});#}
+
+                {#},#}
+                {#error: function (data) {#}
+{#//                    console.log(data);#}
+                {#}#}
+            {#});#}
 
 //           $('#appbundle_site_responsibleManager').removeAttr('disabled');
 //           $('#appbundle_site_developer').removeAttr('disabled');
-        });
+//        });
 
         var flag = false;
-        $('.client').chosen().change( function () {
-            if (this.value.toLowerCase() == '') {
+        $('.client').on('select2:select', function () {
+            if (this.value == '') {
                 $('.newClient').show();
                 flag = true;
             } else {
@@ -64,7 +106,6 @@
                     $('.newClient').hide();
                     flag = false;
                 }
-
             }
         }).change();
     </script>

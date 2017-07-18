@@ -139,12 +139,26 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $developer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $developerName;
+
+    /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesManagedBy")
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      */
     private $responsibleManager;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $managerName;
 
     /**
      * @var \DateTime
@@ -535,5 +549,53 @@ class Site implements AuthorEditorable, \JsonSerializable
     public function getResponsibleManager()
     {
         return $this->responsibleManager;
+    }
+
+    /**
+     * Set developerName
+     *
+     * @param string $developerName
+     *
+     * @return Site
+     */
+    public function setDeveloperName($developerName)
+    {
+        $this->developerName = $developerName;
+
+        return $this;
+    }
+
+    /**
+     * Get developerName
+     *
+     * @return string
+     */
+    public function getDeveloperName()
+    {
+        return $this->developerName;
+    }
+
+    /**
+     * Set managerName
+     *
+     * @param string $managerName
+     *
+     * @return Site
+     */
+    public function setManagerName($managerName)
+    {
+        $this->managerName = $managerName;
+
+        return $this;
+    }
+
+    /**
+     * Get managerName
+     *
+     * @return string
+     */
+    public function getManagerName()
+    {
+        return $this->managerName;
     }
 }

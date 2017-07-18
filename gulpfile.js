@@ -19,7 +19,7 @@ gulp.task('clean', function (cb) {
 
 gulp.task('styles', function() {
     return gulp.src([
-        'node_modules/chosen-js/chosen.css',
+        'node_modules/select2/dist/css/select2.css',
         'web-src/less/*'
     ])
         .pipe(less())
@@ -36,10 +36,8 @@ gulp.task('scripts:bundle', function() {
     return gulp.src([
         'node_modules/jquery/dist/jquery.js',
         'node_modules/bootstrap/dist/js/bootstrap.js',
-        'node_modules/typeahead.js/dist/bloodhound.js',
-        'node_modules/typeahead.js/dist/typeahead.jquery.js',
-        'node_modules/chosen-js/chosen.jquery.js',
-        'web-src/js/*.js'
+        'node_modules/select2/dist/js/select2.full.js',
+        // 'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(myJsFilter)

@@ -27,12 +27,15 @@ class ProjectController extends Controller
 
         $q = $request->query->get('q', '');
 
-        return new JsonResponse(array_values(array_map(function ($project) {
-            return $project['name'];
+
+        $response = new JsonResponse(array_values(array_map(function ($project) {
+            return $project;
         }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
             return (empty($q) || stripos($project['name'], $q) !== false);
 //            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
         }))));
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        return $response;
     }
 
     /**
@@ -40,36 +43,40 @@ class ProjectController extends Controller
      * Method("POST")
      */
     public function membersAction(Request $request){
-        if ($request->get('projectName')) {
+        if ($request->get('project')) {
 
             $em = $this->getDoctrine();
-            $project = $em->getRepository(Project::class)->findOneBy(['name' => $request->get('projectName')]);
+            $project = $em->getRepository(Project::class)->find($request->get('project'));
 
+            $client = null;
             if ($project) {
-//            $client = $em->getRepository(Client::class)->find($project->getClient());
-
-                $redmineClientService = $this->container->get('redmine_client');
-                $uri = '/projects/' . $project->getId() . '/memberships.json';
-                $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
-
-                $developers = [];
-                $managers = [];
-                foreach ($result['memberships'] as $membership){
-                    if ($membership['roles'][0]['name'] == "Developer") {
-                        $developers[] = $membership['user'];
-                    }
-                    if ($membership['roles'][0]['name'] == "Manager") {
-                        $managers[] = $membership['user'];
-                    }
-
-                }
-
-                return new JsonResponse([
-//                'client' => ['id' => $client->getId()],
-                    'developers' => $developers,
-                    'managers' => $managers,
-                ]);
+                $entity = $em->getRepository(Client::class)->findOneBy(['id' => $project->getClient()->getId()]);
+                $client = [
+                    'id' => $entity->getId(),
+                    'fullName' => $entity->getFullName()
+                ];
             }
+
+            $redmineClientService = $this->container->get('redmine_client');
+            $uri = '/projects/' . $request->get('project') . '/memberships.json';
+
+            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+            $developers = [];
+            $managers = [];
+            foreach ($result['memberships'] as $membership){
+                if ($membership['roles'][0]['name'] == "Developer") {
+                    $developers[] = $membership['user'];
+                }
+                if ($membership['roles'][0]['name'] == "Manager") {
+                    $managers[] = $membership['user'];
+                }
+            }
+
+            return new JsonResponse([
+                'client' => $client,
+                'developers' => $developers,
+                'managers' => $managers,
+            ]);
         }
         return new JsonResponse(1);
     }
