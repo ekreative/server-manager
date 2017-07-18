@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Framework;
 use AppBundle\Form\ModelTransformer\SitesFilter;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,10 +24,10 @@ class SitesFilterType extends AbstractType
                 'attr' => ['placeholder' => 'Name'],
                 'required' => false,
             ])
-            ->add('framework', 'entity', [
+            ->add('framework', EntityType::class, [
                 'class' => Framework::class,
                 'required' => false,
-                'empty_value' => 'All',
+                'placeholder' => 'All',
             ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Status',
@@ -36,7 +37,7 @@ class SitesFilterType extends AbstractType
                     'Supported' => 'Supported',
                     'Unsupported' => 'UnSupported',
                 ],
-                'empty_value' => null,
+                'placeholder' => null,
             ])
         ;
     }

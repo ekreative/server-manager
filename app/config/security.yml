@@ -28,7 +28,7 @@ security:
             logout:
                 path: /logout
             remember_me:
-                key: "%secret%"
+                secret: "%secret%"
                 path: /
                 lifetime: 604800
                 always_remember_me: true

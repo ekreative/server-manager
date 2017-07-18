@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Login;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -71,7 +72,7 @@ class LoginType extends AbstractType
             $form = $event->getForm();
             $data = $event->getData();
             $form
-                ->add('loginType', 'choice', [
+                ->add('loginType', ChoiceType::class, [
                     'choices' => $this->getAvailableTypes((string)$builder->getForm()->getPropertyPath()),
                     'expanded' => true,
                     'attr' => [
@@ -136,7 +137,7 @@ class LoginType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Login'
+            'data_class' => Login::class
         ]);
     }
 
@@ -144,7 +145,7 @@ class LoginType extends AbstractType
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_login';
     }
