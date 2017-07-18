@@ -61,16 +61,6 @@ class SiteType extends AbstractType
                 'label' => false,
                 'attr' => ['class' => 'newClient', 'style' => 'display:none'],
             ))
-            ->add('responsibleManager', EntityType::class,[
-                'class' => User::class,
-                'choice_label' => function ($user){
-                    /**
-                     * @var User $user
-                     */
-                return $user->getFirstName().' '.$user->getLastName();
-                },
-//                'disabled' => true
-            ])
             ->add('developer', EntityType::class,[
                 'class' => User::class,
                 'choice_label' => function ($user){
@@ -78,6 +68,16 @@ class SiteType extends AbstractType
                      * @var User $user
                      */
                     return $user->getFirstName().' '.$user->getLastName();
+                },
+//                'disabled' => true
+            ])
+            ->add('responsibleManager', EntityType::class,[
+                'class' => User::class,
+                'choice_label' => function ($user){
+                    /**
+                     * @var User $user
+                     */
+                return $user->getFirstName().' '.$user->getLastName();
                 },
 //                'disabled' => true
             ])
