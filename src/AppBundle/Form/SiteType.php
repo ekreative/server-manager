@@ -62,19 +62,21 @@ class SiteType extends AbstractType
             ))
             ->add('developer', UserType::class,[
                 'required' => false,
-                'disabled' => true
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose main developer'
             ])
             ->add('responsibleManager', UserType::class,[
                 'label' => 'Responsible Manager',
                 'required' => false,
-                'disabled' => true
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose Responsible manager'
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
                     0 => 'Standart',
                     1 => 'Advanced',
                 ],
-                'label' => 'SLA plan'
+                'label' => 'SLA plan',
             ])
             ->add('framework', null, [
                 'required' => true,

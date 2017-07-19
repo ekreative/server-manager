@@ -80,6 +80,6 @@ class ProjectController extends Controller
                 'managers' => $managers,
             ]);
         }
-        return new JsonResponse(1);
+        return new JsonResponse(false);
     }
 }

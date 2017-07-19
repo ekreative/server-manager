@@ -51,7 +51,7 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank()
      */
-    private $sla;
+    private $sla = false;
 
     /**
      * @var string

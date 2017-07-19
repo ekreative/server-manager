@@ -18,7 +18,6 @@
                 type: "GET",
                 delay: 1000,
                 processResults: function (data) {
-                    console.log(data);
                     return {
                         results: $.map(data, function (item) {
                             return {
@@ -29,7 +28,6 @@
                     };
                 }
             }
-
         }).on('select2:select', function () {
             var route = "{{ path('project_members') | escape('js') }}";
             $.ajax({
@@ -37,8 +35,6 @@
                 url: route,
                 data: {'project': $('#appbundle_site_project').val()},
                 success: function (data) {
-                    console.log(data);
-
                     $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
 
                     if (data.client) {
@@ -58,7 +54,7 @@
 
                 },
                 error: function (data) {
-//                    console.log(data);
+                    console.log(data);
                 }
             });
            $('#appbundle_site_responsibleManager').removeAttr('disabled');
