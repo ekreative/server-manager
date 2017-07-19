@@ -62,6 +62,9 @@
         });
 
         $(document).ready(function () {
+            $('#appbundle_site_endDate').datetimepicker();
+            $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
+
             var flag = false;
             $('#appbundle_site_client').on('change', function () {
                 if (this.value == '') {
@@ -74,8 +77,6 @@
                     }
                 }
             }).change();
-
-            $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
         });
     </script>
 {% endblock %}

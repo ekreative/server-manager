@@ -2,21 +2,16 @@
 
 namespace AppBundle\Form;
 
-use Acme\DemoLib\Class_With_Underscores;
 use AppBundle\Entity\Client;
 use AppBundle\Entity\Framework;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Site;
-use AppBundle\Entity\User;
-use function foo\func;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SiteType extends AbstractType
@@ -137,8 +132,11 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-            ->add('endDate', null)
-            ->add('notes', null);
+            ->add('endDate', DateTimeType::class, [
+                'html5' => false,
+                'widget' => 'single_text',
+            ])
+            ->add('notes', TextareaType::class);
             $builder->get('developer')->resetViewTransformers();
             $builder->get('responsibleManager')->resetViewTransformers();
             $builder->get('project')->resetViewTransformers();

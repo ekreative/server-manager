@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.4",
-    "chosen-js": "^1.7.0",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "jquery": "^2.1.4",
     "lesshat": "^3.0.2",
     "select2": "^4.0.3"
