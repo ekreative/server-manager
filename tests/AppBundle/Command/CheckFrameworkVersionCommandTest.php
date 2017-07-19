@@ -1,24 +1,20 @@
 <?php
 
-namespace AppBundle\Tests\Command;
+namespace AppBundle\Command;
 
-use AppBundle\Command\CheckFrameworkVersionCommand;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tests\AppTestCase;
 
-class CheckFrameworkVersionCommandTest extends WebTestCase
+class CheckFrameworkVersionCommandTest extends AppTestCase
 {
     public function testExecute()
     {
-        $client = static::createClient();
-        $client->getContainer()->get('fixture_loader')->load();
-
         $kernel = static::createKernel();
         $kernel->boot();
 
         $application = new Application($kernel);
-        $application->add(new CheckFrameworkVersionCommand($client->getContainer()->get('doctrine'), $client->getContainer()->get('logger')));
+        $application->add(new CheckFrameworkVersionCommand($this->client->getContainer()->get('doctrine'), $this->client->getContainer()->get('logger')));
 
         $command = $application->find('app:check-version');
         $commandTester = new CommandTester($command);
