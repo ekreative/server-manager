@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace AppBundle\Tests;
 
 use AppBundle\Command\TestFixturesLoaderCommand;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -27,6 +27,8 @@ class AppTestCase extends WebTestCase
         $this->fs = new Filesystem();
 
         $container = $this->client->getContainer();
+
+        $wsd = $container->getParameter('default_db_path');
 
         if ($this->fs->exists($container->getParameter('default_db_path'))) {
             $this->fs->copy(

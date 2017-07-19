@@ -2,9 +2,7 @@
 
 namespace AppBundle\Tests\Command;
 
-use Tests\AppTestCase;
-
-include_once __DIR__.'/../../AppTestCase.php';
+use AppBundle\Tests\AppTestCase;
 
 class DefaultControllerTest extends AppTestCase
 {

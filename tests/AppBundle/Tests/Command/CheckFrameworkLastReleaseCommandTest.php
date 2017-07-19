@@ -1,12 +1,13 @@
 <?php
 
-namespace AppBundle\Command;
+namespace AppBundle\Tests\Command;
 
+use AppBundle\Command\CheckFrameworkLastReleaseCommand;
 use AppBundle\Entity\Framework;
+use AppBundle\Tests\AppTestCase;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\AppTestCase;
 
 class CheckFrameworkLastReleaseCommandTest extends AppTestCase
 {

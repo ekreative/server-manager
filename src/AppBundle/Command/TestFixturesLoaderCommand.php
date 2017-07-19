@@ -43,9 +43,9 @@ class TestFixturesLoaderCommand extends Command
 
         if ($input->getOption('force') || !$fs->exists($this->getDefaultPath())) {
             $commands = [
-                ['command' => 'doctrine:schema:drop', '--force' => true, '-e' => 'test'],
-                ['command' => 'doctrine:schema:update', '--force' => true, '-e' => 'test'],
-                ['command' => 'hautelook:doctrine:fixtures:load', '--no-interaction' => true, '-e' => 'test'],
+                ['command' => 'd:s:d', '--force' => true, '-e' => 'test'],
+                ['command' => 'd:s:u', '--force' => true, '-e' => 'test'],
+                ['command' => 'h:d:f:l', '--no-interaction' => true, '-e' => 'test']
             ];
 
             foreach ($commands as $command) {

@@ -1,10 +1,11 @@
 <?php
 
-namespace AppBundle\Command;
+namespace AppBundle\Tests\Command;
 
+use AppBundle\Command\CheckFrameworkVersionCommand;
+use AppBundle\Tests\AppTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\AppTestCase;
 
 class CheckFrameworkVersionCommandTest extends AppTestCase
 {
