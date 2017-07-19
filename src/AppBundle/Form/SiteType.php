@@ -28,7 +28,7 @@ class SiteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('project', ChoiceType::class, [
+            ->add('project', ProjectType::class, [
                 'required' => true
             ])
             ->add('name', null, [
@@ -50,7 +50,7 @@ class SiteType extends AbstractType
                 'mapped' => false,
                 'expanded' => false,
                 'multiple' => false,
-                'empty_value' => 'Add New'
+                'placeholder' => 'Add New'
             ])
 
             ->add('newClient', new ClientType(), array(
@@ -60,15 +60,14 @@ class SiteType extends AbstractType
                 'label' => false,
                 'attr' => ['class' => 'newClient', 'style' => 'display:none'],
             ))
-            ->add('developerName', ChoiceType::class,[
-                'label' => 'Developer',
-                'required' => false
-//                'disabled' => true
+            ->add('developer', UserType::class,[
+                'required' => false,
+                'disabled' => true
             ])
-            ->add('managerName', ChoiceType::class,[
+            ->add('responsibleManager', UserType::class,[
                 'label' => 'Responsible Manager',
-                'required' => false
-//                'disabled' => true
+                'required' => false,
+                'disabled' => true
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
@@ -138,8 +137,9 @@ class SiteType extends AbstractType
             ])
             ->add('endDate', null)
             ->add('notes', null);
-            $builder->get('developerName')->resetViewTransformers();
-            $builder->get('managerName')->resetViewTransformers();
+            $builder->get('developer')->resetViewTransformers();
+            $builder->get('responsibleManager')->resetViewTransformers();
+            $builder->get('project')->resetViewTransformers();
     }
 
     /**

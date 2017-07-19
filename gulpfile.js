@@ -37,7 +37,7 @@ gulp.task('scripts:bundle', function() {
         'node_modules/jquery/dist/jquery.js',
         'node_modules/bootstrap/dist/js/bootstrap.js',
         'node_modules/select2/dist/js/select2.full.js',
-        // 'web-src/js/*.js'
+        'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(myJsFilter)

@@ -38,6 +38,20 @@ class Projects
     }
 
     /**
+     * @param int $id
+     * @return array
+     */
+    public function getProjectById($id)
+    {
+        foreach ($this->getAllProjects() as $project) {
+            if ($project['id'] == $id) {
+                return $project;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param string $name
      * @return array
      */

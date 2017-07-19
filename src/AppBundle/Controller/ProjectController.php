@@ -50,11 +50,13 @@ class ProjectController extends Controller
 
             $client = null;
             if ($project) {
-                $entity = $em->getRepository(Client::class)->findOneBy(['id' => $project->getClient()->getId()]);
-                $client = [
-                    'id' => $entity->getId(),
-                    'fullName' => $entity->getFullName()
-                ];
+                if ($project->getClient()) {
+                    $entity = $em->getRepository(Client::class)->findOneBy(['id' => $project->getClient()->getId()]);
+                    $client = [
+                        'id' => $entity->getId(),
+                        'fullName' => $entity->getFullName()
+                    ];
+                }
             }
 
             $redmineClientService = $this->container->get('redmine_client');

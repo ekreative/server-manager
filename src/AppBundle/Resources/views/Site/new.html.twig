@@ -9,7 +9,7 @@
 {% block javascripts %}
     <script>
         $("#appbundle_site_project").select2({
-            placeholder: 'Project',
+            placeholder: 'Project Name',
             minimumInputLength: 3,
             cache: true,
             ajax: {
@@ -39,16 +39,21 @@
                 success: function (data) {
                     console.log(data);
 
-                    $('#appbundle_site_developerName, #appbundle_site_managerName').empty();
+                    $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
 
-                    $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
+                    if (data.client) {
+                        $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
+                        $('.newClient').hide();
+                    } else {
+                        $('#appbundle_site_client').val('').trigger('change.select2');
+                    }
 
                     data.developers.forEach(function (item) {
-                        $('#appbundle_site_developerName').append('<option>'+item.name+'</option>')
+                        $('#appbundle_site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
                     });
 
                     data.managers.forEach(function (item) {
-                        $('#appbundle_site_managerName').append('<option>'+item.name+'</option>')
+                        $('#appbundle_site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
                     });
 
                 },
@@ -56,57 +61,25 @@
 //                    console.log(data);
                 }
             });
+           $('#appbundle_site_responsibleManager').removeAttr('disabled');
+           $('#appbundle_site_developer').removeAttr('disabled');
         });
 
         $(document).ready(function () {
-
-            $(".client, #appbundle_site_managerName, #appbundle_site_developerName, #appbundle_site_client").select2();
-//            templateResult: formatRepo, // omitted for brevity, see the source of this page
-//            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-        });
-
-
-
-
-
-
-        {#$('#appbundle_site_project').on('change', function () {#}
-            {#var route = "{{ path('project_members') | escape('js') }}";#}
-            {#$.ajax({#}
-                {#type: 'POST',#}
-                {#url: route,#}
-                {#data: {'projectName': $('#appbundle_site_project').val()},#}
-                {#success: function (data) {#}
-                    {#console.log(data);#}
-                    {#data.developers.forEach(function (item) {#}
-                        {#$('#appbundle_site_developerName').append('<option>'+item.name+'</option>')#}
-                    {#});#}
-
-                    {#data.managers.forEach(function (item) {#}
-                        {#$('#appbundle_site_managerName').append('<option>'+item.name+'</option>')#}
-                    {#});#}
-
-                {#},#}
-                {#error: function (data) {#}
-{#//                    console.log(data);#}
-                {#}#}
-            {#});#}
-
-//           $('#appbundle_site_responsibleManager').removeAttr('disabled');
-//           $('#appbundle_site_developer').removeAttr('disabled');
-//        });
-
-        var flag = false;
-        $('.client').on('select2:select', function () {
-            if (this.value == '') {
-                $('.newClient').show();
-                flag = true;
-            } else {
-                if (flag == true){
-                    $('.newClient').hide();
-                    flag = false;
+            var flag = false;
+            $('#appbundle_site_client').on('change', function () {
+                if (this.value == '') {
+                    $('.newClient').show();
+                    flag = true;
+                } else {
+                    if (flag == true){
+                        $('.newClient').hide();
+                        flag = false;
+                    }
                 }
-            }
-        }).change();
+            }).change();
+
+            $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
+        });
     </script>
 {% endblock %}

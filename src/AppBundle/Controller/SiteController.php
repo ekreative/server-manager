@@ -84,19 +84,18 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-//            if ($form->get('client')->getData() == '') {
-//                $client = $form->get('newClient')->getData();
-//                $em->persist($client);
-//            } else {
-//                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
-//            }
+            if ($form->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $form->get('newClient')->getData();
+                if ($client->getFullName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
+            }
 
-//            $redmineClientService = $this->container->get('redmine_client');
-//            $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
-//            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
-//            dump($result);die;
-            dump($form->getData());
-            die();
             $entity->getProject()->setClient($client);
             $em->persist($entity);
             $em->flush();
