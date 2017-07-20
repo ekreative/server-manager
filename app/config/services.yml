@@ -18,7 +18,6 @@ services:
     project_type:
         class: AppBundle\Form\ProjectType
         arguments:
-            - @router
             - @project_transformer
         tags:
             - { name: form.type, alias: project }
@@ -28,6 +27,20 @@ services:
             arguments:
                 - @doctrine.orm.entity_manager
                 - @projects
+
+    user_type:
+        class: AppBundle\Form\UserType
+        arguments:
+            - @user_transformer
+        tags:
+            - { name: form.type, alias: developer }
+
+    user_transformer:
+                class: AppBundle\Form\ModelTransformer\UserModelTransformer
+                arguments:
+                    - @doctrine.orm.entity_manager
+                    - @ekreative_redmine_login.user_factory
+                    - @redmine_client
 
     projects:
         class: AppBundle\Redmine\Projects

@@ -8,23 +8,77 @@
 
 {% block javascripts %}
     <script>
+        $('#appbundle_site_endDate').datetimepicker({
+            format: 'DD MMM YYYY HH:mm',
+        });
+        var simplemde = new SimpleMDE({ element: document.getElementById("appbundle_site_notes") });
+        $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
+        $("#appbundle_site_project").select2({
+            placeholder: 'Project Name',
+            minimumInputLength: 3,
+            cache: true,
+            ajax: {
+                url:  "{{ path('project_typeahead') }}",
+                dataType: "json",
+                type: "GET",
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                }
+            }
+        }).on('select2:select', function () {
+            var route = "{{ path('project_members') | escape('js') }}";
+            $.ajax({
+                type: 'POST',
+                url: route,
+                data: {'project': $('#appbundle_site_project').val()},
+                success: function (data) {
+                    $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
 
-        $(".client").chosen({
-            no_results_text: "Oops, nothing found!"
+                    if (data.client) {
+                        $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
+                        $('.newClient').hide();
+                    } else {
+                        $('#appbundle_site_client').val('').trigger('change.select2');
+                    }
+
+                    data.developers.forEach(function (item) {
+                        $('#appbundle_site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
+                    });
+
+                    data.managers.forEach(function (item) {
+                        $('#appbundle_site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
+                    });
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+           $('#appbundle_site_responsibleManager').removeAttr('disabled');
+           $('#appbundle_site_developer').removeAttr('disabled');
         });
 
-        var flag = false;
-        $('.client').chosen().change( function () {
-            if (this.value.toLowerCase() == '') {
-                $('.newClient').show();
-                flag = true;
-            } else {
-                if (flag == true){
-                    $('.newClient').hide();
-                    flag = false;
+        $(document).ready(function () {
+            var flag = false;
+            $('#appbundle_site_client').on('change', function () {
+                if (this.value == '') {
+                    $('.newClient').show();
+                    flag = true;
+                } else {
+                    if (flag == true){
+                        $('.newClient').hide();
+                        flag = false;
+                    }
                 }
-
-            }
-        }).change();
+            }).change();
+        });
     </script>
 {% endblock %}

@@ -7,7 +7,7 @@
         <h1>{{ block('title') }}
             <div class="pull-right">
                 {{ form_start(delete_form, {'attr': {'delete_form': true}}) }}
-                    {{ form_widget(delete_form.submit,{'attr':{'class':'btn-danger', 'onclick':'return confirm("Are you sure you want to delete?")'}}) }}
+                {{ form_widget(delete_form.submit,{'attr':{'class':'btn-danger', 'onclick':'return confirm("Are you sure you want to delete?")'}}) }}
                 {{ form_end(delete_form) }}
             </div>
             <div class="pull-right">
@@ -20,59 +20,164 @@
 {% block body %}
     <table class="table inner">
         <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+
+        <tr>
+            <th>Project</th>
+            <td>{{ entity.project.name }}</td>
+        </tr>
+
+        {% if (entity.project.client) %}
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <th>Client</th>
+                <td>
+                    <table class="table inner">
+                        <tr>
+                            <th>
+                                id
+                            </th>
+                            <td>
+                                {{ entity.project.client.id }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Full Name
+                            </th>
+                            <td>
+                                {{ entity.project.client.fullName }}
+                            </td>
+                        </tr>
+                        {% if entity.project.client.skype %}
+                            <tr>
+                                <th>
+                                    Skype
+                                </th>
+                                <td>
+                                    {{ entity.project.client.skype }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.project.client.phone %}
+                            <tr>
+                                <th>
+                                    Phone
+                                </th>
+                                <td>
+                                    {{ entity.project.client.phone }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </table>
+
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if entity.developerName %}
+            <tr>
+                <th>Developer</th>
+                <td>
+                    <a {% if entity.developer %}href="https://redmine.ekreative.com/users/{{ entity.developer.id }}" {% endif %}>
+                        {{ entity.developerName }}
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if entity.responsibleManager %}
+            <tr>
+                <th>Responsible Manager</th>
+                <td>
+                    <a {% if entity.responsibleManager %}href="https://redmine.ekreative.com/users/{{ entity.responsibleManager.id }}" {% endif %}>
+                        {{ entity.managerName }}
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <th>Framework</th>
+            <td>{{ entity.framework.name }}
+                v{{ entity.frameworkVersion }} {% if entity.healthChecks.last %} ( Last sync: {{ entity.healthChecks.last.lastSyncAt|date }} ) {% endif %}</td>
+        </tr>
+
+        {% if entity.endDate %}
+            <tr>
+                <th>End Date</th>
+                <td>
+                    {{ entity.endDate | date("d.m.Y") }}
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if entity.notes %}
+            <tr>
+                <th colspan="100%">
+                    Notes
+                </th>
             </tr>
             <tr>
-                <th>Name</th>
-                <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-                <th>Framework Version</th>
-                <td>{{ entity.frameworkVersion }} {% if entity.healthChecks.last %} ( Last sync: {{ entity.healthChecks.last.lastSyncAt|date }} ) {% endif %}</td>
-            </tr>
-            <tr>
-                <th>Admin Login</th>
-                <td>{{ render(controller('AppBundle:Login:show', {'login': entity.adminLogin})) }}</td>
-            </tr>
-            <tr>
-                <th>Database Login</th>
-                <td>{{ render(controller('AppBundle:Login:show', {'login': entity.databaseLogin})) }}</td>
+                <td colspan="100%">
+                    {{ entity.notes | markdown }}
+                </td>
             </tr>
 
-            {% if (entity.servers|length) %}
-                <tr>
-                    <th>Servers</th>
-                    <td>
-                        {% for server in entity.servers %}
-                            {{ render(controller('AppBundle:Server:show', {'server': server})) }}
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endif %}
+        {% endif %}
 
-            {% if (entity.domains|length) %}
-                <tr>
-                    <th>Domains</th>
-                    <td>
-                        {% for domain in entity.domains %}
-                            {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endif %}
+        <tr>
+            <td>
+                <h2>
+                    Credentials
+                </h2>
+            </td>
+        </tr>
 
-            {% if (entity.healthChecks|length) %}
-                <tr>
-                    <th>Health Checks</th>
-                    <td>
-                        {% for healthCheck in entity.healthChecks%}
-                            {{ render(controller('AppBundle:HealthCheck:show', {'healthCheck': healthCheck})) }}
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endif %}
+
+        <tr>
+            <th>Admin Login</th>
+            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.adminLogin})) }}</td>
+        </tr>
+        <tr>
+            <th>Database Login</th>
+            <td>{{ render(controller('AppBundle:Login:show', {'login': entity.databaseLogin})) }}</td>
+        </tr>
+
+        {% if (entity.servers|length) %}
+            <tr>
+                <th>Servers</th>
+                <td>
+                    {% for server in entity.servers %}
+                        {{ render(controller('AppBundle:Server:show', {'server': server})) }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if (entity.domains|length) %}
+            <tr>
+                <th>Domains</th>
+                <td>
+                    {% for domain in entity.domains %}
+                        {{ render(controller('AppBundle:Domain:show', {'domain': domain})) }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if (entity.healthChecks|length) %}
+            <tr>
+                <th>Health Checks</th>
+                <td>
+                    {% for healthCheck in entity.healthChecks %}
+                        {{ render(controller('AppBundle:HealthCheck:show', {'healthCheck': healthCheck})) }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
         </tbody>
     </table>
 {% endblock %}

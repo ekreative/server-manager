@@ -32,7 +32,7 @@ class ProjectModelTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value) {
-            return $value->getName();
+            return $value->getId();
         }
         return null;
     }
@@ -44,7 +44,7 @@ class ProjectModelTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if ($value) {
-            $redmineProject = $this->projects->getProjectByName($value);
+            $redmineProject = $this->projects->getProjectById($value);
             if ($redmineProject) {
                 return $this->em->getRepository('AppBundle:Project')->getProject($redmineProject);
             }

@@ -19,7 +19,9 @@ gulp.task('clean', function (cb) {
 
 gulp.task('styles', function() {
     return gulp.src([
-        'node_modules/chosen-js/chosen.css',
+        'node_modules/select2/dist/css/select2.css',
+        'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+        'node_modules/simplemde/dist/simplemde.min.css',
         'web-src/less/*'
     ])
         .pipe(less())
@@ -36,9 +38,10 @@ gulp.task('scripts:bundle', function() {
     return gulp.src([
         'node_modules/jquery/dist/jquery.js',
         'node_modules/bootstrap/dist/js/bootstrap.js',
-        'node_modules/typeahead.js/dist/bloodhound.js',
-        'node_modules/typeahead.js/dist/typeahead.jquery.js',
-        'node_modules/chosen-js/chosen.jquery.js',
+        'node_modules/select2/dist/js/select2.full.js',
+        'node_modules/moment/moment.js',
+        'node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        'node_modules/simplemde/dist/simplemde.min.js',
         'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init({loadMaps: true}))
