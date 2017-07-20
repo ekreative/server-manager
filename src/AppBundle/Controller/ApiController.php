@@ -29,7 +29,7 @@ class ApiController extends Controller
     {
         $doctrine = $this->getDoctrine();
 
-        $projects = $doctrine->getRepository('AppBundle:Project')->findBy(['id' => array_map(function ($project) {
+        $projects = $doctrine->getRepository(Project::class)->findBy(['id' => array_map(function ($project) {
             return $project['id'];
         }, $this->get('projects')->getAllProjects())]);
 

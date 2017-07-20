@@ -10,7 +10,7 @@ services:
     site_author.listener:
         class: AppBundle\AuthorEditor\AuthorEditorListener
         arguments:
-            - @security.token_storage
+            - "@security.token_storage"
         tags:
             - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
@@ -18,23 +18,23 @@ services:
     project_type:
         class: AppBundle\Form\ProjectType
         arguments:
-            - @router
-            - @project_transformer
+            - "@router"
+            - "@project_transformer"
         tags:
-            - { name: form.type, alias: project }
+            - { name: form.type }
 
     project_transformer:
             class: AppBundle\Form\ModelTransformer\ProjectModelTransformer
             arguments:
-                - @doctrine.orm.entity_manager
-                - @projects
+                - "@doctrine.orm.entity_manager"
+                - "@projects"
 
     projects:
         class: AppBundle\Redmine\Projects
         arguments:
-            - @ekreative_redmine_login.client_provider
-            - @security.token_storage
-#            - @projects_cache
+            - "@ekreative_redmine_login.client_provider"
+            - "@security.token_storage"
+#            - "@projects_cache"
 
     projects_cache:
         class: Doctrine\Common\Cache\ArrayCache
@@ -65,15 +65,15 @@ services:
     app.check_version.command:
         class: AppBundle\Command\CheckFrameworkVersionCommand
         arguments:
-            - @doctrine
-            - @logger
+            - "@doctrine"
+            - "@logger"
         tags:
             - {name: console.command}
 
     app.check_last_release.command:
         class: AppBundle\Command\CheckFrameworkLastReleaseCommand
         arguments:
-            - @doctrine
-            - @logger
+            - "@doctrine"
+            - "@logger"
         tags:
             - {name: console.command}
