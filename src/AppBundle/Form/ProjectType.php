@@ -44,4 +44,3 @@ class ProjectType extends TextType
         return ChoiceType::class;
     }
 }
-

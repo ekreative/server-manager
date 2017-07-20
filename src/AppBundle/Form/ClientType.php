@@ -22,7 +22,7 @@ class ClientType extends AbstractType
             ->add('skype', TextType::class, [
                 'required' => false
             ])
-            ->add('phone', TextType::class,[
+            ->add('phone', TextType::class, [
                 'required' => false
             ])
             ;

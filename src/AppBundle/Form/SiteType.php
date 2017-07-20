@@ -10,9 +10,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SiteType extends AbstractType
 {
@@ -38,7 +40,7 @@ class SiteType extends AbstractType
                         return $project->getId();
                     }, $client->getProjects()->toArray()))];
                 },
-                'choice_label' => function(Client $client) {
+                'choice_label' => function (Client $client) {
                     return $client->getFullName();
                 },
                 'required' => false,
@@ -55,12 +57,12 @@ class SiteType extends AbstractType
                 'label' => false,
                 'attr' => ['class' => 'newClient', 'style' => 'display:none'],
             ))
-            ->add('developer', UserType::class,[
+            ->add('developer', UserType::class, [
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
                 'placeholder' => 'Choose main developer'
             ])
-            ->add('responsibleManager', UserType::class,[
+            ->add('responsibleManager', UserType::class, [
                 'label' => 'Responsible Manager',
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
@@ -132,14 +134,15 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-            ->add('endDate', DateTimeType::class, [
+            ->add('endDate', DateType::class, [
                 'html5' => false,
                 'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
             ])
             ->add('notes', TextareaType::class);
-            $builder->get('developer')->resetViewTransformers();
-            $builder->get('responsibleManager')->resetViewTransformers();
-            $builder->get('project')->resetViewTransformers();
+        $builder->get('developer')->resetViewTransformers();
+        $builder->get('responsibleManager')->resetViewTransformers();
+        $builder->get('project')->resetViewTransformers();
     }
 
     /**
@@ -150,7 +153,7 @@ class SiteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Site',
+            'data_class' => Site::class,
             'clients' => []
         ]);
     }

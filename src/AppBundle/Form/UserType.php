@@ -31,4 +31,3 @@ class UserType extends TextType
         return ChoiceType::class;
     }
 }
-

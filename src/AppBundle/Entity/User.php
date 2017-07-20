@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Ekreative\RedmineLoginBundle\Security\RedmineUser;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-
 /**
  * User
  *

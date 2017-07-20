@@ -8,6 +8,11 @@
 
 {% block javascripts %}
     <script>
+        $('#appbundle_site_endDate').datetimepicker({
+            format: 'DD MMM YYYY HH:mm',
+        });
+        var simplemde = new SimpleMDE({ element: document.getElementById("appbundle_site_notes") });
+        $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
         $("#appbundle_site_project").select2({
             placeholder: 'Project Name',
             minimumInputLength: 3,
@@ -62,9 +67,6 @@
         });
 
         $(document).ready(function () {
-            $('#appbundle_site_endDate').datetimepicker();
-            $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
-
             var flag = false;
             $('#appbundle_site_client').on('change', function () {
                 if (this.value == '') {

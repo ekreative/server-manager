@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Client;
 use AppBundle\Entity\Project;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +31,7 @@ class ProjectController extends Controller
             return $project;
         }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
             return (empty($q) || stripos($project['name'], $q) !== false);
-//            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
+            //            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
         }))));
         $response->headers->addCacheControlDirective('must-revalidate', true);
         return $response;
@@ -42,9 +41,9 @@ class ProjectController extends Controller
      * @Route("/project/members/", name="project_members")
      * Method("POST")
      */
-    public function membersAction(Request $request){
+    public function membersAction(Request $request)
+    {
         if ($request->get('project')) {
-
             $em = $this->getDoctrine();
             $project = $em->getRepository(Project::class)->find($request->get('project'));
 
@@ -65,7 +64,7 @@ class ProjectController extends Controller
             $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
             $developers = [];
             $managers = [];
-            foreach ($result['memberships'] as $membership){
+            foreach ($result['memberships'] as $membership) {
                 if ($membership['roles'][0]['name'] == "Developer") {
                     $developers[] = $membership['user'];
                 }

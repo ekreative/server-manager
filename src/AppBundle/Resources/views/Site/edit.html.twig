@@ -16,6 +16,49 @@
 
 {% block javascripts %}
     <script>
+        var simplemde = new SimpleMDE({ element: document.getElementById("appbundle_site_notes") });
+
+            $('#appbundle_site_endDate').datetimepicker({
+                useCurrent: false,
+                format: 'DD.MM.YYYY'
+            });
+
+        $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
+        $("#appbundle_site_project").append('<option value="{{ entity.project.id }}">{{ entity.project.name }}</option>');
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ path('project_members') | escape('js') }}",
+            data: {'project': $('#appbundle_site_project').val()},
+            success: function (data) {
+                $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
+
+                if (data.client) {
+                    $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
+                    $('.newClient').hide();
+                } else {
+                    $('#appbundle_site_client').val('').trigger('change.select2');
+                }
+
+                data.developers.forEach(function (item) {
+                    $('#appbundle_site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
+                });
+
+                data.managers.forEach(function (item) {
+                    $('#appbundle_site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
+                });
+
+                $('#appbundle_site_developer').val({{ entity.developer.id }});
+                $('#appbundle_site_responsibleManager').val({{ entity.responsibleManager.id }});
+
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+        $('#appbundle_site_responsibleManager').removeAttr('disabled');
+        $('#appbundle_site_developer').removeAttr('disabled');
+
         $("#appbundle_site_project").select2({
             placeholder: 'Project Name',
             minimumInputLength: 3,
@@ -69,43 +112,6 @@
         });
 
         $(document).ready(function () {
-            $('#appbundle_site_endDate').datetimepicker();
-            $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
-            $("#appbundle_site_project").append('<option value="{{ entity.project.id }}">{{ entity.project.name }}</option>');
-
-            $.ajax({
-                type: 'POST',
-                url: "{{ path('project_members') | escape('js') }}",
-                data: {'project': $('#appbundle_site_project').val()},
-                success: function (data) {
-                    $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
-
-                    if (data.client) {
-                        $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
-                        $('.newClient').hide();
-                    } else {
-                        $('#appbundle_site_client').val('').trigger('change.select2');
-                    }
-
-                    data.developers.forEach(function (item) {
-                        $('#appbundle_site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
-                    });
-
-                    data.managers.forEach(function (item) {
-                        $('#appbundle_site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
-                    });
-
-                    $('#appbundle_site_developer').val({{ entity.developer.id }});
-                    $('#appbundle_site_responsibleManager').val({{ entity.responsibleManager.id }});
-
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-            $('#appbundle_site_responsibleManager').removeAttr('disabled');
-            $('#appbundle_site_developer').removeAttr('disabled');
-
             var flag = false;
             $('#appbundle_site_client').on('change', function () {
                 if (this.value == '') {
