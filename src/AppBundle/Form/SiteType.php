@@ -2,12 +2,19 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Client;
 use AppBundle\Entity\Framework;
+use AppBundle\Entity\Project;
 use AppBundle\Entity\Site;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SiteType extends AbstractType
 {
@@ -17,20 +24,60 @@ class SiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
         $builder
-            ->add('project', 'project', [
-                'required'=>true
+            ->add('project', ProjectType::class, [
+                'required' => true
             ])
             ->add('name', null, [
                 'attr' => [
                     'help-block' => 'A name for the site'
                 ]
             ])
+            ->add('client', EntityType::class, [
+                'class' => Client::class,
+                'choice_attr' => function (Client $client) {
+                    return ['data-projects' => implode(array_map(function (Project $project) {
+                        return $project->getId();
+                    }, $client->getProjects()->toArray()))];
+                },
+                'choice_label' => function (Client $client) {
+                    return $client->getFullName();
+                },
+                'required' => false,
+                'mapped' => false,
+                'expanded' => false,
+                'multiple' => false,
+                'placeholder' => 'Add New'
+            ])
+
+            ->add('newClient', new ClientType(), array(
+                'required' => false,
+                'mapped' => false,
+                'property_path' => 'client',
+                'label' => false,
+                'attr' => ['class' => 'newClient', 'style' => 'display:none'],
+            ))
+            ->add('developer', UserType::class, [
+                'required' => false,
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose main developer'
+            ])
+            ->add('responsibleManager', UserType::class, [
+                'label' => 'Responsible Manager',
+                'required' => false,
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose Responsible manager'
+            ])
+            ->add('sla', ChoiceType::class, [
+                'choices' => [
+                    0 => 'Standart',
+                    1 => 'Advanced',
+                ],
+                'label' => 'SLA plan',
+            ])
             ->add('framework', null, [
                 'required' => true,
-                'choice_attr' => function($framework, $key, $index) {
+                'choice_attr' => function ($framework, $key, $index) {
                     /** @var Framework $framework */
                     return ['data-framework-version' => $framework->getCurrentVersion()];
                 },
@@ -50,7 +97,6 @@ class SiteType extends AbstractType
                 ],
                 'empty_value' => null,
             ])
-
             ->add('adminLogin', new LoginType(), [
                 'attr' => [
                     'help-block' => 'Site admin login details'
@@ -88,7 +134,15 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-        ;
+            ->add('endDate', DateType::class, [
+                'html5' => false,
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+            ])
+            ->add('notes', TextareaType::class);
+        $builder->get('developer')->resetViewTransformers();
+        $builder->get('responsibleManager')->resetViewTransformers();
+        $builder->get('project')->resetViewTransformers();
     }
 
     /**
@@ -99,7 +153,8 @@ class SiteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Site'
+            'data_class' => Site::class,
+            'clients' => []
         ]);
     }
 

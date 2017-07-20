@@ -14,7 +14,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckFrameworkVersionCommand extends Command
 {
-
     protected $doctrine;
 
     protected $logger;
@@ -48,13 +47,11 @@ class CheckFrameworkVersionCommand extends Command
                 $version = $this->checkVersion($healthCheck->getUrl(), $healthCheck->getSite()->getFramework());
                 $healthCheck->getSite()->setFrameworkVersion($version);
                 $healthCheck->setLastSyncAt(new \DateTime());
-
             } catch (\Exception $e) {
                 $this->logger->error('Check version error.', [
                     'message' => $e->getMessage()
                 ]);
             }
-
         }
         $io = new SymfonyStyle($input, $output);
         $io->success('Versions checked.');
@@ -76,7 +73,7 @@ class CheckFrameworkVersionCommand extends Command
     {
         $client = new Client();
 
-        $response = $client->get( $url);
+        $response = $client->get($url);
 
         if (Framework::JOOMLA === $framework->getKey()) {
             $result = new \SimpleXMLElement($response->getBody());
@@ -94,5 +91,4 @@ class CheckFrameworkVersionCommand extends Command
             throw new \ErrorException('Invalid Content-Type. Expected: "application/json", "' . $response->getHeader('Content-Type')[0] . '" is given.');
         }
     }
-
 }

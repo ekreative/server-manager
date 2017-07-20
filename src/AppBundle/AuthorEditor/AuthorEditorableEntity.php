@@ -49,7 +49,6 @@ trait AuthorEditorableEntity
      */
     public function setEditor(User $editor = null)
     {
-
         $this->editor = $editor;
 
         return $this;
@@ -62,5 +61,4 @@ trait AuthorEditorableEntity
     {
         return $this->editor;
     }
-
 }

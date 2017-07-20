@@ -4,9 +4,8 @@
     <meta charset="UTF-8"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/manager.css') }}"/>
-    {% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"/>
+    {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
 <body>
@@ -40,6 +39,9 @@
                         <li>
                             <a href="{{ path('hosting') }}">Hosting</a>
                         </li>
+                        <li>
+                            <a href="{{ path('client') }}">Clients</a>
+                        </li>
                     {% endif %}
                     <li>
                         <a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
@@ -70,8 +72,7 @@
         {% endblock %}
     </main>
 </div>
-{% block javascripts %}
-    <script src="{{ asset('js/bundle.js') }}"></script>
-{% endblock %}
+<script src="{{ asset('js/bundle.js') }}"></script>
+{% block javascripts %}{% endblock %}
 </body>
 </html>

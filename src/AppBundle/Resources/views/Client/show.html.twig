@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{{ block('title') }}
+            <div class="pull-right">
+                {{ form_start(delete_form, {'attr': {'delete_form': true}}) }}
+                {{ form_widget(delete_form.submit,{'attr':{'class':'btn-danger', 'onclick':'return confirm("Are you sure you want to delete?")'}}) }}
+                {{ form_end(delete_form) }}
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('client_edit', { 'client': entity.id }) }}" class="btn btn-default header-edit-btn">Edit</a>
+            </div>
+        </h1>
+    </div>
+{% endblock header %}
+
+{% block body %}
+    <table class="table inner">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Full Name</th>
+            <td>{{ entity.fullName }}</td>
+        </tr>
+        <tr>
+            <th>E-mail</th>
+            <td>{{ entity.email }}</td>
+        </tr>
+        {% if entity.skype %}
+        <tr>
+            <th>Skype</th>
+            <td>{{ entity.skype }}</td>
+        </tr>
+        {% endif %}
+        {% if entity.phone %}
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

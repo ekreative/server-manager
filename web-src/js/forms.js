@@ -26,22 +26,22 @@ $('.form-collection').each(function(i, formCollection) {
     });
 });
 
-$('input[typeahead]').each(function(i, input) {
-    $(input).typeahead(null, {
-        source: new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: $(input).attr('typeahead'),
-                cache: false
-            }
-        }),
-        remote: {
-            cache: false,
-            ttl: 0
-        }
-    })
-});
+// $('input[typeahead]').each(function(i, input) {
+//     $(input).typeahead(null, {
+//         source: new Bloodhound({
+//             datumTokenizer: Bloodhound.tokenizers.whitespace,
+//             queryTokenizer: Bloodhound.tokenizers.whitespace,
+//             prefetch: {
+//                 url: $(input).attr('typeahead'),
+//                 cache: false
+//             }
+//         }),
+//         remote: {
+//             cache: false,
+//             ttl: 0
+//         }
+//     })
+// });
 
 function loginTypeToggle($input) {
     var val = $input.val(),
