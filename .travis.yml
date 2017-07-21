@@ -13,11 +13,11 @@ before_script:
     - composer install
     - mkdir -p build/logs
 
-script: ./bin/phpunit -c app --coverage-clover build/logs/clover.xml
+script: ./vendor/bin/phpunit -c app --coverage-clover build/logs/clover.xml
 
 after_success:
   - composer require satooshi/php-coveralls
-  - ./bin/coveralls -v
+  - ./vendor/bin/coveralls -v
 
 cache:
     directories:
