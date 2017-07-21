@@ -1015,16 +1015,16 @@
         },
         {
             "name": "ekreative/redmine_login",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ekreative/redmine-login.git",
-                "reference": "4e4f0b3a9fe0dff572290eb4ecbe03da0b33f3e1"
+                "reference": "fe11948fa36b5f488c0ab518653cbd0ced1b247f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/4e4f0b3a9fe0dff572290eb4ecbe03da0b33f3e1",
-                "reference": "4e4f0b3a9fe0dff572290eb4ecbe03da0b33f3e1",
+                "url": "https://api.github.com/repos/ekreative/redmine-login/zipball/fe11948fa36b5f488c0ab518653cbd0ced1b247f",
+                "reference": "fe11948fa36b5f488c0ab518653cbd0ced1b247f",
                 "shasum": ""
             },
             "require": {
@@ -1050,7 +1050,7 @@
                 "MIT"
             ],
             "description": "Login to symfony using redmine as user provider",
-            "time": "2017-07-07T08:08:42+00:00"
+            "time": "2017-07-21T10:58:11+00:00"
         },
         {
             "name": "fig/link-util",

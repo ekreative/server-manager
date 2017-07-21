@@ -7,6 +7,9 @@ use Ekreative\RedmineLoginBundle\Client\ClientProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * @group legacy
+ */
 class ApiControllerTest extends AppTestCase
 {
     public function testSites()
