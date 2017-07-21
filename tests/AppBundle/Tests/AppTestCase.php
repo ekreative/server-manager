@@ -19,6 +19,8 @@ class AppTestCase extends WebTestCase
      */
     protected $fs;
 
+    protected $container;
+
     public function setUp()
     {
         parent::setUp();
@@ -26,14 +28,12 @@ class AppTestCase extends WebTestCase
 
         $this->fs = new Filesystem();
 
-        $container = $this->client->getContainer();
+        $this->container = $this->client->getContainer();
 
-        $wsd = $container->getParameter('default_db_path');
-
-        if ($this->fs->exists($container->getParameter('default_db_path'))) {
+        if ($this->fs->exists($this->container->getParameter('default_db_path'))) {
             $this->fs->copy(
-                $container->getParameter('default_db_path'),
-                $container->getParameter('test_db_path'));
+                $this->container->getParameter('default_db_path'),
+                $this->container->getParameter('test_db_path'));
         } else {
             TestFixturesLoaderCommand::runCommand($this->client->getKernel(),
                 ['command' => 't:f', '-e' => 'test', '-f' => true]);
@@ -43,8 +43,9 @@ class AppTestCase extends WebTestCase
 
     public function tearDown()
     {
-        $this->fs->remove($this->client->getContainer()->getParameter('test_db_path'));
+        $this->fs->remove($this->container->getParameter('test_db_path'));
         $this->client = null;
+        $this->container = null;
         parent::tearDown();
     }
 
