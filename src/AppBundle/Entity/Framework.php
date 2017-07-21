@@ -18,12 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Framework implements AuthorEditorable
 {
-    const SYMFONY = 'symfony';
-    const JOOMLA = 'joomla';
-    const WORDPRESS = 'wordpress';
-    const DRUPAL_7 = 'drupal7';
-    const DRUPAL_8 = 'drupal8';
-
     use AuthorEditorableEntity;
     use TimestampableEntity;
 
