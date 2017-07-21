@@ -61,13 +61,6 @@ class Framework implements AuthorEditorable
      */
     private $sites;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="key")
-     */
-    private $key;
-
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -149,25 +142,5 @@ class Framework implements AuthorEditorable
     public function __toString()
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
     }
 }

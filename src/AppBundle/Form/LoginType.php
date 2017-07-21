@@ -73,7 +73,7 @@ class LoginType extends AbstractType
             $data = $event->getData();
             $form
                 ->add('loginType', ChoiceType::class, [
-                    'choices' => $this->getAvailableTypes((string)$builder->getForm()->getPropertyPath()),
+                    'choices' => array_flip($this->getAvailableTypes((string)$builder->getForm()->getPropertyPath())),
                     'expanded' => true,
                     'attr' => [
                         'class' => 'btn-group',

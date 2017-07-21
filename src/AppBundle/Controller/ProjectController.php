@@ -26,7 +26,6 @@ class ProjectController extends Controller
 
         $q = $request->query->get('q', '');
 
-
         $response = new JsonResponse(array_values(array_map(function ($project) {
             return $project;
         }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
