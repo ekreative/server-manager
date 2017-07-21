@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Client;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,10 +17,14 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fullName')
-            ->add('email')
-            ->add('skype')
-            ->add('phone')
+            ->add('fullName', TextType::class)
+            ->add('email', TextType::class)
+            ->add('skype', TextType::class, [
+                'required' => false
+            ])
+            ->add('phone', TextType::class, [
+                'required' => false
+            ])
             ;
     }
 

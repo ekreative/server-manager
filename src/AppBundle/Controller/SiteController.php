@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
 use AppBundle\Entity\Client;
+use AppBundle\Entity\User;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
@@ -85,12 +86,34 @@ class SiteController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             if ($form->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
                 $client = $form->get('newClient')->getData();
-                $em->persist($client);
+                if ($client->getFullName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
             } else {
                 $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
             }
             $entity->getProject()->setClient($client);
+
+            if ($form->get('developer')->getData()) {
+                /**
+                 * @var User $developer
+                 */
+                $developer = $form->get('developer')->getData();
+                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
+            }
+
+            if ($form->get('responsibleManager')->getData()) {
+                /**
+                 * @var User $responsibleManager
+                 */
+                $responsibleManager = $form->get('responsibleManager')->getData();
+                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -233,6 +256,35 @@ class SiteController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if ($editForm->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $editForm->get('newClient')->getData();
+                if ($client->getFullName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($editForm->get('client')->getData());
+            }
+            $entity->getProject()->setClient($client);
+
+            if ($editForm->get('developer')->getData()) {
+                /**
+                 * @var User $developer
+                 */
+                $developer = $editForm->get('developer')->getData();
+                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
+            }
+
+            if ($editForm->get('responsibleManager')->getData()) {
+                /**
+                 * @var User $responsibleManager
+                 */
+                $responsibleManager = $editForm->get('responsibleManager')->getData();
+                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
+            }
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('site_show', ['id' => $id]));

@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Hosting implements AuthorEditorable
 {
-
     use AuthorEditorableEntity;
     use TimestampableEntity;
 
