@@ -140,13 +140,4 @@ class LoginType extends AbstractType
             'data_class' => Login::class
         ]);
     }
-
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_login';
-    }
 }

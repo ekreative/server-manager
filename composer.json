@@ -3,6 +3,9 @@
     "license": "MIT",
     "type": "project",
     "description": "An app for storing data about servers",
+    "optimize-autoloader": true,
+    "classmap-authoritative": true,
+    "apcu-autoloader": true,
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle/",

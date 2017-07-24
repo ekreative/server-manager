@@ -2,17 +2,13 @@ imports:
     - { resource: config.yml }
 
 framework:
-    validation:
-        cache: validator.mapping.cache.apc
-    serializer:
-        cache: serializer.mapping.cache.apc
     session:
         handler_id: session_handler
 
 doctrine:
     orm:
-        metadata_cache_driver: apc
-        result_cache_driver: apc
+        metadata_cache_driver: apcu
+        result_cache_driver: apcu
         result_cache_driver:
             type: service
             id: result_cache
@@ -34,7 +30,7 @@ services:
     redis:
         class: Redis
         calls:
-            - [connect, [%redis%, 6379]]
+            - [connect, ["%redis%", 6379]]
 
     result_cache:
         class: Doctrine\Common\Cache\RedisCache
@@ -55,6 +51,6 @@ services:
     projects_cache:
         class: Doctrine\Common\Cache\RedisCache
         calls:
-            - [setRedis, [@redis]]
+            - [setRedis, ["@redis"]]
             - [ setNamespace, [ 'sm:p:' ]]
         lazy: true

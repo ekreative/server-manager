@@ -59,12 +59,4 @@ class ServerType extends AbstractType
             'data_class' => Server::class
         ]);
     }
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_server';
-    }
 }

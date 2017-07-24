@@ -49,7 +49,6 @@ class SiteType extends AbstractType
                 'multiple' => false,
                 'placeholder' => 'Add New'
             ])
-
             ->add('newClient', ClientType::class, [
                 'required' => false,
                 'mapped' => false,
