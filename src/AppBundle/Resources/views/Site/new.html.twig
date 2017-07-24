@@ -12,7 +12,8 @@
             format: 'DD.MM.YYYY'
         });
         var simplemde = new SimpleMDE({ element: document.getElementById("site_notes") });
-        $(".client, #site_responsibleManager, #site_developer, #site_client").select2();
+        $("#site_responsibleManager, #site_developer, #site_client").select2();
+
         $("#site_project").select2({
             placeholder: 'Project Name',
             minimumInputLength: 3,
@@ -43,7 +44,7 @@
                     $('#site_developer, #site_responsibleManager').select2("val", "");
                     if (data.client) {
                         $('#site_client').val(data.client.id).trigger('change.select2');
-                        $('.newClient').hide();
+                        $('#site_newClient').hide();
                     } else {
                         $('#site_client').val('').trigger('change.select2');
                     }
@@ -65,20 +66,13 @@
            $('#site_developer').removeAttr('disabled');
         });
 
-        $(document).ready(function () {
-            var flag = false;
-            $('#site_client').on('change', function () {
-                if (this.value == '') {
-                    $('.newClient').show();
-                    flag = true;
-                } else {
-                    if (flag == true){
-                        $('.newClient').hide();
-                        flag = false;
-                    }
-                }
-            }).change();
-        });
+        $('#site_client').on('change', function () {
+            if ($(this).val() == '') {
+                $('#site_newClient').show();
+            } else {
+                $('#site_newClient').hide();
+            }
+        }).change();
 
         (function($) {
             $.fn.closest_descendent = function(filter) {

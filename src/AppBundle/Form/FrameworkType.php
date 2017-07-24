@@ -35,12 +35,4 @@ class FrameworkType extends AbstractType
             'data_class' => Framework::class
         ]);
     }
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_framework';
-    }
 }

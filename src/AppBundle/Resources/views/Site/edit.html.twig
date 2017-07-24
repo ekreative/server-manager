@@ -34,7 +34,7 @@
                 $('#site_developer, #site_responsibleManager').select2("val", "");
                 if (data.client) {
                     $('#site_client').val(data.client.id).trigger('change.select2');
-                    $('.newClient').hide();
+                    $('#site_newClient').hide();
                 } else {
                     $('#site_client').val('').trigger('change.select2');
                 }
@@ -60,6 +60,14 @@
         });
         $('#site_responsibleManager').removeAttr('disabled');
         $('#site_developer').removeAttr('disabled');
+
+        $('#site_client').on('change', function () {
+            if ($(this).val() == '') {
+                $('#site_newClient').show();
+            } else {
+                $('#site_newClient').hide();
+            }
+        }).change();
 
         $("#site_project").select2({
             placeholder: 'Project Name',
@@ -91,10 +99,10 @@
                     $('#site_developer, #site_responsibleManager').select2("val", "");
 
                     if (data.client) {
-                        $('#site_client').val(data.client.id).trigger('change.select2');
+                        $('#site_client').val(data.client.id).trigger('select2:select');
                         $('.newClient').hide();
                     } else {
-                        $('#site_client').val('').trigger('change.select2');
+                        $('#site_client').val('').trigger('select2:select');
                     }
 
                     data.developers.forEach(function (item) {
@@ -108,21 +116,6 @@
             });
             $('#site_responsibleManager').removeAttr('disabled');
             $('#site_developer').removeAttr('disabled');
-        });
-
-        var flag = false;
-        $(document).ready(function () {
-            $('#site_client').on('change', function () {
-                if (this.value == '') {
-                    $('.newClient').show();
-                    flag = true;
-                } else {
-                    if (flag == true){
-                        $('.newClient').hide();
-                        flag = false;
-                    }
-                }
-            }).change();
         });
 
         (function($) {
