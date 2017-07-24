@@ -55,8 +55,8 @@ class CheckFrameworkVersionCommand extends Command
         }
         $io = new SymfonyStyle($input, $output);
         $io->success('Versions checked.');
-        $this->doctrine->getEntityManager()->flush();
-        $this->doctrine->getEntityManager()->clear();
+        $this->doctrine->getManager()->flush();
+        $this->doctrine->getManager()->clear();
     }
 
     /**

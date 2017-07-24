@@ -90,3 +90,17 @@ services:
             - "@logger"
         tags:
             - {name: console.command}
+
+    app.bundle_fixtures_provider:
+            class: AppBundle\DataFixtures\AppProvider
+            tags:
+                - { name: hautelook_alice.faker.provider }
+
+    app.bundle.command_test_fixtures:
+        class: AppBundle\Command\TestFixturesLoaderCommand
+        calls:
+            - {method: setKernel, arguments: ["@kernel"]}
+            - {method: setDefaultPath, arguments: ["%default_db_path%"]}
+            - {method: setTestDbPath, arguments: ["%test_db_path%"]}
+        tags:
+            - { name: console.command }

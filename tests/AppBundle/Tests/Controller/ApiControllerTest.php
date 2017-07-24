@@ -2,12 +2,15 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\Tests\AppTestCase;
 use Ekreative\RedmineLoginBundle\Client\ClientProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ApiControllerTest extends WebTestCase
+/**
+ * @group legacy
+ */
+class ApiControllerTest extends AppTestCase
 {
     public function testSites()
     {
@@ -49,8 +52,6 @@ class ApiControllerTest extends WebTestCase
         $clientProvider = $this->getMockBuilder(ClientProvider::class)->disableOriginalConstructor()->getMock();
         $clientProvider->method('get')->willReturn($redmineUserClient);
         $client->getContainer()->set('ekreative_redmine_login.client_provider', $clientProvider);
-
-        $client->getContainer()->get('fixture_loader')->load();
 
         $client->request('GET', '/api/sites', [], [], ['HTTP_X-API-Key' => 'test-api-key']);
 
