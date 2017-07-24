@@ -36,11 +36,11 @@ services:
             - { name: form.type, alias: developer }
 
     user_transformer:
-                class: AppBundle\Form\ModelTransformer\UserModelTransformer
-                arguments:
-                    - "@doctrine.orm.entity_manager"
-                    - "@ekreative_redmine_login.user_factory"
-                    - "@redmine_client"
+        class: AppBundle\Form\ModelTransformer\UserModelTransformer
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@ekreative_redmine_login.user_factory"
+            - "@redmine_client"
 
     projects:
         class: AppBundle\Redmine\Projects
@@ -92,9 +92,9 @@ services:
             - {name: console.command}
 
     app.bundle_fixtures_provider:
-            class: AppBundle\DataFixtures\AppProvider
-            tags:
-                - { name: hautelook_alice.faker.provider }
+        class: AppBundle\DataFixtures\AppProvider
+        tags:
+            - { name: hautelook_alice.faker.provider }
 
     app.bundle.command_test_fixtures:
         class: AppBundle\Command\TestFixturesLoaderCommand
