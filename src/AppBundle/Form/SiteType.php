@@ -6,6 +6,7 @@ use AppBundle\Entity\Framework;
 use AppBundle\Entity\Site;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,7 +21,7 @@ class SiteType extends AbstractType
 
 
         $builder
-            ->add('project', 'project', [
+            ->add('project', ProjectType::class, [
                 'required'=>true
             ])
             ->add('name', null, [
@@ -36,9 +37,9 @@ class SiteType extends AbstractType
                 },
             ])
             ->add('frameworkVersion', null, [
-                'read_only' => true,
                 'attr' => [
-                    'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
+                    'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)',
+                    'readonly' => true
                 ]
             ])
             ->add('status', ChoiceType::class, [
@@ -48,41 +49,41 @@ class SiteType extends AbstractType
                     'Supported' => Site::STATUS_SUPPORTED,
                     'UnSupported' => Site::STATUS_UNSUPPORTED,
                 ],
-                'empty_value' => null,
+                'placeholder' => 'Choose a status.',
             ])
 
-            ->add('adminLogin', new LoginType(), [
+            ->add('adminLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Site admin login details'
                 ]
             ])
-            ->add('databaseLogin', new LoginType(), [
+            ->add('databaseLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Login to the database for the site'
                 ]
             ])
-            ->add('servers', 'collection', [
+            ->add('servers', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new ServerType(),
+                'entry_type' => ServerType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Servers credentials associated with this site'
                 ]
             ])
-            ->add('domains', 'collection', [
+            ->add('domains', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new DomainType(),
+                'entry_type' => DomainType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Domain names credentials associated with this site'
                 ]
             ])
-            ->add('healthChecks', 'collection', [
+            ->add('healthChecks', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new HealthCheckType(),
+                'entry_type' => HealthCheckType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Health checks associated with this site'
@@ -99,14 +100,14 @@ class SiteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Site'
+            'data_class' => Site::class
         ]);
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_site';
     }

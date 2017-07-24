@@ -33,8 +33,3 @@ monolog:
                 VERBOSITY_DEBUG: DEBUG
             channels: ["doctrine"]
 
-services:
-    fixture_loader:
-        class: AppBundle\Fixtures\Loader
-        arguments:
-            - "@h4cc_alice_fixtures.manager"
