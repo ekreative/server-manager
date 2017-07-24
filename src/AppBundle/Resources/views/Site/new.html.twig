@@ -8,12 +8,12 @@
 
 {% block javascripts %}
     <script>
-        $('#appbundle_site_endDate').datetimepicker({
-            format: 'DD MMM YYYY HH:mm',
+        $('#site_endDate').datetimepicker({
+            format: 'DD.MM.YYYY'
         });
-        var simplemde = new SimpleMDE({ element: document.getElementById("appbundle_site_notes") });
-        $(".client, #appbundle_site_responsibleManager, #appbundle_site_developer, #appbundle_site_client").select2();
-        $("#appbundle_site_project").select2({
+        var simplemde = new SimpleMDE({ element: document.getElementById("site_notes") });
+        $(".client, #site_responsibleManager, #site_developer, #site_client").select2();
+        $("#site_project").select2({
             placeholder: 'Project Name',
             minimumInputLength: 3,
             cache: true,
@@ -38,23 +38,22 @@
             $.ajax({
                 type: 'POST',
                 url: route,
-                data: {'project': $('#appbundle_site_project').val()},
+                data: {'project': $('#site_project').val()},
                 success: function (data) {
-                    $('#appbundle_site_developer, #appbundle_site_responsibleManager').empty();
-
+                    $('#site_developer, #site_responsibleManager').select2("val", "");
                     if (data.client) {
-                        $('#appbundle_site_client').val(data.client.id).trigger('change.select2');
+                        $('#site_client').val(data.client.id).trigger('change.select2');
                         $('.newClient').hide();
                     } else {
-                        $('#appbundle_site_client').val('').trigger('change.select2');
+                        $('#site_client').val('').trigger('change.select2');
                     }
 
                     data.developers.forEach(function (item) {
-                        $('#appbundle_site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
+                        $('#site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
                     });
 
                     data.managers.forEach(function (item) {
-                        $('#appbundle_site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
+                        $('#site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
                     });
 
                 },
@@ -62,13 +61,13 @@
                     console.log(data);
                 }
             });
-           $('#appbundle_site_responsibleManager').removeAttr('disabled');
-           $('#appbundle_site_developer').removeAttr('disabled');
+           $('#site_responsibleManager').removeAttr('disabled');
+           $('#site_developer').removeAttr('disabled');
         });
 
         $(document).ready(function () {
             var flag = false;
-            $('#appbundle_site_client').on('change', function () {
+            $('#site_client').on('change', function () {
                 if (this.value == '') {
                     $('.newClient').show();
                     flag = true;
@@ -80,5 +79,69 @@
                 }
             }).change();
         });
+
+        (function($) {
+            $.fn.closest_descendent = function(filter) {
+                var $found = $(),
+                    $currentSet = this; // Current place
+                while ($currentSet.length) {
+                    $found = $currentSet.filter(filter);
+                    if ($found.length) break;  // At least one match: break loop
+                    // Get all children of the current set
+                    $currentSet = $currentSet.children();
+                }
+                return $found.first(); // Return first match of the collection
+            }
+        })(jQuery);
+        $('.form-collection').each(function(i, formCollection) {
+            var $formCollection = $(formCollection),
+                $elements = $formCollection.find('.form-collection-elements'),
+                idx = $elements.find('.form-collection-element').length;
+            $formCollection.find('.form-collection-add').on('click', function() {
+                var prototype = $(this).data('prototype');
+                prototype = prototype.replace(/__name__/g, idx++);
+                $(prototype).appendTo($(this).closest('.form-collection').find('.form-collection-elements'));
+                refreshTogles($(this).closest('.form-collection').find('.form-collection-element:last-child'));
+            });
+            $elements.on('click', '.form-collection-delete', function() {
+                $(this).parents('.form-collection-element').remove();
+            });
+        });
+
+        function loginTypeToggle($input) {
+            var val = $input.val(),
+                $root = $input.closest('.form-group').parent();
+
+            $root.find('> .form-group > div > [data-login-type]:not([data-login-type~="'+val+'"])').each(function() {
+                $(this).closest('.form-group').addClass('hide');
+            });
+
+            $root.find('> .form-group > div > [data-login-type~="'+val+'"]').each(function() {
+                $(this).closest('.form-group').removeClass('hide');
+            });
+
+        }
+
+        $(document).on('change', '[data-login-type-toggle] input', function() {
+            loginTypeToggle($(this));
+        });
+
+        $('#site_framework').on('change', function() {
+            $('#site_frameworkVersion').val($(this).find('option[value='+$(this).val()+']').attr('data-framework-version'));
+        }).change();
+
+        function refreshTogles(elem) {
+            if (elem) {
+                elem.find('[data-login-type-toggle] [checked]').each(function(i, input) {
+                    loginTypeToggle($(input));
+                });
+            } else {
+                $('[data-login-type-toggle] [checked]').each(function(i, input) {
+                    loginTypeToggle($(input));
+                });
+            }
+        }
+        refreshTogles(false);
+
     </script>
 {% endblock %}

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,10 +55,10 @@ class ClientController extends Controller
     {
         $entity = new Client();
 
-        $form = $this->createForm(new ClientType(), $entity, [
+        $form = $this->createForm(ClientType::class, $entity, [
             'method' => 'POST',
         ])
-            ->add('submit', 'submit', ['label' => 'Create']);
+            ->add('submit', SubmitType::class, ['label' => 'Create']);
 
         if ($request->getMethod() == "POST") {
             $form->handleRequest($request);
@@ -74,24 +75,6 @@ class ClientController extends Controller
             'entity' => $entity,
             'form' => $form->createView(),
         ];
-    }
-
-    /**
-     * @Route("/typeahead", name="client_typeahead")
-     */
-    public function typeaheadAction(Request $request)
-    {
-        $qb = $this->getDoctrine()->getRepository(Client::class)->createQueryBuilder('c');
-
-        $q = $request->query->get('q');
-
-        if ($q) {
-            $qb->andWhere('LOWERCASE(c.fullName) LIKE :q')->setParameter('q', strtolower($q).'%');
-        }
-
-        return new JsonResponse(array_map(function (Client $client) {
-            return ['id' => $client->getId(), 'fullName' => $client->getFullName()];
-        }, $qb->getQuery()->getResult()));
     }
 
     /**
@@ -129,11 +112,10 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $editForm = $this->createForm(new ClientType(), $client, [
+        $editForm = $this->createForm(ClientType::class, $client, [
             'action' => $this->generateUrl('client_edit', ['client' => $client->getId()]),
             'method' => 'PUT',
-        ])
-        ->add('submit', 'submit', ['label' => 'Update']);
+        ]);
 
         $deleteForm = $this->createDeleteForm($client->getId());
 
@@ -183,7 +165,7 @@ class ClientController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('client_delete', ['client' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Delete'])
+            ->add('submit', SubmitType::class, ['label' => 'Delete'])
             ->getForm();
     }
 }

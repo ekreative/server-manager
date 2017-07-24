@@ -17,6 +17,9 @@ swiftmailer:
 
 doctrine:
     dbal:
-        driver: pdo_sqlite
-        memory: true
+        driver:   pdo_sqlite
+        memory:   true
         charset:  UTF8
+        mapping_types:
+            enum: string
+        path: "%test_db_path%"

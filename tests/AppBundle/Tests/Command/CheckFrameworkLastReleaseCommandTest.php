@@ -4,24 +4,21 @@ namespace AppBundle\Tests\Command;
 
 use AppBundle\Command\CheckFrameworkLastReleaseCommand;
 use AppBundle\Entity\Framework;
+use AppBundle\Tests\AppTestCase;
 use GuzzleHttp\Client;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CheckFrameworkLastReleaseCommandTest extends WebTestCase
+class CheckFrameworkLastReleaseCommandTest extends AppTestCase
 {
 
     public function testExecute()
     {
-        $client = static::createClient();
-        $client->getContainer()->get('fixture_loader')->load();
-
         $kernel = static::createKernel();
         $kernel->boot();
 
         $application = new Application($kernel);
-        $application->add(new CheckFrameworkLastReleaseCommand($client->getContainer()->get('doctrine'), $client->getContainer()->get('logger')));
+        $application->add(new CheckFrameworkLastReleaseCommand($this->client->getContainer()->get('doctrine'), $this->client->getContainer()->get('logger')));
 
         $command = $application->find('app:check-last-release');
         $commandTester = new CommandTester($command);
@@ -29,7 +26,7 @@ class CheckFrameworkLastReleaseCommandTest extends WebTestCase
             'command'  => $command->getName(),
         ));
 
-        $frameworks = $client->getContainer()->get('doctrine')->getRepository(Framework::class)->findAll();
+        $frameworks = $this->client->getContainer()->get('doctrine')->getRepository(Framework::class)->findAll();
         $guzzle = new Client();
         $output = $commandTester->getDisplay();
         /** @var Framework $framework */

@@ -10,7 +10,7 @@ services:
     site_author.listener:
         class: AppBundle\AuthorEditor\AuthorEditorListener
         arguments:
-            - @security.token_storage
+            - "@security.token_storage"
         tags:
             - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
@@ -18,36 +18,36 @@ services:
     project_type:
         class: AppBundle\Form\ProjectType
         arguments:
-            - @project_transformer
+            - "@project_transformer"
         tags:
-            - { name: form.type, alias: project }
+            - { name: form.type }
 
     project_transformer:
             class: AppBundle\Form\ModelTransformer\ProjectModelTransformer
             arguments:
-                - @doctrine.orm.entity_manager
-                - @projects
+                - "@doctrine.orm.entity_manager"
+                - "@projects"
 
     user_type:
         class: AppBundle\Form\UserType
         arguments:
-            - @user_transformer
+            - "@user_transformer"
         tags:
             - { name: form.type, alias: developer }
 
     user_transformer:
-                class: AppBundle\Form\ModelTransformer\UserModelTransformer
-                arguments:
-                    - @doctrine.orm.entity_manager
-                    - @ekreative_redmine_login.user_factory
-                    - @redmine_client
+        class: AppBundle\Form\ModelTransformer\UserModelTransformer
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@ekreative_redmine_login.user_factory"
+            - "@redmine_client"
 
     projects:
         class: AppBundle\Redmine\Projects
         arguments:
-            - @ekreative_redmine_login.client_provider
-            - @security.token_storage
-#            - @projects_cache
+            - "@ekreative_redmine_login.client_provider"
+            - "@security.token_storage"
+#            - "@projects_cache"
 
     projects_cache:
         class: Doctrine\Common\Cache\ArrayCache
@@ -57,15 +57,15 @@ services:
     client_type:
         class: AppBundle\Form\ClientTypeaheadType
         arguments:
-            - @router
-            - @client_transformer
+            - "@router"
+            - "@client_transformer"
         tags:
             - { name: form.type, alias: client }
 
     client_transformer:
             class: AppBundle\Form\ModelTransformer\ClientModelTransformer
             arguments:
-                - @doctrine.orm.entity_manager
+                - "@doctrine.orm.entity_manager"
 
     redmine_client:
         class: GuzzleHttp\Client
@@ -78,15 +78,29 @@ services:
     app.check_version.command:
         class: AppBundle\Command\CheckFrameworkVersionCommand
         arguments:
-            - @doctrine
-            - @logger
+            - "@doctrine"
+            - "@logger"
         tags:
             - {name: console.command}
 
     app.check_last_release.command:
         class: AppBundle\Command\CheckFrameworkLastReleaseCommand
         arguments:
-            - @doctrine
-            - @logger
+            - "@doctrine"
+            - "@logger"
         tags:
             - {name: console.command}
+
+    app.bundle_fixtures_provider:
+        class: AppBundle\DataFixtures\AppProvider
+        tags:
+            - { name: hautelook_alice.faker.provider }
+
+    app.bundle.command_test_fixtures:
+        class: AppBundle\Command\TestFixturesLoaderCommand
+        calls:
+            - {method: setKernel, arguments: ["@kernel"]}
+            - {method: setDefaultPath, arguments: ["%default_db_path%"]}
+            - {method: setTestDbPath, arguments: ["%test_db_path%"]}
+        tags:
+            - { name: console.command }

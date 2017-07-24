@@ -9,12 +9,12 @@ use AppBundle\Entity\Site;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class SiteType extends AbstractType
 {
@@ -50,13 +50,15 @@ class SiteType extends AbstractType
                 'placeholder' => 'Add New'
             ])
 
-            ->add('newClient', new ClientType(), array(
+            ->add('newClient', ClientType::class, [
                 'required' => false,
                 'mapped' => false,
                 'property_path' => 'client',
                 'label' => false,
-                'attr' => ['class' => 'newClient', 'style' => 'display:none'],
-            ))
+                'attr' => [
+                    'style' => 'display:none'
+                ],
+            ])
             ->add('developer', UserType::class, [
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
@@ -70,21 +72,22 @@ class SiteType extends AbstractType
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
-                    0 => 'Standart',
-                    1 => 'Advanced',
+                    'Standart' => 0,
+                    'Advanced' => 1,
                 ],
                 'label' => 'SLA plan',
             ])
-            ->add('framework', null, [
+            ->add('framework', EntityType::class, [
                 'required' => true,
-                'choice_attr' => function ($framework, $key, $index) {
-                    /** @var Framework $framework */
-                    return ['data-framework-version' => $framework->getCurrentVersion()];
-                },
+                 'class' => Framework::class,
+                 'choice_attr' => function ($framework, $key, $index) {
+                     /** @var Framework $framework */
+                     return ['data-framework-version' => $framework->getCurrentVersion()];
+                 },
             ])
-            ->add('frameworkVersion', null, [
-                'read_only' => true,
+            ->add('frameworkVersion', TextType::class, [
                 'attr' => [
+                    'readonly' => true,
                     'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
                 ]
             ])
@@ -95,51 +98,53 @@ class SiteType extends AbstractType
                     'Supported' => Site::STATUS_SUPPORTED,
                     'UnSupported' => Site::STATUS_UNSUPPORTED,
                 ],
-                'empty_value' => null,
+                'placeholder' => null,
             ])
-            ->add('adminLogin', new LoginType(), [
+            ->add('adminLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Site admin login details'
                 ]
             ])
-            ->add('databaseLogin', new LoginType(), [
+            ->add('databaseLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Login to the database for the site'
                 ]
             ])
-            ->add('servers', 'collection', [
+            ->add('servers', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new ServerType(),
+                'entry_type' => ServerType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Servers credentials associated with this site'
                 ]
             ])
-            ->add('domains', 'collection', [
+            ->add('domains', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new DomainType(),
+                'entry_type' => DomainType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Domain names credentials associated with this site'
                 ]
             ])
-            ->add('healthChecks', 'collection', [
+            ->add('healthChecks', CollectionType::class, [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'type' => new HealthCheckType(),
+                'entry_type' => HealthCheckType::class,
                 'by_reference' => false,
                 'attr' => [
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
             ->add('endDate', DateType::class, [
-                'html5' => false,
+                'required' => false,
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy',
             ])
-            ->add('notes', TextareaType::class);
+            ->add('notes', TextareaType::class, [
+                'required' => false
+            ]);
         $builder->get('developer')->resetViewTransformers();
         $builder->get('responsibleManager')->resetViewTransformers();
         $builder->get('project')->resetViewTransformers();
@@ -156,13 +161,5 @@ class SiteType extends AbstractType
             'data_class' => Site::class,
             'clients' => []
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'appbundle_site';
     }
 }

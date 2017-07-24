@@ -11,5 +11,8 @@
 {% endblock headerPanel %}
 
 {% block body %}
-    {{ form(edit_form) }}
+    {{ form_start(edit_form) }}
+    {{ form_widget(edit_form) }}
+    <button>Update</button>
+    {{ form_end(edit_form) }}
 {% endblock %}

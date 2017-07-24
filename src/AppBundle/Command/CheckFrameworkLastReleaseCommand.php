@@ -113,7 +113,7 @@ class CheckFrameworkLastReleaseCommand extends Command
                     break;
             }
         }
-        $this->doctrine->getEntityManager()->flush();
-        $this->doctrine->getEntityManager()->clear();
+        $this->doctrine->getManager()->flush();
+        $this->doctrine->getManager()->clear();
     }
 }

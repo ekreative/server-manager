@@ -22,3 +22,5 @@ parameters:
     api_key_redmine: ThisApiKeyIsNotSoSecretChangeIt
     group_server_managers: 'ServerManager'
     redis: 'localhost'
+    test_db_path: '%kernel.cache_dir%/db.sqlite'
+    default_db_path: '%kernel.cache_dir%/snapshot.sqlite'

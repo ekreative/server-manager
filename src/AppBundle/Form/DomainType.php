@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Domain;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +17,7 @@ class DomainType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('managementLogin', new LoginType(), [
+            ->add('managementLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Where can we change things for this domain name? e.g. 123-reg.co.uk'
                 ]
@@ -31,14 +32,14 @@ class DomainType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Domain'
+            'data_class' => Domain::class
         ]);
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_domain';
     }

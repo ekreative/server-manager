@@ -12,8 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Exception\Exception;
@@ -90,7 +88,7 @@ class SiteController extends Controller
                  * @var Client $client
                  */
                 $client = $form->get('newClient')->getData();
-                if ($client->getFullName() && $client->getEmail()) {
+                if ($client && $client->getFullName() && $client->getEmail()) {
                     $em->persist($client);
                 }
             } else {
@@ -141,13 +139,13 @@ class SiteController extends Controller
             ->getQuery()
             ->getResult();
 
-        $form = $this->createForm(new SiteType(), $entity, [
+        $form = $this->createForm(SiteType::class, $entity, [
             'action' => $this->generateUrl('site_create'),
             'method' => 'POST',
             'clients' => $clients
         ]);
 
-        $form->add('submit', 'submit', ['label' => 'Create']);
+        $form->add('submit', SubmitType::class, ['label' => 'Create']);
 
         return $form;
     }
@@ -224,12 +222,12 @@ class SiteController extends Controller
 
     private function createEditForm(Site $entity)
     {
-        $form = $this->createForm(new SiteType(), $entity, [
+        $form = $this->createForm(SiteType::class, $entity, [
             'action' => $this->generateUrl('site_update', ['id' => $entity->getId()]),
             'method' => 'PUT',
         ]);
 
-        $form->add('submit', 'submit', ['label' => 'Update']);
+        $form->add('submit', SubmitType::class, ['label' => 'Update']);
 
         return $form;
     }
@@ -245,7 +243,7 @@ class SiteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Site')->find($id);
+        $entity = $em->getRepository(Site::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Site entity.');
@@ -261,7 +259,7 @@ class SiteController extends Controller
                  * @var Client $client
                  */
                 $client = $editForm->get('newClient')->getData();
-                if ($client->getFullName() && $client->getEmail()) {
+                if ($client && $client->getFullName() && $client->getEmail()) {
                     $em->persist($client);
                 }
             } else {
@@ -328,7 +326,7 @@ class SiteController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('site_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Delete'])
+            ->add('submit', SubmitType::class, ['label' => 'Delete'])
             ->getForm();
     }
 }

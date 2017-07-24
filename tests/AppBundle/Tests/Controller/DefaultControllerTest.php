@@ -1,16 +1,14 @@
 <?php
 
-namespace AppBundle\Tests\Controller;
+namespace AppBundle\Tests\Command;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use AppBundle\Tests\AppTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends AppTestCase
 {
     public function testIndex()
     {
-        $client = static::createClient();
-
-        $client->request('GET', '/');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 }
