@@ -44,6 +44,15 @@ class Project implements AuthorEditorable
      */
     private $sites;
 
+    /**
+     * @var Client
+     *
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="projects")
+     * @Assert\NotBlank(message="Enter a current name of Client")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $client;
+
     public function __construct($id)
     {
         $this->id = $id;
@@ -113,5 +122,29 @@ class Project implements AuthorEditorable
     public function getSites()
     {
         return $this->sites;
+    }
+
+    /**
+     * Set client
+     *
+     * @param \AppBundle\Entity\Client $client
+     *
+     * @return Project
+     */
+    public function setClient(\AppBundle\Entity\Client $client = null)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client
+     *
+     * @return \AppBundle\Entity\Client
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }

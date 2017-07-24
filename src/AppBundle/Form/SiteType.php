@@ -2,11 +2,17 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Client;
 use AppBundle\Entity\Framework;
+use AppBundle\Entity\Project;
 use AppBundle\Entity\Site;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,28 +24,71 @@ class SiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
         $builder
             ->add('project', ProjectType::class, [
-                'required'=>true
+                'required' => true
             ])
             ->add('name', null, [
                 'attr' => [
                     'help-block' => 'A name for the site'
                 ]
             ])
-            ->add('framework', null, [
-                'required' => true,
-                'choice_attr' => function($framework, $key, $index) {
-                    /** @var Framework $framework */
-                    return ['data-framework-version' => $framework->getCurrentVersion()];
+            ->add('client', EntityType::class, [
+                'class' => Client::class,
+                'choice_attr' => function (Client $client) {
+                    return ['data-projects' => implode(array_map(function (Project $project) {
+                        return $project->getId();
+                    }, $client->getProjects()->toArray()))];
                 },
+                'choice_label' => function (Client $client) {
+                    return $client->getFullName();
+                },
+                'required' => false,
+                'mapped' => false,
+                'expanded' => false,
+                'multiple' => false,
+                'placeholder' => 'Add New'
             ])
-            ->add('frameworkVersion', null, [
+
+            ->add('newClient', ClientType::class, [
+                'required' => false,
+                'mapped' => false,
+                'property_path' => 'client',
+                'label' => false,
                 'attr' => [
-                    'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)',
-                    'readonly' => true
+                    'style' => 'display:none'
+                ],
+            ])
+            ->add('developer', UserType::class, [
+                'required' => false,
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose main developer'
+            ])
+            ->add('responsibleManager', UserType::class, [
+                'label' => 'Responsible Manager',
+                'required' => false,
+                'attr' => ['disabled' => 'disabled'],
+                'placeholder' => 'Choose Responsible manager'
+            ])
+            ->add('sla', ChoiceType::class, [
+                'choices' => [
+                    'Standart' => 0,
+                    'Advanced' => 1,
+                ],
+                'label' => 'SLA plan',
+            ])
+            ->add('framework', EntityType::class, [
+                'required' => true,
+                 'class' => Framework::class,
+                 'choice_attr' => function ($framework, $key, $index) {
+                     /** @var Framework $framework */
+                     return ['data-framework-version' => $framework->getCurrentVersion()];
+                 },
+            ])
+            ->add('frameworkVersion', TextType::class, [
+                'attr' => [
+                    'readonly' => true,
+                    'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
                 ]
             ])
             ->add('status', ChoiceType::class, [
@@ -49,9 +98,8 @@ class SiteType extends AbstractType
                     'Supported' => Site::STATUS_SUPPORTED,
                     'UnSupported' => Site::STATUS_UNSUPPORTED,
                 ],
-                'placeholder' => 'Choose a status.',
+                'placeholder' => null,
             ])
-
             ->add('adminLogin', LoginType::class, [
                 'attr' => [
                     'help-block' => 'Site admin login details'
@@ -89,7 +137,17 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-        ;
+            ->add('endDate', DateType::class, [
+                'required' => false,
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+            ])
+            ->add('notes', TextareaType::class, [
+                'required' => false
+            ]);
+        $builder->get('developer')->resetViewTransformers();
+        $builder->get('responsibleManager')->resetViewTransformers();
+        $builder->get('project')->resetViewTransformers();
     }
 
     /**
@@ -100,15 +158,8 @@ class SiteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Site::class
+            'data_class' => Site::class,
+            'clients' => []
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_site';
     }
 }

@@ -63,7 +63,6 @@ class CheckFrameworkLastReleaseCommand extends Command
                         $framework->setCurrentVersion($content->releases->release->version);
                         $this->logger->info('Framework latest release is up to date.', ['framework' => $framework->getName()]);
                         $io->success(Framework::DRUPAL_8 .' version updated.');
-
                     } catch (\Exception $e) {
                         $this->logger->critical('Failed to load latest release', ['framework' => $framework->getName()]);
                     }

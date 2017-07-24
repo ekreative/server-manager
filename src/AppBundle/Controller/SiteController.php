@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Entity\Client;
+use AppBundle\Entity\User;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
@@ -12,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * Site controller.
@@ -53,7 +56,7 @@ class SiteController extends Controller
         $form = $this->createForm(SitesFilterType::class, $filter)
             ->add('Search', SubmitType::class);
         $form->handleRequest($request);
-        $query = $em->getRepository(Site::class)->searchQuery($filter);
+        $query = $em->getRepository('AppBundle:Site')->searchQuery($filter);
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [
@@ -68,6 +71,9 @@ class SiteController extends Controller
      * @Route("/", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
+     *
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
@@ -77,6 +83,35 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            if ($form->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $form->get('newClient')->getData();
+                if ($client && $client->getFullName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
+            }
+            $entity->getProject()->setClient($client);
+
+            if ($form->get('developer')->getData()) {
+                /**
+                 * @var User $developer
+                 */
+                $developer = $form->get('developer')->getData();
+                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
+            }
+
+            if ($form->get('responsibleManager')->getData()) {
+                /**
+                 * @var User $responsibleManager
+                 */
+                $responsibleManager = $form->get('responsibleManager')->getData();
+                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -98,9 +133,16 @@ class SiteController extends Controller
      */
     private function createCreateForm(Site $entity)
     {
+        $clients = $this->getDoctrine()
+            ->getRepository(Client::class)
+            ->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult();
+
         $form = $this->createForm(SiteType::class, $entity, [
             'action' => $this->generateUrl('site_create'),
             'method' => 'POST',
+            'clients' => $clients
         ]);
 
         $form->add('submit', SubmitType::class, ['label' => 'Create']);
@@ -137,7 +179,7 @@ class SiteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository(Site::class)->find($id);
+        $entity = $em->getRepository('AppBundle:Site')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Site entity.');
@@ -162,7 +204,7 @@ class SiteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository(Site::class)->find($id);
+        $entity = $em->getRepository('AppBundle:Site')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Site entity.');
@@ -212,6 +254,35 @@ class SiteController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if ($editForm->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $editForm->get('newClient')->getData();
+                if ($client && $client->getFullName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($editForm->get('client')->getData());
+            }
+            $entity->getProject()->setClient($client);
+
+            if ($editForm->get('developer')->getData()) {
+                /**
+                 * @var User $developer
+                 */
+                $developer = $editForm->get('developer')->getData();
+                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
+            }
+
+            if ($editForm->get('responsibleManager')->getData()) {
+                /**
+                 * @var User $responsibleManager
+                 */
+                $responsibleManager = $editForm->get('responsibleManager')->getData();
+                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
+            }
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
@@ -237,7 +308,7 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository(Site::class)->find($id);
+            $entity = $em->getRepository('AppBundle:Site')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Site entity.');

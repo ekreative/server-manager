@@ -2,31 +2,24 @@
 
 namespace AppBundle\Form\ModelTransformer;
 
-use AppBundle\Entity\Project;
-use AppBundle\Redmine\Projects;
+use AppBundle\Entity\Client;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 
-class ProjectModelTransformer implements DataTransformerInterface
+class ClientModelTransformer implements DataTransformerInterface
 {
     /**
      * @var ObjectManager
      */
     private $em;
 
-    /**
-     * @var Projects
-     */
-    private $projects;
-
-    public function __construct(ObjectManager $em, Projects $projects)
+    public function __construct(ObjectManager $em)
     {
         $this->em = $em;
-        $this->projects = $projects;
     }
 
     /**
-     * @param Project $value
+     * @param Client $value
      * @return string
      */
     public function transform($value)
@@ -39,14 +32,18 @@ class ProjectModelTransformer implements DataTransformerInterface
 
     /**
      * @param string $value
-     * @return Project
+     * @return Client
      */
     public function reverseTransform($value)
     {
         if ($value) {
-            $redmineProject = $this->projects->getProjectById($value);
-            if ($redmineProject) {
-                return $this->em->getRepository('AppBundle:Project')->getProject($redmineProject);
+            /**
+             * @var Client $client
+             */
+            $client = $this->em->getRepository(Client::class)->find(['name' => $value]);
+
+            if ($client) {
+                return $client;
             }
         }
         return null;

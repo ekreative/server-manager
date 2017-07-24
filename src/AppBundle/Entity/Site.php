@@ -42,6 +42,25 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $name;
 
     /**
+     * SLA plan status
+     * 0 - standart
+     * 1 - advanced
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()
+     */
+    private $sla = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
      * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
@@ -110,6 +129,42 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $framework;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesDevelopedBy")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     */
+    private $developer;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $developerName;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesManagedBy")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     */
+    private $responsibleManager;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $managerName;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $endDate;
 
     /**
      *
@@ -375,4 +430,172 @@ class Site implements AuthorEditorable, \JsonSerializable
         ];
     }
 
+
+    /**
+     * Set sla
+     *
+     * @param boolean $sla
+     *
+     * @return Site
+     */
+    public function setSla($sla)
+    {
+        $this->sla = $sla;
+
+        return $this;
+    }
+
+    /**
+     * Get sla
+     *
+     * @return boolean
+     */
+    public function getSla()
+    {
+        return $this->sla;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Site
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Set endDate
+     *
+     * @param \DateTime $endDate
+     *
+     * @return Site
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return \DateTime
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Set developer
+     *
+     * @param integer $developer
+     *
+     * @return Site
+     */
+    public function setDeveloper($developer)
+    {
+        $this->developer = $developer;
+
+        return $this;
+    }
+
+    /**
+     * Get developer
+     *
+     * @return integer
+     */
+    public function getDeveloper()
+    {
+        return $this->developer;
+    }
+
+    /**
+     * Set responsibleManager
+     *
+     * @param integer $responsibleManager
+     *
+     * @return Site
+     */
+    public function setResponsibleManager($responsibleManager)
+    {
+        $this->responsibleManager = $responsibleManager;
+
+        return $this;
+    }
+
+    /**
+     * Get responsibleManager
+     *
+     * @return integer
+     */
+    public function getResponsibleManager()
+    {
+        return $this->responsibleManager;
+    }
+
+    /**
+     * Set developerName
+     *
+     * @param string $developerName
+     *
+     * @return Site
+     */
+    public function setDeveloperName($developerName)
+    {
+        $this->developerName = $developerName;
+
+        return $this;
+    }
+
+    /**
+     * Get developerName
+     *
+     * @return string
+     */
+    public function getDeveloperName()
+    {
+        return $this->developerName;
+    }
+
+    /**
+     * Set managerName
+     *
+     * @param string $managerName
+     *
+     * @return Site
+     */
+    public function setManagerName($managerName)
+    {
+        $this->managerName = $managerName;
+
+        return $this;
+    }
+
+    /**
+     * Get managerName
+     *
+     * @return string
+     */
+    public function getManagerName()
+    {
+        return $this->managerName;
+    }
 }

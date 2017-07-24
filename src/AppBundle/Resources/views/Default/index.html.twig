@@ -8,18 +8,23 @@
 {% block body %}
 
     <div class="row home-page-grid">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <a href="{{ path('site') }}">Sites
                 <i class="glyphicon glyphicon-globe"></i></a>
         </div>
         {% if is_granted('ROLE_REDMINE_ADMIN') %}
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <a href="{{ path('framework') }}">Frameworks
                     <i class="glyphicon glyphicon-briefcase"></i></a>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <a href="{{ path('hosting') }}">Hosting
                     <i class="glyphicon glyphicon-home"></i></a>
+            </div>
+
+            <div class="col-sm-3">
+                <a href="{{ path('client') }}">Clients
+                    <i class="glyphicon glyphicon-user"></i></a>
             </div>
         {% endif %}
     </div>
