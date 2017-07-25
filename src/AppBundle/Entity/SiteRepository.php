@@ -24,6 +24,11 @@ class SiteRepository extends EntityRepository
                 ->setParameter('framework', $filter->getFramework());
         }
 
+        if ($filter->getClient() && $filter->getClient() != 'All') {
+            $qb->andWhere('p.client = :client')
+                ->setParameter('client', $filter->getClient());
+        }
+
         if ($filter->getStatus() && $filter->getStatus() != 'All') {
             $qb->andWhere('s.status = :status')
                 ->setParameter('status', $filter->getStatus());
