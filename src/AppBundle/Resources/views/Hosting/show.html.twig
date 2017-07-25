@@ -14,6 +14,13 @@
                 <a href="{{ path('hosting_edit', { 'id': entity.id }) }}" class="btn btn-default header-edit-btn">Edit</a>
             </div>
         </h1>
+        <h6>
+            <b>Created by:</b> {{ entity.author }} {{ entity.createdAt | date("d.m.Y H:i:s") }}
+            {% if entity.createdAt != entity.updatedAt %}
+                <br>
+                <b>Updated by:</b> {{ entity.editor }} {{ entity.updatedAt | date("d.m.Y H:i:s") }}
+            {% endif %}
+        </h6>
     </div>
 {% endblock header %}
 
