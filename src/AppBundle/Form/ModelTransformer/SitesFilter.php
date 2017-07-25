@@ -18,6 +18,27 @@ class SitesFilter
     private $status;
 
     /**
+     * @var string
+     */
+    private $client;
+
+    /**
+     * @return string
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param string $client
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+    }
+
+    /**
      * @var array
      */
     private $projects = [];
