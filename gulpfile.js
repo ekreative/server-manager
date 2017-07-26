@@ -18,12 +18,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('styles', function() {
-    return gulp.src([
-        'node_modules/select2/dist/css/select2.css',
-        'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-        'node_modules/simplemde/dist/simplemde.min.css',
-        'web-src/less/*'
-    ])
+    return gulp.src(['web-src/less/*'])
         .pipe(less())
         .pipe(uglifycss())
         .pipe(concat('app.css'))

@@ -56,7 +56,7 @@ class UserModelTransformer implements DataTransformerInterface
                 $uri = '/users/' . $value . '.json?include=groups';
                 $result = \GuzzleHttp\json_decode($this->redmineClient->get($uri)->getBody(), true);
 
-                return $this->userFactory->loadUserByData(array_shift($result), false);
+                return $this->userFactory->loadUserByData($result['user'], false);
             }
             return $user;
         }

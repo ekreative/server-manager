@@ -56,7 +56,7 @@ class SiteController extends Controller
         $form = $this->createForm(SitesFilterType::class, $filter)
             ->add('Search', SubmitType::class);
         $form->handleRequest($request);
-        $query = $em->getRepository('AppBundle:Site')->searchQuery($filter);
+        $query = $em->getRepository(Site::class)->searchQuery($filter);
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [

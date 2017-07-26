@@ -27,9 +27,8 @@
         $("#site_project").append('<option value="{{ entity.project.id }}">{{ entity.project.name }}</option>');
 
         $.ajax({
-            type: 'POST',
-            url: "{{ path('project_members') | escape('js') }}",
-            data: {'project': $('#site_project').val()},
+            type: 'GET',
+            url: "/project/"+$('#site_project').val()+"/members",
             success: function (data) {
                 $('#site_developer, #site_responsibleManager').select2("val", "");
                 if (data.client) {
@@ -90,11 +89,9 @@
                 }
             }
         }).on('select2:select', function () {
-            var route = "{{ path('project_members') | escape('js') }}";
             $.ajax({
-                type: 'POST',
-                url: route,
-                data: {'project': $('#site_project').val()},
+                type: 'GET',
+                url: "/project/"+$('#site_project').val()+"/members",
                 success: function (data) {
                     $('#site_developer, #site_responsibleManager').select2("val", "");
 

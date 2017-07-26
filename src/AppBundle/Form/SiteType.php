@@ -41,7 +41,7 @@ class SiteType extends AbstractType
                     }, $client->getProjects()->toArray()))];
                 },
                 'choice_label' => function (Client $client) {
-                    return $client->getFullName();
+                    return $client->getName();
                 },
                 'required' => false,
                 'mapped' => false,

@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use AppBundle\AuthorEditor\AuthorEditorable;
 use AppBundle\AuthorEditor\AuthorEditorableEntity;
+use AppBundle\Entity\Project;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -15,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Client implements AuthorEditorable
+class Client implements AuthorEditorable, \JsonSerializable
 {
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -32,15 +34,15 @@ class Client implements AuthorEditorable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $fullName;
+    private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      * @Assert\Email()
      */
@@ -49,14 +51,14 @@ class Client implements AuthorEditorable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $skype;
 
@@ -67,6 +69,13 @@ class Client implements AuthorEditorable
      */
     private $projects;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -81,25 +90,25 @@ class Client implements AuthorEditorable
     /**
      * Set fullName
      *
-     * @param string $fullName
+     * @param string $name
      *
      * @return Client
      */
-    public function setFullName($fullName)
+    public function setName($name)
     {
-        $this->fullName = $fullName;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get fullName
+     * Get name
      *
      * @return string
      */
-    public function getFullName()
+    public function getName()
     {
-        return $this->fullName;
+        return $this->name;
     }
 
     /**
@@ -173,22 +182,15 @@ class Client implements AuthorEditorable
     {
         return $this->skype;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add project
      *
-     * @param \AppBundle\Entity\Project $project
+     * @param Project $project
      *
      * @return Client
      */
-    public function addProject(\AppBundle\Entity\Project $project)
+    public function addProject(Project $project)
     {
         $this->projects[] = $project;
 
@@ -198,9 +200,9 @@ class Client implements AuthorEditorable
     /**
      * Remove project
      *
-     * @param \AppBundle\Entity\Project $project
+     * @param Project $project
      */
-    public function removeProject(\AppBundle\Entity\Project $project)
+    public function removeProject(Project $project)
     {
         $this->projects->removeElement($project);
     }
@@ -213,5 +215,15 @@ class Client implements AuthorEditorable
     public function getProjects()
     {
         return $this->projects;
+    }
+
+    public function jsonSerialize() {
+        return [
+            "id"     =>  $this->getId(),
+            "name"   =>  $this->getName(),
+            "email"  =>  $this->getEmail(),
+            "skype"  =>  $this->getSkype() ?? null,
+            "phone"  =>  $this->getPhone() ?? null,
+        ];
     }
 }

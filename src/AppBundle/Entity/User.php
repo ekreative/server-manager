@@ -2,10 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Site;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ekreative\RedmineLoginBundle\Security\RedmineUser;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * User
@@ -34,24 +35,21 @@ class User extends RedmineUser
         return $this->username;
     }
 
-    /**
-     * Get admin
-     *
-     * @return boolean
-     */
-    public function getAdmin()
+    public function __construct(array $data = null, $isAdmin = null)
     {
-        return $this->admin;
+        parent::__construct($data, $isAdmin);
+        $this->sitesDevelopedBy = new ArrayCollection();
+        $this->sitesManagedBy = new ArrayCollection();
     }
 
     /**
      * Add sitesDevelopedBy
      *
-     * @param \AppBundle\Entity\Site $sitesDevelopedBy
+     * @param Site $sitesDevelopedBy
      *
      * @return User
      */
-    public function addSitesDevelopedBy(\AppBundle\Entity\Site $sitesDevelopedBy)
+    public function addSitesDevelopedBy(Site $sitesDevelopedBy)
     {
         $this->sitesDevelopedBy[] = $sitesDevelopedBy;
 
@@ -61,9 +59,9 @@ class User extends RedmineUser
     /**
      * Remove sitesDevelopedBy
      *
-     * @param \AppBundle\Entity\Site $sitesDevelopedBy
+     * @param Site $sitesDevelopedBy
      */
-    public function removeSitesDevelopedBy(\AppBundle\Entity\Site $sitesDevelopedBy)
+    public function removeSitesDevelopedBy(Site $sitesDevelopedBy)
     {
         $this->sitesDevelopedBy->removeElement($sitesDevelopedBy);
     }
@@ -81,11 +79,11 @@ class User extends RedmineUser
     /**
      * Add sitesManagedBy
      *
-     * @param \AppBundle\Entity\Site $sitesManagedBy
+     * @param Site $sitesManagedBy
      *
      * @return User
      */
-    public function addSitesManagedBy(\AppBundle\Entity\Site $sitesManagedBy)
+    public function addSitesManagedBy(Site $sitesManagedBy)
     {
         $this->sitesManagedBy[] = $sitesManagedBy;
 
@@ -95,9 +93,9 @@ class User extends RedmineUser
     /**
      * Remove sitesManagedBy
      *
-     * @param \AppBundle\Entity\Site $sitesManagedBy
+     * @param Site $sitesManagedBy
      */
-    public function removeSitesManagedBy(\AppBundle\Entity\Site $sitesManagedBy)
+    public function removeSitesManagedBy(Site $sitesManagedBy)
     {
         $this->sitesManagedBy->removeElement($sitesManagedBy);
     }

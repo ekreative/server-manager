@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Client;
 use AppBundle\Entity\Project;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +14,7 @@ class ProjectController extends Controller
 {
     /**
      * @Route("/project/typeahead", name="project_typeahead")
+     * @Cache(expires="tomorrow")
      */
     public function typeaheadAction(Request $request)
     {
@@ -30,54 +32,42 @@ class ProjectController extends Controller
             return $project;
         }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
             return (empty($q) || stripos($project['name'], $q) !== false);
-            //            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
         }))));
-        $response->headers->addCacheControlDirective('must-revalidate', true);
+
         return $response;
     }
 
     /**
-     * @Route("/project/members/", name="project_members")
-     * Method("POST")
+     * @Route("/project/{project}/members", name="project_members")
+     * Method("GET")
      */
-    public function membersAction(Request $request)
+    public function membersAction(Project $project)
     {
-        if ($request->get('project')) {
-            $em = $this->getDoctrine();
-            $project = $em->getRepository(Project::class)->find($request->get('project'));
-
-            $client = null;
-            if ($project) {
-                if ($project->getClient()) {
-                    $entity = $em->getRepository(Client::class)->findOneBy(['id' => $project->getClient()->getId()]);
-                    $client = [
-                        'id' => $entity->getId(),
-                        'fullName' => $entity->getFullName()
-                    ];
-                }
-            }
-
-            $redmineClientService = $this->container->get('redmine_client');
-            $uri = '/projects/' . $request->get('project') . '/memberships.json';
-
-            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
-            $developers = [];
-            $managers = [];
-            foreach ($result['memberships'] as $membership) {
-                if ($membership['roles'][0]['name'] == "Developer") {
-                    $developers[] = $membership['user'];
-                }
-                if ($membership['roles'][0]['name'] == "Manager") {
-                    $managers[] = $membership['user'];
-                }
-            }
-
-            return new JsonResponse([
-                'client' => $client,
-                'developers' => $developers,
-                'managers' => $managers,
-            ]);
+        if ($project && $project->getClient()) {
+            $client = $this->getDoctrine()->getRepository(Client::class)->findOneBy(
+                ['id' => $project->getClient()->getId()]
+            );
         }
-        return new JsonResponse(false);
+
+        $redmineClientService = $this->container->get('redmine_client');
+        $uri = '/projects/' . $project->getId() . '/memberships.json';
+
+        $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+        $developers = [];
+        $managers = [];
+        foreach ($result['memberships'] as $membership) {
+            if ($membership['roles'][0]['name'] == "Developer") {
+                $developers[] = $membership['user'];
+            }
+            if ($membership['roles'][0]['name'] == "Manager") {
+                $managers[] = $membership['user'];
+            }
+        }
+
+        return new JsonResponse([
+            'client' => $client ?? null,
+            'developers' => $developers,
+            'managers' => $managers,
+        ]);
     }
 }
