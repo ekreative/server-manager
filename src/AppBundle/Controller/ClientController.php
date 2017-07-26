@@ -48,8 +48,6 @@ class ClientController extends Controller
      * @Route("/new", name="client_new")
      * @Method("GET|POST")
      * @Template()
-     * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function newAction(Request $request)
     {
@@ -83,9 +81,6 @@ class ClientController extends Controller
      * @Route("/{client}", name="client_show")
      * @Method("GET")
      * @Template()
-     *
-     * @param Client $client
-     * @return array
      */
     public function showAction(Client $client)
     {
@@ -103,10 +98,6 @@ class ClientController extends Controller
      * @Route("/{client}/edit", name="client_edit")
      * @Method("GET|PUT")
      * @Template()
-     *
-     * @param Request $request
-     * @param Client $client
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, Client $client)
     {
@@ -140,10 +131,6 @@ class ClientController extends Controller
      *
      * @Route("/{client}", name="client_delete")
      * @Method("DELETE")
-     *
-     * @param Request $request
-     * @param Client $client
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Client $client)
     {

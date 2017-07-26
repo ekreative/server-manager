@@ -37,6 +37,19 @@
             <td>{{ entity.project.name }}</td>
         </tr>
 
+        <tr>
+            <th>SLA plan</th>
+            <td>{{ entity.sla }}</td>
+        </tr>
+        {% if entity.slaEndAt %}
+            <tr>
+                <th>SLA End At</th>
+                <td>
+                    {{ entity.slaEndAt | date("d.m.Y") }}
+                </td>
+            </tr>
+        {% endif %}
+
         {% if (entity.project.client) %}
             <tr>
                 <th>Client</th>
@@ -52,7 +65,7 @@
                         </tr>
                         <tr>
                             <th>
-                                Full Name
+                                Name
                             </th>
                             <td>
                                 {{ entity.project.client.name }}
@@ -92,12 +105,12 @@
             </tr>
         {% endif %}
 
-        {% if entity.developerName %}
+        {% if entity.developer %}
             <tr>
                 <th>Developer</th>
                 <td>
                     <a {% if entity.developer %}href="https://redmine.ekreative.com/users/{{ entity.developer.id }}" {% endif %}>
-                        {{ entity.developerName }}
+                        {{ entity.developer.firstName }} {{ entity.developer.lastName }}
                     </a>
                 </td>
             </tr>
@@ -108,7 +121,7 @@
                 <th>Responsible Manager</th>
                 <td>
                     <a {% if entity.responsibleManager %}href="https://redmine.ekreative.com/users/{{ entity.responsibleManager.id }}" {% endif %}>
-                        {{ entity.managerName }}
+                        {{ entity.responsibleManager.firstName }} {{ entity.responsibleManager.lastName }}
                     </a>
                 </td>
             </tr>
@@ -120,11 +133,11 @@
                 v{{ entity.frameworkVersion }} {% if entity.healthChecks.last %} ( Last sync: {{ entity.healthChecks.last.lastSyncAt|date }} ) {% endif %}</td>
         </tr>
 
-        {% if entity.endDate %}
+        {% if entity.siteCompletedAt %}
             <tr>
-                <th>End Date</th>
+                <th>Site Completed At</th>
                 <td>
-                    {{ entity.endDate | date("d.m.Y") }}
+                    {{ entity.siteCompletedAt | date("d.m.Y") }}
                 </td>
             </tr>
         {% endif %}

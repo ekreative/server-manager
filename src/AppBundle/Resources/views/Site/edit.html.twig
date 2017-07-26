@@ -18,7 +18,7 @@
     <script>
         var simplemde = new SimpleMDE({ element: document.getElementById("site_notes") });
 
-        $('#site_endDate').datetimepicker({
+        $('#site_siteCompletedAt, #site_slaEndAt').datetimepicker({
             useCurrent: false,
             format: 'DD.MM.YYYY'
         });
@@ -28,7 +28,7 @@
 
         $.ajax({
             type: 'GET',
-            url: "/project/"+$('#site_project').val()+"/members",
+            url: "/app_dev.php/project/"+$('#site_project').val()+"/members",
             success: function (data) {
                 $('#site_developer, #site_responsibleManager').select2("val", "");
                 if (data.client) {
@@ -91,7 +91,7 @@
         }).on('select2:select', function () {
             $.ajax({
                 type: 'GET',
-                url: "/project/"+$('#site_project').val()+"/members",
+                url: "/app_dev.php/project/"+$('#site_project').val()+"/members",
                 success: function (data) {
                     $('#site_developer, #site_responsibleManager').select2("val", "");
 

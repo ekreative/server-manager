@@ -71,16 +71,21 @@ class SiteType extends AbstractType
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
-                    'Standart' => 0,
-                    'Advanced' => 1,
+                    'Standard' => Site::SLA_STANDARD,
+                    'Advanced' => Site::SLA_ADVANCED,
                 ],
                 'label' => 'SLA plan',
+            ])
+            ->add('slaEndAt', DateType::class, [
+                'required' => false,
+                'label' => "SLA end at",
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
             ])
             ->add('framework', EntityType::class, [
                 'required' => true,
                  'class' => Framework::class,
-                 'choice_attr' => function ($framework, $key, $index) {
-                     /** @var Framework $framework */
+                 'choice_attr' => function (Framework $framework) {
                      return ['data-framework-version' => $framework->getCurrentVersion()];
                  },
             ])
@@ -136,7 +141,7 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-            ->add('endDate', DateType::class, [
+            ->add('siteCompletedAt', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy',

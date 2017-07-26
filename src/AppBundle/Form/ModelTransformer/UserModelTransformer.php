@@ -52,13 +52,18 @@ class UserModelTransformer implements DataTransformerInterface
     {
         if ($value) {
             $user = $this->em->getRepository(User::class)->find($value);
-            if (!$user) {
-                $uri = '/users/' . $value . '.json?include=groups';
-                $result = \GuzzleHttp\json_decode($this->redmineClient->get($uri)->getBody(), true);
 
-                return $this->userFactory->loadUserByData($result['user'], false);
-            }
+            if ($user) {
             return $user;
+            }
+
+            $uri = '/users/' . $value . '.json?include=groups';
+            $result = \GuzzleHttp\json_decode($this->redmineClient->get($uri)->getBody(), true);
+
+            if ($result['user']['status'] == 3){
+                return null;
+            }
+            return $this->userFactory->loadUserByData($result['user'], false);
         }
         return null;
     }

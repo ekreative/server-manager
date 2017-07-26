@@ -7,7 +7,6 @@ use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +19,8 @@ class Site implements AuthorEditorable, \JsonSerializable
 {
     const STATUS_SUPPORTED = 'Supported';
     const STATUS_UNSUPPORTED = 'UnSupported';
+    const SLA_STANDARD = 'Standard';
+    const SLA_ADVANCED = 'Advanced';
 
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -42,16 +43,12 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $name;
 
     /**
-     * SLA plan status
-     * 0 - standart
-     * 1 - advanced
+     * @var string
      *
-     * @var bool
-     *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $sla = false;
+    private $sla;
 
     /**
      * @var string
@@ -139,13 +136,6 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $developer;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $developerName;
-
-    /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesManagedBy")
@@ -154,17 +144,16 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $responsibleManager;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $managerName;
+    protected $siteCompletedAt;
 
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $endDate;
+    protected $slaEndAt;
 
     /**
      *
@@ -178,6 +167,7 @@ class Site implements AuthorEditorable, \JsonSerializable
 
     public function __construct()
     {
+        $this->sla = $this::SLA_STANDARD;
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->healthChecks = new ArrayCollection();
@@ -479,29 +469,6 @@ class Site implements AuthorEditorable, \JsonSerializable
         return $this->notes;
     }
 
-    /**
-     * Set endDate
-     *
-     * @param \DateTime $endDate
-     *
-     * @return Site
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    /**
-     * Get endDate
-     *
-     * @return \DateTime
-     */
-    public function getEndDate()
-    {
-        return $this->endDate;
-    }
 
     /**
      * Set developer
@@ -552,50 +519,50 @@ class Site implements AuthorEditorable, \JsonSerializable
     }
 
     /**
-     * Set developerName
+     * Set siteCompletedAt
      *
-     * @param string $developerName
+     * @param \DateTime $siteCompletedAt
      *
      * @return Site
      */
-    public function setDeveloperName($developerName)
+    public function setSiteCompletedAt($siteCompletedAt)
     {
-        $this->developerName = $developerName;
+        $this->siteCompletedAt = $siteCompletedAt;
 
         return $this;
     }
 
     /**
-     * Get developerName
+     * Get siteCompletedAt
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getDeveloperName()
+    public function getSiteCompletedAt()
     {
-        return $this->developerName;
+        return $this->siteCompletedAt;
     }
 
     /**
-     * Set managerName
+     * Set slaEndAt
      *
-     * @param string $managerName
+     * @param \DateTime $slaEndAt
      *
      * @return Site
      */
-    public function setManagerName($managerName)
+    public function setSlaEndAt($slaEndAt)
     {
-        $this->managerName = $managerName;
+        $this->slaEndAt = $slaEndAt;
 
         return $this;
     }
 
     /**
-     * Get managerName
+     * Get slaEndAt
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getManagerName()
+    public function getSlaEndAt()
     {
-        return $this->managerName;
+        return $this->slaEndAt;
     }
 }

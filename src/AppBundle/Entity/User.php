@@ -109,4 +109,14 @@ class User extends RedmineUser
     {
         return $this->sitesManagedBy;
     }
+
+    /**
+     * Get admin
+     *
+     * @return boolean
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
 }
