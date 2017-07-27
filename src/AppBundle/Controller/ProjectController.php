@@ -6,6 +6,7 @@ use AppBundle\Entity\Client;
 use AppBundle\Entity\Project;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,49 +17,41 @@ class ProjectController extends Controller
      */
     public function typeaheadAction(Request $request)
     {
-        $siteNames = [];
-        $sites = $this->getDoctrine()->getRepository('AppBundle:Site')->findAll();
-        foreach ($sites as $site) {
-            if ($site->getProject()) {
-                $siteNames[] = $site->getProject()->getName();
-            }
-        }
-
         $q = $request->query->get('q', '');
 
-        $response = new JsonResponse(array_values(array_map(function ($project) {
+        $cache = new ApcuAdapter('ekreative', 3600);
+
+        if ($cache->getItem('projects')->get() != null) {
+            $projects = $cache->getItem('projects')->get();
+        } else {
+            $projects = $this->get('projects')->getAllProjects();
+            $cache->save($cache->getItem('projects')->set($projects));
+        }
+        $response = array_values(array_map(function ($project) {
             return $project;
-        }, array_filter($this->get('projects')->getAllProjects(), function ($project) use ($q, $siteNames) {
-            return (empty($q) || stripos($project['name'], $q) !== false);
-            //            return (empty($q) || stripos($project['name'], $q) !== false) && !in_array($project['name'], $siteNames) ;
-        }))));
-        $response->headers->addCacheControlDirective('must-revalidate', true);
-        return $response;
+        }, array_filter($projects, function ($project) use ($q) {
+            return (empty($q) || stripos($project['name'], strtolower($q)) !== false);
+        })));
+
+        return $this->json($response);
     }
 
     /**
-     * @Route("/project/members/", name="project_members")
-     * Method("POST")
+     * @Route("/project/members", name="project_members")
+     * Method("GET")
      */
     public function membersAction(Request $request)
     {
-        if ($request->get('project')) {
-            $em = $this->getDoctrine();
-            $project = $em->getRepository(Project::class)->find($request->get('project'));
-
-            $client = null;
-            if ($project) {
-                if ($project->getClient()) {
-                    $entity = $em->getRepository(Client::class)->findOneBy(['id' => $project->getClient()->getId()]);
-                    $client = [
-                        'id' => $entity->getId(),
-                        'fullName' => $entity->getFullName()
-                    ];
-                }
+        if ($request->query->get("project")) {
+            $project = $this->getDoctrine()->getRepository(Project::class)->find($request->query->get("project"));
+            if ($project && $project->getClient()) {
+                $client = $this->getDoctrine()->getRepository(Client::class)->findOneBy(
+                    ['id' => $project->getClient()->getId()]
+                );
             }
 
             $redmineClientService = $this->container->get('redmine_client');
-            $uri = '/projects/' . $request->get('project') . '/memberships.json';
+            $uri = '/projects/' . $request->query->get("project") . '/memberships.json';
 
             $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
             $developers = [];
@@ -73,11 +66,11 @@ class ProjectController extends Controller
             }
 
             return new JsonResponse([
-                'client' => $client,
+                'client' => $client ?? null,
                 'developers' => $developers,
                 'managers' => $managers,
             ]);
         }
-        return new JsonResponse(false);
+        return $this->json(['error' => "Query parameter project is empty"], 406);
     }
 }

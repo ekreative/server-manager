@@ -27,13 +27,9 @@ class SiteController extends Controller
     /**
      * Lists all Site entities.
      *
-     * @param Request $request
-     *
      * @Route("/", name="site")
      * @Method("GET")
      * @Template()
-     *
-     * @return array
      */
     public function indexAction(Request $request)
     {
@@ -56,7 +52,7 @@ class SiteController extends Controller
         $form = $this->createForm(SitesFilterType::class, $filter)
             ->add('Search', SubmitType::class);
         $form->handleRequest($request);
-        $query = $em->getRepository('AppBundle:Site')->searchQuery($filter);
+        $query = $em->getRepository(Site::class)->searchQuery($filter);
         $entities = $this->get('knp_paginator')->paginate($query, $request->query->getInt('page', 1), 100);
 
         return [
@@ -71,9 +67,6 @@ class SiteController extends Controller
      * @Route("/", name="site_create")
      * @Method("POST")
      * @Template("AppBundle:Site:new.html.twig")
-     *
-     * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
@@ -96,22 +89,6 @@ class SiteController extends Controller
             }
             $entity->getProject()->setClient($client);
 
-            if ($form->get('developer')->getData()) {
-                /**
-                 * @var User $developer
-                 */
-                $developer = $form->get('developer')->getData();
-                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
-            }
-
-            if ($form->get('responsibleManager')->getData()) {
-                /**
-                 * @var User $responsibleManager
-                 */
-                $responsibleManager = $form->get('responsibleManager')->getData();
-                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
-            }
-
             $em->persist($entity);
             $em->flush();
 
@@ -124,13 +101,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Creates a form to create a Site entity.
-     *
-     * @param Site $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
     private function createCreateForm(Site $entity)
     {
         $clients = $this->getDoctrine()
@@ -266,22 +236,6 @@ class SiteController extends Controller
                 $client = $em->getRepository(Client::class)->find($editForm->get('client')->getData());
             }
             $entity->getProject()->setClient($client);
-
-            if ($editForm->get('developer')->getData()) {
-                /**
-                 * @var User $developer
-                 */
-                $developer = $editForm->get('developer')->getData();
-                $entity->setDeveloperName($developer->getFirstName()." ".$developer->getLastName());
-            }
-
-            if ($editForm->get('responsibleManager')->getData()) {
-                /**
-                 * @var User $responsibleManager
-                 */
-                $responsibleManager = $editForm->get('responsibleManager')->getData();
-                $entity->setManagerName($responsibleManager->getFirstName()." ".$responsibleManager->getLastName());
-            }
 
             $em->flush();
 

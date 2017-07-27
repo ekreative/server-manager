@@ -26,7 +26,11 @@ class SiteType extends AbstractType
     {
         $builder
             ->add('project', ProjectType::class, [
-                'required' => true
+                'required' => true,
+                'choices' =>
+                    $builder->getData()->getProject() ? [
+                        $builder->getData()->getProject()->getName() => $builder->getData()->getProject()->getId()
+                ] : null
             ])
             ->add('name', null, [
                 'attr' => [
@@ -41,7 +45,7 @@ class SiteType extends AbstractType
                     }, $client->getProjects()->toArray()))];
                 },
                 'choice_label' => function (Client $client) {
-                    return $client->getFullName();
+                    return $client->getName();
                 },
                 'required' => false,
                 'mapped' => false,
@@ -61,26 +65,39 @@ class SiteType extends AbstractType
             ->add('developer', UserType::class, [
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
-                'placeholder' => 'Choose main developer'
+                'placeholder' => 'Choose main developer',
+                'choices' =>
+                    $builder->getData()->getDeveloper() ? [
+                        $builder->getData()->getDeveloper()->getFirstName()." ".$builder->getData()->getDeveloper()->getLastName() => $builder->getData()->getDeveloper()->getId()
+                    ] : null
             ])
             ->add('responsibleManager', UserType::class, [
                 'label' => 'Responsible Manager',
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
-                'placeholder' => 'Choose Responsible manager'
+                'placeholder' => 'Choose Responsible manager',
+                'choices' =>
+                    $builder->getData()->getresponsibleManager() ? [
+                        $builder->getData()->getresponsibleManager()->getFirstName()." ".$builder->getData()->getresponsibleManager()->getLastName() => $builder->getData()->getresponsibleManager()->getId()
+                    ] : null
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
-                    'Standart' => 0,
-                    'Advanced' => 1,
+                    'Standard' => Site::SLA_STANDARD,
+                    'Advanced' => Site::SLA_ADVANCED,
                 ],
                 'label' => 'SLA plan',
+            ])
+            ->add('slaEndAt', DateType::class, [
+                'required' => false,
+                'label' => "SLA end at",
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
             ])
             ->add('framework', EntityType::class, [
                 'required' => true,
                  'class' => Framework::class,
-                 'choice_attr' => function ($framework, $key, $index) {
-                     /** @var Framework $framework */
+                 'choice_attr' => function (Framework $framework) {
                      return ['data-framework-version' => $framework->getCurrentVersion()];
                  },
             ])
@@ -136,7 +153,7 @@ class SiteType extends AbstractType
                     'help-block' => 'Health checks associated with this site'
                 ]
             ])
-            ->add('endDate', DateType::class, [
+            ->add('siteCompletedAt', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy',
