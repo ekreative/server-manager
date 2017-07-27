@@ -27,11 +27,8 @@ class SitesFilterType extends AbstractType
             ])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
-                'choice_label' => function ($client){
-                    /**
-                     * @var Client $client
-                     */
-                    return $client->getFullName();
+                'choice_label' => function (Client $client){
+                    return $client->getName();
                 },
                 'required' => false,
                 'placeholder' => 'All',

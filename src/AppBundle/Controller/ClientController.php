@@ -43,13 +43,11 @@ class ClientController extends Controller
     }
 
     /**
-     * Creates a new Framework entity.
+     * Creates a new Client entity.
      *
      * @Route("/new", name="client_new")
      * @Method("GET|POST")
      * @Template()
-     * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function newAction(Request $request)
     {
@@ -78,14 +76,11 @@ class ClientController extends Controller
     }
 
     /**
-     * Finds and displays a Framework entity.
+     * Finds and displays a Client entity.
      *
      * @Route("/{client}", name="client_show")
      * @Method("GET")
      * @Template()
-     *
-     * @param Client $client
-     * @return array
      */
     public function showAction(Client $client)
     {
@@ -98,15 +93,11 @@ class ClientController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Framework entity.
+     * Displays a form to edit an existing Client entity.
      *
      * @Route("/{client}/edit", name="client_edit")
      * @Method("GET|PUT")
      * @Template()
-     *
-     * @param Request $request
-     * @param Client $client
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, Client $client)
     {
@@ -115,7 +106,8 @@ class ClientController extends Controller
         $editForm = $this->createForm(ClientType::class, $client, [
             'action' => $this->generateUrl('client_edit', ['client' => $client->getId()]),
             'method' => 'PUT',
-        ]);
+        ])
+        ->add('submit', SubmitType::class, ['label' => 'Update']);
 
         $deleteForm = $this->createDeleteForm($client->getId());
 
@@ -140,10 +132,6 @@ class ClientController extends Controller
      *
      * @Route("/{client}", name="client_delete")
      * @Method("DELETE")
-     *
-     * @param Request $request
-     * @param Client $client
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Client $client)
     {

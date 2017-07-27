@@ -32,7 +32,7 @@ class ProjectModelTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value) {
-            return $value->getId();
+            return $value->getName();
         }
         return null;
     }

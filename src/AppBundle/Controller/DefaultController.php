@@ -15,6 +15,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        if ($this->getUser()->isAdmin() == false){
+            return $this->redirect('site');
+        }
         return [];
     }
 }
