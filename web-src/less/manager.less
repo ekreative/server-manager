@@ -1,12 +1,19 @@
-@import "../../node_modules/bootstrap/less/bootstrap";
-@import "../../node_modules/lesshat/build/lesshat";
-@import "../../node_modules/select2/dist/css/select2.css";
-@import "../../node_modules/eonasdan-bootstrap-datetimepicker/src/less/bootstrap-datetimepicker-build";
-@import "../../node_modules/simplemde/dist/simplemde.min.css";
+@import "../../node_modules/bootstrap/less/bootstrap.less";
+@import "../../node_modules/lesshat/build/lesshat.less";
+@import (inline) "../../node_modules/select2/dist/css/select2.css";
+@import (inline) "../../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css";
+@import (inline) "../../node_modules/simplemde/dist/simplemde.min.css";
 
 .form-single-button {
     display: inline-block;
 }
+
+label.required::after{
+    content: ' *' !important;
+    font-weight: normal !important;
+    color:red;
+}
+
 
 .header-edit-btn {
     margin-top: 1px;
