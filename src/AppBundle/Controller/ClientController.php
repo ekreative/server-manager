@@ -43,7 +43,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Creates a new Framework entity.
+     * Creates a new Client entity.
      *
      * @Route("/new", name="client_new")
      * @Method("GET|POST")
@@ -76,7 +76,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Finds and displays a Framework entity.
+     * Finds and displays a Client entity.
      *
      * @Route("/{client}", name="client_show")
      * @Method("GET")
@@ -93,7 +93,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Framework entity.
+     * Displays a form to edit an existing Client entity.
      *
      * @Route("/{client}/edit", name="client_edit")
      * @Method("GET|PUT")
@@ -106,7 +106,8 @@ class ClientController extends Controller
         $editForm = $this->createForm(ClientType::class, $client, [
             'action' => $this->generateUrl('client_edit', ['client' => $client->getId()]),
             'method' => 'PUT',
-        ]);
+        ])
+        ->add('submit', SubmitType::class, ['label' => 'Update']);
 
         $deleteForm = $this->createDeleteForm($client->getId());
 

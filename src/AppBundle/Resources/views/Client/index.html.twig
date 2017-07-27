@@ -4,9 +4,9 @@
 
 {% block headerPanel %}
     <div class="pull-right">
-        {#<a href="{{ path('framework_new') }}" class="btn-default btn">#}
-            {#Create a new entry#}
-        {#</a>#}
+        <a href="{{ path('client_new') }}" class="btn-default btn">
+            Create a new entry
+        </a>
     </div>
 {% endblock headerPanel %}
 
@@ -48,10 +48,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-
-    <a href="{{ path('client_new') }}" class="btn-default btn">
-        Create a new entry
-    </a>
-
 {% endblock %}
