@@ -70,7 +70,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="sites")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="sites", fetch="EAGER")
      * @Assert\NotBlank(message="Enter a current name of Redmine project")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */

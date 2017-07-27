@@ -26,7 +26,11 @@ class SiteType extends AbstractType
     {
         $builder
             ->add('project', ProjectType::class, [
-                'required' => true
+                'required' => true,
+                'choices' =>
+                    $builder->getData()->getProject() ? [
+                        $builder->getData()->getProject()->getName() => $builder->getData()->getProject()->getId()
+                ] : null
             ])
             ->add('name', null, [
                 'attr' => [
@@ -61,13 +65,21 @@ class SiteType extends AbstractType
             ->add('developer', UserType::class, [
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
-                'placeholder' => 'Choose main developer'
+                'placeholder' => 'Choose main developer',
+                'choices' =>
+                    $builder->getData()->getDeveloper() ? [
+                        $builder->getData()->getDeveloper()->getFirstName()." ".$builder->getData()->getDeveloper()->getLastName() => $builder->getData()->getDeveloper()->getId()
+                    ] : null
             ])
             ->add('responsibleManager', UserType::class, [
                 'label' => 'Responsible Manager',
                 'required' => false,
                 'attr' => ['disabled' => 'disabled'],
-                'placeholder' => 'Choose Responsible manager'
+                'placeholder' => 'Choose Responsible manager',
+                'choices' =>
+                    $builder->getData()->getresponsibleManager() ? [
+                        $builder->getData()->getresponsibleManager()->getFirstName()." ".$builder->getData()->getresponsibleManager()->getLastName() => $builder->getData()->getresponsibleManager()->getId()
+                    ] : null
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
