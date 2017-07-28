@@ -18,6 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Framework implements AuthorEditorable
 {
+    const SYMFONY = 'symfony';
+    const JOOMLA = 'joomla';
+    const WORDPRESS = 'wordpress';
+    const DRUPAL_7 = 'drupal7';
+    const DRUPAL_8 = 'drupal8';
+
     use AuthorEditorableEntity;
     use TimestampableEntity;
 
@@ -54,6 +60,13 @@ class Framework implements AuthorEditorable
      * @ORM\OneToMany(targetEntity="Site", mappedBy="framework")
      */
     private $sites;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="key")
+     */
+    private $key;
 
     public function __construct()
     {
@@ -136,5 +149,23 @@ class Framework implements AuthorEditorable
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+        return $this;
     }
 }

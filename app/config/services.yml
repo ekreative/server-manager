@@ -104,3 +104,11 @@ services:
             - {method: setTestDbPath, arguments: ["%test_db_path%"]}
         tags:
             - { name: console.command }
+
+    app.check_site_status.command:
+        class: AppBundle\Command\CheckSiteStatusCommand
+        arguments:
+          - "@doctrine"
+          - "@logger"
+        tags:
+          -  { name: console.command }
