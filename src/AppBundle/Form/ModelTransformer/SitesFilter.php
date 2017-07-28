@@ -15,7 +15,7 @@ class SitesFilter
     /**
      * @var string
      */
-    private $status;
+    private $status = 'Supported';
 
     /**
      * @var string
