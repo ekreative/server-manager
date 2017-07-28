@@ -65,7 +65,7 @@ class ProjectController extends Controller
                 }
             }
 
-            return new JsonResponse([
+            return $this->json([
                 'client' => $client ?? null,
                 'developers' => $developers,
                 'managers' => $managers,

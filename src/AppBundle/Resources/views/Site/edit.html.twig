@@ -18,7 +18,7 @@
     <script>
         $.ajax({
             type: 'GET',
-            url: "/app_dev.php/project/members?project="+$('#site_project').val(),
+            url: "/project/members?project="+$('#site_project').val(),
             success: function (data) {
                 if (data.client) {
                     $('#site_client').val(data.client.id).trigger('change');

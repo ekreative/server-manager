@@ -12,7 +12,7 @@ $("#site_project").select2({
     minimumInputLength: 3,
     cache: true,
     ajax: {
-        url:  "/app_dev.php/project/typeahead",
+        url:  "/project/typeahead",
         dataType: "json",
         type: "GET",
         delay: 1000,
@@ -35,7 +35,7 @@ $("#site_project").select2({
 }).on('change', function () {
     $.ajax({
         type: 'GET',
-        url: "/app_dev.php/project/members",
+        url: "/project/members",
         data: {
           project:  $('#site_project').val()
         },
