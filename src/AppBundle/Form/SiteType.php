@@ -109,7 +109,7 @@ class SiteType extends AbstractType
             ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Status',
-                'required' => false,
+                'required' => true,
                 'choices' => [
                     'Supported' => Site::STATUS_SUPPORTED,
                     'UnSupported' => Site::STATUS_UNSUPPORTED,

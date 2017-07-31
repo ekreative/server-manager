@@ -156,9 +156,6 @@ class Site implements AuthorEditorable, \JsonSerializable
     protected $slaEndAt;
 
     /**
-     *
-     * '0' => sites what are placed on our hosting
-     * '1' => sites what are placed on external hosting
      * @var string
      * @ORM\Column(type="string", length=60)
      *
