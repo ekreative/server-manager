@@ -41,7 +41,7 @@ class CheckSiteStatusCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sites = $this->em->getRepository(Site::class)->findBy(['status' => "supported"]);
+        $sites = $this->em->getRepository(Site::class)->findBy(['status' => Site::STATUS_SUPPORTED]);
         if (!$sites) {
             $this->logger->error('No sites to update.');
             return;
@@ -51,7 +51,7 @@ class CheckSiteStatusCommand extends Command
         foreach ($sites as $site) {
             if ($site->getSlaEndAt() && $site->getSlaEndAt()  < new \DateTime()) {
                 $i++;
-                $site->setStatus('unsupported');
+                $site->setStatus(Site::STATUS_UNSUPPORTED);
             }
         }
 
