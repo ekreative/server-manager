@@ -58,7 +58,7 @@ class UserModelTransformer implements DataTransformerInterface
             }
 
             $uri = '/users/' . $value . '.json?include=groups';
-            $result = \GuzzleHttp\json_decode($this->redmineClient->get($uri)->getBody(), true);
+            $result = json_decode($this->redmineClient->get($uri)->getBody(), true);
 
             if ($result['user']['status'] == 3) {
                 return null;
