@@ -17,10 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Site implements AuthorEditorable, \JsonSerializable
 {
-    const STATUS_SUPPORTED = 'Supported';
-    const STATUS_UNSUPPORTED = 'UnSupported';
-    const SLA_STANDARD = 'Standard';
-    const SLA_ADVANCED = 'Advanced';
+    const STATUS_SUPPORTED = 'supported';
+    const STATUS_UNSUPPORTED = 'unsupported';
+    const SLA_STANDARD = 'standard';
+    const SLA_ADVANCED = 'advanced';
 
     use AuthorEditorableEntity;
     use TimestampableEntity;
