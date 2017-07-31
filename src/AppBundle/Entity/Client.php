@@ -217,7 +217,8 @@ class Client implements AuthorEditorable, \JsonSerializable
         return $this->projects;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             "id"     =>  $this->getId(),
             "name"   =>  $this->getName(),
