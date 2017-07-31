@@ -51,7 +51,7 @@ class CheckSiteStatusCommand extends Command
         foreach ($sites as $site) {
             if ($site->getSlaEndAt() && $site->getSlaEndAt()  < new \DateTime()) {
                 $i++;
-                $site->setStatus('UnSupported');
+                $site->setStatus('unsupported');
             }
         }
 
