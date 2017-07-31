@@ -41,7 +41,7 @@ class CheckSiteStatusCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sites = $this->em->getRepository(Site::class)->findBy(['status' => "Supported"]);
+        $sites = $this->em->getRepository(Site::class)->findBy(['status' => "supported"]);
         if (!$sites) {
             $this->logger->error('No sites to update.');
             return;
