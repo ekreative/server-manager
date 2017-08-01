@@ -103,7 +103,6 @@ class SiteType extends AbstractType
             ])
             ->add('frameworkVersion', TextType::class, [
                 'attr' => [
-                    'readonly' => true,
                     'help-block' => 'The version of framework used in the project (must be semvar major.minor.patch)'
                 ]
             ])

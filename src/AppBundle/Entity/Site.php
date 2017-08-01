@@ -61,7 +61,7 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      * @Assert\Regex("/^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)?(\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*))?\b/i", message="Enter a valid semvar version")
      */

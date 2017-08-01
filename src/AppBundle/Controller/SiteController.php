@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Exception\Exception;
 
@@ -89,10 +90,14 @@ class SiteController extends Controller
             }
             $entity->getProject()->setClient($client);
 
-            $em->persist($entity);
-            $em->flush();
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
+                $form->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
+            } else {
+                $em->persist($entity);
+                $em->flush();
 
-            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+                return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+            }
         }
 
         return [
@@ -237,9 +242,12 @@ class SiteController extends Controller
             }
             $entity->getProject()->setClient($client);
 
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
+                $editForm->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
+            } else {
+                $em->flush();
+                return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
+            }
         }
 
         return [
