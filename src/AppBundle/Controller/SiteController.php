@@ -90,8 +90,7 @@ class SiteController extends Controller
             }
             $entity->getProject()->setClient($client);
 
-
-            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1){
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
                 $form->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
             } else {
                 $em->persist($entity);
@@ -243,7 +242,7 @@ class SiteController extends Controller
             }
             $entity->getProject()->setClient($client);
 
-            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1){
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
                 $editForm->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
             } else {
                 $em->flush();
