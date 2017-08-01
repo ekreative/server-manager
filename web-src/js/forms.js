@@ -117,10 +117,6 @@ $(document).on('change', '[data-login-type-toggle] input', function() {
     loginTypeToggle($(this));
 });
 
-$('#site_framework').on('change', function() {
-    $('#site_frameworkVersion').val($(this).find('option[value='+$(this).val()+']').attr('data-framework-version'));
-}).change();
-
 function refreshTogles(elem) {
     if (elem) {
         elem.find('[data-login-type-toggle] [checked]').each(function(i, input) {
