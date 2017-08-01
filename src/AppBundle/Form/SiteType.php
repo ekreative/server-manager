@@ -112,7 +112,7 @@ class SiteType extends AbstractType
                 'required' => true,
                 'choices' => [
                     'Supported' => Site::STATUS_SUPPORTED,
-                    'UnSupported' => Site::STATUS_UNSUPPORTED,
+                    'Unsupported' => Site::STATUS_UNSUPPORTED,
                 ],
                 'placeholder' => null,
             ])

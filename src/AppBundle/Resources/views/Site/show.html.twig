@@ -38,8 +38,13 @@
         </tr>
 
         <tr>
+            <th>Status</th>
+            <td>{{ entity.status | capitalize }}</td>
+        </tr>
+
+        <tr>
             <th>SLA plan</th>
-            <td>{{ entity.sla }}</td>
+            <td>{{ entity.sla | capitalize }}</td>
         </tr>
         {% if entity.slaEndAt %}
             <tr>

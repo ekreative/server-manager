@@ -165,6 +165,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     public function __construct()
     {
         $this->sla = $this::SLA_STANDARD;
+        $this->status = $this::STATUS_SUPPORTED;
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->healthChecks = new ArrayCollection();
