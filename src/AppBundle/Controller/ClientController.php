@@ -21,20 +21,13 @@ class ClientController extends Controller
 {
 
     /**
-     * Lists all Client entities.
-     *
-     * @param $request Request
-     * @return string
-     *
      * @Route("/", name="client")
      * @Method("GET")
      * @Template()
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $clients = $em->getRepository(Client::class)->findAll();
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findAll();
         $entities = $this->get('knp_paginator')->paginate($clients, $request->query->getInt('page', 1), 100);
 
         return [

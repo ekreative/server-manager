@@ -43,19 +43,17 @@ class CheckSiteStatusCommand extends Command
     {
         $sites = $this->em->getRepository(Site::class)->findBy(['status' => Site::STATUS_SUPPORTED]);
         if (!$sites) {
-            $this->logger->error('No sites to update.');
+            $this->logger->info('No sites to update.');
             return;
         }
 
-        $i = 0;
         foreach ($sites as $site) {
             if ($site->getSlaEndAt() && $site->getSlaEndAt()  < new \DateTime()) {
-                $i++;
                 $site->setStatus(Site::STATUS_UNSUPPORTED);
+                $this->logger->info($site->getName() . " updated");
             }
         }
 
         $this->em->flush();
-        $this->logger->info($i . "sites updated");
     }
 }
