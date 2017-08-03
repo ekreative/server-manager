@@ -128,7 +128,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $framework;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesDevelopedBy")
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
@@ -136,7 +136,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $developer;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesManagedBy")
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
@@ -471,7 +471,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * Set developer
      *
-     * @param integer $developer
+     * @param User $developer
      *
      * @return Site
      */
@@ -485,7 +485,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * Get developer
      *
-     * @return integer
+     * @return User
      */
     public function getDeveloper()
     {
@@ -495,7 +495,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * Set responsibleManager
      *
-     * @param integer $responsibleManager
+     * @param User $responsibleManager
      *
      * @return Site
      */
@@ -509,7 +509,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * Get responsibleManager
      *
-     * @return integer
+     * @return User
      */
     public function getResponsibleManager()
     {

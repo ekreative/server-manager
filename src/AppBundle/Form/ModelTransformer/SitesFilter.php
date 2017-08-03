@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form\ModelTransformer;
 
+use AppBundle\Entity\Site;
+
 class SitesFilter
 {
     /**
@@ -15,7 +17,7 @@ class SitesFilter
     /**
      * @var string
      */
-    private $status = 'Supported';
+    private $status = Site::STATUS_SUPPORTED;
 
     /**
      * @var string

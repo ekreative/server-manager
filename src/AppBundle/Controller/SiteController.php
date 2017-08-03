@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * Site controller.
@@ -41,7 +40,7 @@ class SiteController extends Controller
             // get all projects current user from RedMine
             $redmineClientService = $this->container->get('redmine_client');
             $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
-            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+            $result = json_decode($redmineClientService->get($uri)->getBody(), true);
             $listMemberships = array_shift($result)['memberships'];
             if (!empty($listMemberships)) {
                 foreach ($listMemberships as $membership) {
@@ -82,7 +81,7 @@ class SiteController extends Controller
                  * @var Client $client
                  */
                 $client = $form->get('newClient')->getData();
-                if ($client && $client->getFullName() && $client->getEmail()) {
+                if ($client instanceof Client && $client->getName() && $client->getEmail()) {
                     $em->persist($client);
                 }
             } else {
@@ -108,11 +107,7 @@ class SiteController extends Controller
 
     private function createCreateForm(Site $entity)
     {
-        $clients = $this->getDoctrine()
-            ->getRepository(Client::class)
-            ->createQueryBuilder('p')
-            ->getQuery()
-            ->getResult();
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findAll();
 
         $form = $this->createForm(SiteType::class, $entity, [
             'action' => $this->generateUrl('site_create'),
@@ -154,7 +149,7 @@ class SiteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Site')->find($id);
+        $entity = $em->getRepository(Site::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Site entity.');
@@ -179,7 +174,7 @@ class SiteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Site')->find($id);
+        $entity = $em->getRepository(Site::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Site entity.');
@@ -234,13 +229,14 @@ class SiteController extends Controller
                  * @var Client $client
                  */
                 $client = $editForm->get('newClient')->getData();
-                if ($client && $client->getFullName() && $client->getEmail()) {
-                    $em->persist($client);
+
+                if ($client instanceof Client && $client->getName() && $client->getEmail()) {
+                    $entity->getProject()->setClient($client);
                 }
             } else {
                 $client = $em->getRepository(Client::class)->find($editForm->get('client')->getData());
+                $entity->getProject()->setClient($client);
             }
-            $entity->getProject()->setClient($client);
 
             if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
                 $editForm->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
@@ -270,7 +266,7 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:Site')->find($id);
+            $entity = $em->getRepository(Site::class)->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Site entity.');

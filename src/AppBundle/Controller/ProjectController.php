@@ -53,7 +53,7 @@ class ProjectController extends Controller
             $redmineClientService = $this->container->get('redmine_client');
             $uri = '/projects/' . $request->query->get("project") . '/memberships.json';
 
-            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+            $result = json_decode($redmineClientService->get($uri)->getBody(), true);
             $developers = [];
             $managers = [];
             foreach ($result['memberships'] as $membership) {

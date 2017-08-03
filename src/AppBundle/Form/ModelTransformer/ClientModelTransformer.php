@@ -36,16 +36,6 @@ class ClientModelTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if ($value) {
-            /**
-             * @var Client $client
-             */
-            $client = $this->em->getRepository(Client::class)->find(['name' => $value]);
-
-            if ($client) {
-                return $client;
-            }
-        }
-        return null;
+        return $this->em->getRepository(Client::class)->find(['name' => $value]) ?: null;
     }
 }
