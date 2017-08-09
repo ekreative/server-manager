@@ -21,8 +21,8 @@ class ServerType extends AbstractType
             ->add('live', ChoiceType::class, [
                 'required' => true,
                 'choices'=>[
-                    1 => 'Yes',
-                    0 => 'No'
+                    'Yes'=> 1,
+                    'No' => 0
                 ],
                 'attr' => [
                     'help-block' => 'Is this a live server or a test server?'
@@ -58,13 +58,5 @@ class ServerType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Server::class
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'appbundle_server';
     }
 }

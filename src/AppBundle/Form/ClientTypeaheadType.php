@@ -2,23 +2,27 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Project;
-use AppBundle\Form\ModelTransformer\ProjectModelTransformer;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use AppBundle\Form\ModelTransformer\ClientModelTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
-class ProjectType extends TextType
+class ClientTypeaheadType extends TextType
 {
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
     /**
-     * @var ProjectModelTransformer
+     * @var ClientModelTransformer
      */
     private $transformer;
 
-    public function __construct(ProjectModelTransformer $transformer)
+    public function __construct(RouterInterface $router, ClientModelTransformer $transformer)
     {
+        $this->router = $router;
         $this->transformer = $transformer;
     }
 
@@ -35,13 +39,9 @@ class ProjectType extends TextType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'attr' => [
-                'help-block' => 'The Redmine project'
+                'typeahead' => $this->router->generate('client_typeahead'),
+                'help-block' => 'Client`s Full Name'
             ]
         ]);
-    }
-
-    public function getParent()
-    {
-        return ChoiceType::class;
     }
 }

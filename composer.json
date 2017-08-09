@@ -28,7 +28,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.1",
-        "ekreative/redmine_login": "^3.6.0",
+        "ekreative/redmine_login": "^3.7",
         "nelmio/api-doc-bundle": "^2.13",
         "jrschumacher/symfony-redis-session-handler": "^1.0",
         "stof/doctrine-extensions-bundle": "^1.2",
@@ -36,7 +36,8 @@
         "guzzlehttp/guzzle": "^6.3",
         "ext-apcu": "*",
         "symfony/finder": "^2.0",
-        "symfony/yaml": "^3.0"
+        "symfony/yaml": "^3.0",
+        "knplabs/knp-markdown-bundle": "^1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

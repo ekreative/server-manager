@@ -2,12 +2,13 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Framework;
+use AppBundle\Entity\Client;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FrameworkType extends AbstractType
+class ClientType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,12 +17,15 @@ class FrameworkType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('currentVersion', null, [
-                'attr' => [
-                    'help-block' => 'Must be semvar major.minor.patch'
-                ]
-            ]);
+            ->add('name', TextType::class)
+            ->add('email', TextType::class)
+            ->add('skype', TextType::class, [
+                'required' => false
+            ])
+            ->add('phone', TextType::class, [
+                'required' => false
+            ])
+            ;
     }
 
     /**
@@ -32,7 +36,7 @@ class FrameworkType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Framework::class
+            'data_class' => Client::class
         ]);
     }
 }

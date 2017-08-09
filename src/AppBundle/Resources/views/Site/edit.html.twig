@@ -10,6 +10,36 @@
     </div>
 {% endblock headerPanel %}
 
-{% block body -%}
+{% block body %}
     {{ form(edit_form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: "/project/members?project="+$('#site_project').val(),
+            success: function (data) {
+                if (data.client) {
+                    $('#site_client').val(data.client.id).trigger('change');
+                }
+
+                data.developers.forEach(function (item) {
+                    if (item.id == $('#site_developer').val()){
+                        return false;
+                    }
+                    $('#site_developer').append('<option value="'+item.id+'">'+item.name+'</option>')
+                });
+
+                data.managers.forEach(function (item) {
+                    if (item.id == $('#site_responsibleManager').val()){
+                        return false;
+                    }
+                    $('#site_responsibleManager').append('<option value="'+item.id+'">'+item.name+'</option>')
+                });
+            }
+        });
+        $('#site_responsibleManager').removeAttr('disabled');
+        $('#site_developer').removeAttr('disabled');
+    </script>
 {% endblock %}

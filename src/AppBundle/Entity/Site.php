@@ -7,7 +7,6 @@ use AppBundle\AuthorEditor\AuthorEditorableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,8 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Site implements AuthorEditorable, \JsonSerializable
 {
-    const STATUS_SUPPORTED = 'Supported';
-    const STATUS_UNSUPPORTED = 'UnSupported';
+    const STATUS_SUPPORTED = 'supported';
+    const STATUS_UNSUPPORTED = 'unsupported';
+    const SLA_STANDARD = 'standard';
+    const SLA_ADVANCED = 'advanced';
 
     use AuthorEditorableEntity;
     use TimestampableEntity;
@@ -43,9 +44,24 @@ class Site implements AuthorEditorable, \JsonSerializable
 
     /**
      * @var string
+     *
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     */
+    private $sla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
+     * @var string
      * Semvar regex - https://github.com/sindresorhus/semver-regex/blob/master/index.js
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      * @Assert\Regex("/^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)?(\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*))?\b/i", message="Enter a valid semvar version")
      */
@@ -54,7 +70,7 @@ class Site implements AuthorEditorable, \JsonSerializable
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="sites")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="sites", fetch="EAGER")
      * @Assert\NotBlank(message="Enter a current name of Redmine project")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
@@ -112,9 +128,34 @@ class Site implements AuthorEditorable, \JsonSerializable
     private $framework;
 
     /**
+     * @var User
      *
-     * '0' => sites what are placed on our hosting
-     * '1' => sites what are placed on external hosting
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesDevelopedBy")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     */
+    private $developer;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sitesManagedBy")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     */
+    private $responsibleManager;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $siteCompletedAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $slaEndAt;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=60)
      *
@@ -123,6 +164,8 @@ class Site implements AuthorEditorable, \JsonSerializable
 
     public function __construct()
     {
+        $this->sla = $this::SLA_STANDARD;
+        $this->status = $this::STATUS_SUPPORTED;
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->healthChecks = new ArrayCollection();
@@ -375,4 +418,149 @@ class Site implements AuthorEditorable, \JsonSerializable
         ];
     }
 
+
+    /**
+     * Set sla
+     *
+     * @param boolean $sla
+     *
+     * @return Site
+     */
+    public function setSla($sla)
+    {
+        $this->sla = $sla;
+
+        return $this;
+    }
+
+    /**
+     * Get sla
+     *
+     * @return boolean
+     */
+    public function getSla()
+    {
+        return $this->sla;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Site
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+
+    /**
+     * Set developer
+     *
+     * @param User $developer
+     *
+     * @return Site
+     */
+    public function setDeveloper($developer)
+    {
+        $this->developer = $developer;
+
+        return $this;
+    }
+
+    /**
+     * Get developer
+     *
+     * @return User
+     */
+    public function getDeveloper()
+    {
+        return $this->developer;
+    }
+
+    /**
+     * Set responsibleManager
+     *
+     * @param User $responsibleManager
+     *
+     * @return Site
+     */
+    public function setResponsibleManager($responsibleManager)
+    {
+        $this->responsibleManager = $responsibleManager;
+
+        return $this;
+    }
+
+    /**
+     * Get responsibleManager
+     *
+     * @return User
+     */
+    public function getResponsibleManager()
+    {
+        return $this->responsibleManager;
+    }
+
+    /**
+     * Set siteCompletedAt
+     *
+     * @param \DateTime $siteCompletedAt
+     *
+     * @return Site
+     */
+    public function setSiteCompletedAt($siteCompletedAt)
+    {
+        $this->siteCompletedAt = $siteCompletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get siteCompletedAt
+     *
+     * @return \DateTime
+     */
+    public function getSiteCompletedAt()
+    {
+        return $this->siteCompletedAt;
+    }
+
+    /**
+     * Set slaEndAt
+     *
+     * @param \DateTime $slaEndAt
+     *
+     * @return Site
+     */
+    public function setSlaEndAt($slaEndAt)
+    {
+        $this->slaEndAt = $slaEndAt;
+
+        return $this;
+    }
+
+    /**
+     * Get slaEndAt
+     *
+     * @return \DateTime
+     */
+    public function getSlaEndAt()
+    {
+        return $this->slaEndAt;
+    }
 }

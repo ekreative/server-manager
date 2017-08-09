@@ -3,17 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
-use AppBundle\Entity\Server;
-use AppBundle\Entity\Site;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-
 
 class ApiController extends Controller
 {
@@ -33,7 +27,7 @@ class ApiController extends Controller
             return $project['id'];
         }, $this->get('projects')->getAllProjects())]);
 
-        $sitesArrays = array_map(function(Project $project) {
+        $sitesArrays = array_map(function (Project $project) {
             return $project->getSites()->toArray();
         }, $projects);
 

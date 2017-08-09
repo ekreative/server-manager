@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form\ModelTransformer;
 
+use AppBundle\Entity\Site;
+
 class SitesFilter
 {
     /**
@@ -15,7 +17,28 @@ class SitesFilter
     /**
      * @var string
      */
-    private $status;
+    private $status = Site::STATUS_SUPPORTED;
+
+    /**
+     * @var string
+     */
+    private $client;
+
+    /**
+     * @return string
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param string $client
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+    }
 
     /**
      * @var array

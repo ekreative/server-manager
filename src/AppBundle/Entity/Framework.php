@@ -158,7 +158,6 @@ class Framework implements AuthorEditorable
     {
         return $this->key;
     }
-
     /**
      * @param string $key
      *
@@ -167,7 +166,6 @@ class Framework implements AuthorEditorable
     public function setKey($key)
     {
         $this->key = $key;
-
         return $this;
     }
 }

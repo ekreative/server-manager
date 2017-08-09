@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Site;
+use AppBundle\Entity\Client;
+use AppBundle\Entity\User;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use AppBundle\Form\SitesFilterType;
 use AppBundle\Form\SiteType;
@@ -11,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,13 +27,9 @@ class SiteController extends Controller
     /**
      * Lists all Site entities.
      *
-     * @param Request $request
-     *
      * @Route("/", name="site")
      * @Method("GET")
      * @Template()
-     *
-     * @return array
      */
     public function indexAction(Request $request)
     {
@@ -41,7 +40,7 @@ class SiteController extends Controller
             // get all projects current user from RedMine
             $redmineClientService = $this->container->get('redmine_client');
             $uri = '/users/' . $this->getUser()->getId() . '.json?include=memberships';
-            $result = \GuzzleHttp\json_decode($redmineClientService->get($uri)->getBody(), true);
+            $result = json_decode($redmineClientService->get($uri)->getBody(), true);
             $listMemberships = array_shift($result)['memberships'];
             if (!empty($listMemberships)) {
                 foreach ($listMemberships as $membership) {
@@ -77,10 +76,27 @@ class SiteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            if ($form->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $form->get('newClient')->getData();
+                if ($client instanceof Client && $client->getName() && $client->getEmail()) {
+                    $em->persist($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($form->get('client')->getData());
+            }
+            $entity->getProject()->setClient($client);
 
-            return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
+                $form->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
+            } else {
+                $em->persist($entity);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('site_show', ['id' => $entity->getId()]));
+            }
         }
 
         return [
@@ -89,18 +105,14 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Creates a form to create a Site entity.
-     *
-     * @param Site $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
     private function createCreateForm(Site $entity)
     {
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findAll();
+
         $form = $this->createForm(SiteType::class, $entity, [
             'action' => $this->generateUrl('site_create'),
             'method' => 'POST',
+            'clients' => $clients
         ]);
 
         $form->add('submit', SubmitType::class, ['label' => 'Create']);
@@ -212,9 +224,26 @@ class SiteController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+            if ($editForm->get('client')->getData() == '') {
+                /**
+                 * @var Client $client
+                 */
+                $client = $editForm->get('newClient')->getData();
 
-            return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
+                if ($client instanceof Client && $client->getName() && $client->getEmail()) {
+                    $entity->getProject()->setClient($client);
+                }
+            } else {
+                $client = $em->getRepository(Client::class)->find($editForm->get('client')->getData());
+                $entity->getProject()->setClient($client);
+            }
+
+            if (version_compare($entity->getFramework()->getCurrentVersion(), $entity->getFrameworkVersion()) == -1) {
+                $editForm->get('frameworkVersion')->addError(new FormError("Input correct Framework version"));
+            } else {
+                $em->flush();
+                return $this->redirect($this->generateUrl('site_show', ['id' => $id]));
+            }
         }
 
         return [
