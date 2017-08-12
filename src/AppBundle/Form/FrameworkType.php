@@ -21,7 +21,13 @@ class FrameworkType extends AbstractType
                 'attr' => [
                     'help-block' => 'Must be semvar major.minor.patch'
                 ]
-            ]);
+            ])
+            ->add('key', null, [
+                'attr' => [
+                    'help-block' => 'Technical name of framework'
+                ]
+            ])
+        ;
     }
 
     /**

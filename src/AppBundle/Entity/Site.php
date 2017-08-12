@@ -19,6 +19,7 @@ class Site implements AuthorEditorable, \JsonSerializable
 {
     const STATUS_SUPPORTED = 'supported';
     const STATUS_UNSUPPORTED = 'unsupported';
+    const SLA_NONE = 'none';
     const SLA_STANDARD = 'standard';
     const SLA_ADVANCED = 'advanced';
 
@@ -48,7 +49,7 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $sla;
+    private $sla = self::SLA_NONE;
 
     /**
      * @var string
@@ -160,12 +161,10 @@ class Site implements AuthorEditorable, \JsonSerializable
      * @ORM\Column(type="string", length=60)
      *
      **/
-    private $status;
+    private $status = self::STATUS_SUPPORTED;
 
     public function __construct()
     {
-        $this->sla = $this::SLA_STANDARD;
-        $this->status = $this::STATUS_SUPPORTED;
         $this->servers = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->healthChecks = new ArrayCollection();

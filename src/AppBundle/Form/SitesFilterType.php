@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Client;
+use AppBundle\Entity\Site;
 use AppBundle\Entity\Framework;
 use AppBundle\Form\ModelTransformer\SitesFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -42,11 +43,10 @@ class SitesFilterType extends AbstractType
                 'label' => 'Status',
                 'required' => false,
                 'choices' => [
-                    'All' => 'All',
-                    'Supported' => 'Supported',
-                    'Unsupported' => 'UnSupported',
+                    'Supported' => Site::STATUS_SUPPORTED,
+                    'UnSupported' => Site::STATUS_UNSUPPORTED,
                 ],
-                'placeholder' => null,
+                'placeholder' => 'All',
             ])
         ;
     }

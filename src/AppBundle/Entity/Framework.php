@@ -64,7 +64,7 @@ class Framework implements AuthorEditorable
     /**
      * @var string
      *
-     * @ORM\Column(name="key")
+     * @ORM\Column(name="key_name")
      */
     private $key;
 
