@@ -14,6 +14,7 @@
     <div class="search-wrapper clearfix">
         {{ form(form) }}
     </div>
+    {% if entities | length > 0%}
     <table class="table table-stripped va">
         <thead>
         <tr>
@@ -54,12 +55,18 @@
                 </td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
+    {% else %}
+        <h1 class="text-center text-muted" style="font-weight: 100">
+            Nothing found.
+        </h1>
+    {% endif %}
 {% endblock %}
 
 {% form_theme form _self %}
 {% block submit_row %}
     {% set submit_id = form.vars.name ? form.vars.name ~ '_submit' : 'form_submit' %}
-    <button type="submit" id="{{ submit_id }}" class="btn-default btn">Search</button>
+    <button id="{{ submit_id }}" class="btn-default btn">Search</button>
 {% endblock %}
