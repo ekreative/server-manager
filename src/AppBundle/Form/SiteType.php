@@ -83,6 +83,7 @@ class SiteType extends AbstractType
             ])
             ->add('sla', ChoiceType::class, [
                 'choices' => [
+                    'Without a plan' => Site::SLA_NONE,
                     'Standard' => Site::SLA_STANDARD,
                     'Advanced' => Site::SLA_ADVANCED,
                 ],
