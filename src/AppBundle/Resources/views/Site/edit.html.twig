@@ -41,5 +41,15 @@
         });
         $('#site_responsibleManager').removeAttr('disabled');
         $('#site_developer').removeAttr('disabled');
+        $('#site_sla').on('change', function() {
+          if ($('#site_sla').val() == 'none') {
+            $('#site_slaEndAt').attr('disabled','disabled');
+          } else {
+            $('#site_slaEndAt').removeAttr('disabled');
+          }
+        }).change();
+        $('#site_framework').on('change', function() {
+          $('#site_frameworkVersion').val($(this).find('option[value='+$(this).val()+']').attr('data-framework-version'));
+        }).change();
     </script>
 {% endblock %}
